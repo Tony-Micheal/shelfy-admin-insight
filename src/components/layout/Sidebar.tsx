@@ -61,7 +61,7 @@ export function Sidebar() {
 
   return (
     <div className="w-[80px] md:w-[220px] h-screen bg-shelfy-dark border-r border-gray-800 flex flex-col fixed left-0 top-0">
-      <div className="p-4 flex items-center justify-center md:justify-start gap-3 border-b border-gray-800">
+      <div className="p-4 flex items-center justify-center border-b border-gray-800">
         <img 
           src="/lovable-uploads/ef390a68-1963-4918-9790-9ff892f14485.png" 
           alt="Shelfy Logo" 

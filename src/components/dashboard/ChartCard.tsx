@@ -9,8 +9,8 @@ type ChartCardProps = {
 
 export function ChartCard({ title, children, className = '' }: ChartCardProps) {
   return (
-    <div className={`shelfy-chart-card ${className}`}>
-      <h3 className="text-base font-medium text-gray-700 mb-4">{title}</h3>
+    <div className={`bg-white rounded-lg p-6 border border-gray-100 shadow-sm ${className}`}>
+      <h3 className="text-lg font-medium mb-4">{title}</h3>
       <div>{children}</div>
     </div>
   );

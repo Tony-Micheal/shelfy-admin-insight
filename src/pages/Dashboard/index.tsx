@@ -15,7 +15,7 @@ export default function Dashboard() {
   
   return (
     <MainLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 py-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Shelfy Intelligence Dashboard</h1>
           <div>
