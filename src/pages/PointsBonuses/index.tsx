@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon, Award, Plus, Minus, User, Calendar, CheckCircle, Star } from 'lucide-react';
+import { SearchIcon, Award, Plus, Minus, User, Calendar, CheckCircle, Star, Store } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 

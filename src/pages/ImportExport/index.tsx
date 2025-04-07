@@ -13,7 +13,8 @@ import {
   AlertCircle, 
   RefreshCw,
   Calendar,
-  FileText
+  FileText,
+  BarChart
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
@@ -187,19 +188,19 @@ export default function ImportExport() {
                 <h4 className="font-medium">Generate Reports</h4>
                 <div className="grid grid-cols-1 gap-2">
                   <Button variant="outline" className="justify-start">
-                    <FileBarChart size={16} className="mr-2" />
+                    <BarChart size={16} className="mr-2" />
                     OSA Compliance Report
                   </Button>
                   <Button variant="outline" className="justify-start">
-                    <FileBarChart size={16} className="mr-2" />
+                    <BarChart size={16} className="mr-2" />
                     SOS Analytics Report
                   </Button>
                   <Button variant="outline" className="justify-start">
-                    <FileBarChart size={16} className="mr-2" />
+                    <BarChart size={16} className="mr-2" />
                     Store Visits Report
                   </Button>
                   <Button variant="outline" className="justify-start">
-                    <FileBarChart size={16} className="mr-2" />
+                    <BarChart size={16} className="mr-2" />
                     Product Performance Report
                   </Button>
                 </div>
