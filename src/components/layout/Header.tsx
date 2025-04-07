@@ -30,7 +30,7 @@ export function Header() {
             <Button variant="ghost" size="icon" className="relative">
               <Bell size={20} />
               {notifications.some(n => !n.read) && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                <span className="absolute top-1 right-1 w-2 h-2 bg-shelfy-red rounded-full"></span>
               )}
             </Button>
           </DropdownMenuTrigger>
@@ -41,7 +41,7 @@ export function Header() {
               <DropdownMenuItem key={notification.id} className={`${!notification.read ? 'font-medium' : ''}`}>
                 <div className="flex items-start">
                   {!notification.read && (
-                    <span className="mr-2 mt-1.5 w-2 h-2 bg-shelfy-orange rounded-full" />
+                    <span className="mr-2 mt-1.5 w-2 h-2 bg-shelfy-teal rounded-full" />
                   )}
                   <span>{notification.message}</span>
                 </div>
@@ -58,8 +58,8 @@ export function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="gap-2">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                <User size={16} />
+              <div className="w-8 h-8 rounded-full bg-shelfy-teal/10 flex items-center justify-center">
+                <User size={16} className="text-shelfy-teal" />
               </div>
               <span className="hidden md:inline">Admin User</span>
             </Button>
@@ -70,7 +70,7 @@ export function Header() {
               Profile
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
+            <DropdownMenuItem className="text-shelfy-red">
               <LogOut className="mr-2" size={16} />
               Logout
             </DropdownMenuItem>

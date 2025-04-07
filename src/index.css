@@ -6,82 +6,82 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 0 0% 10%; /* Changed to dark color */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 16 85% 53%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 178 72% 40%; /* Teal color */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 200 77% 66%; /* Blue color */
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 41 92% 61%; /* Yellow color */
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 348 71% 53%; /* Red color */
+    --destructive-foreground: 0 0% 100%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 16 85% 53%;
+    --ring: 178 72% 40%; /* Teal color */
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 10%; /* Dark color */
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 178 72% 40%; /* Teal color */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 200 77% 66%; /* Blue color */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 10%; /* Dark color */
+    --foreground: 0 0% 98%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 10%; /* Dark color */
+    --card-foreground: 0 0% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 10%; /* Dark color */
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 16 85% 53%;
+    --primary: 178 72% 40%; /* Teal color */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 200 77% 66%; /* Blue color */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 0 0% 15%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 41 92% 61%; /* Yellow color */
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 348 71% 53%; /* Red color */
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 16 85% 53%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 178 72% 40%; /* Teal color */
     
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 0 0% 10%; /* Dark color */
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 178 72% 40%; /* Teal color */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 200 77% 66%; /* Blue color */
   }
 }
 
@@ -91,7 +91,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-kufi;
   }
 }
 
@@ -105,11 +105,11 @@
   }
   
   .shelfy-tab {
-    @apply px-6 py-3 text-lg font-medium border-b-2 border-transparent hover:text-shelfy-orange transition-colors;
+    @apply px-6 py-3 text-lg font-medium border-b-2 border-transparent hover:text-shelfy-teal transition-colors;
   }
   
   .shelfy-tab-active {
-    @apply text-shelfy-orange border-b-2 border-shelfy-orange;
+    @apply text-shelfy-teal border-b-2 border-shelfy-teal;
   }
   
   .shelfy-circular-progress {
@@ -117,10 +117,10 @@
   }
   
   .shelfy-sidebar-item {
-    @apply flex items-center gap-3 p-3 rounded-md text-gray-500 hover:bg-shelfy-light-gray hover:text-shelfy-orange transition-all;
+    @apply flex items-center gap-3 p-3 rounded-md text-gray-400 hover:bg-shelfy-dark hover:text-shelfy-teal transition-all;
   }
   
   .shelfy-sidebar-item-active {
-    @apply bg-shelfy-orange text-white hover:bg-shelfy-orange hover:text-white;
+    @apply bg-shelfy-teal text-white hover:bg-shelfy-teal hover:text-white;
   }
 }

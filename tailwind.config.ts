@@ -19,6 +19,9 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				kufi: ['"Noto Sans Kufi Arabic"', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -64,11 +67,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				shelfy: {
-					orange: "#EE6721",
-					"orange-light": "#FCECE6",
-					"blue-gray": "#99A4B9",
-					"dark-gray": "#505A6D",
-					"light-gray": "#F5F6F8",
+					dark: "#1a1a1a",
+					teal: "#1baea9",
+					blue: "#66b8ea",
+					yellow: "#f8ba41",
+					red: "#e02945",
 				}
 			},
 			borderRadius: {
