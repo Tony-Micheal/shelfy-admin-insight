@@ -63,11 +63,10 @@ export function Sidebar() {
     <div className="w-[80px] md:w-[220px] h-screen bg-shelfy-dark border-r border-gray-800 flex flex-col fixed left-0 top-0">
       <div className="p-4 flex items-center justify-center md:justify-start gap-3 border-b border-gray-800">
         <img 
-          src="/lovable-uploads/5ae56500-30dc-4a66-8ad0-cb68ae808351.png" 
+          src="/lovable-uploads/ef390a68-1963-4918-9790-9ff892f14485.png" 
           alt="Shelfy Logo" 
           className="h-8" 
         />
-        <h1 className="text-xl font-bold text-white hidden md:block">Shelfy Admin</h1>
       </div>
       
       <div className="flex flex-col gap-1 p-3 flex-1 overflow-y-auto">
