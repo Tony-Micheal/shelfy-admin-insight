@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon, Users, UserPlus, Shield, Lock, Mail, Phone, Calendar } from 'lucide-react';
+import { SearchIcon, UsersIcon, UserPlus, Shield, Lock, Mail, Phone, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -182,7 +182,7 @@ export default function Users() {
         <Card>
           <div className="p-6">
             <h3 className="text-lg font-medium mb-4 flex items-center">
-              <Users size={20} className="mr-2" />
+              <UsersIcon size={20} className="mr-2" />
               Users List
             </h3>
             <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 mb-6">
