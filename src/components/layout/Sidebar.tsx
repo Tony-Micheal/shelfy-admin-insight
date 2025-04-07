@@ -29,12 +29,18 @@ const SidebarItem = ({ icon: Icon, label, path, isActive }: SidebarItemProps) =>
     <Link 
       to={path} 
       className={cn(
-        "shelfy-sidebar-item", 
-        isActive && "shelfy-sidebar-item-active"
+        "flex items-center py-2.5 px-3 rounded-md transition-colors",
+        "hover:bg-gray-800",
+        isActive ? "bg-shelfy-teal text-white" : "text-gray-400",
       )}
     >
-      <Icon size={20} />
-      <span className="text-sm font-medium hidden md:block">{label}</span>
+      <div className={cn(
+        "flex items-center justify-center w-8 h-8 rounded-md",
+        isActive ? "bg-[#329E9A]" : "bg-gray-800"
+      )}>
+        <Icon size={18} />
+      </div>
+      <span className="text-sm font-medium ml-3 hidden md:block">{label}</span>
     </Link>
   );
 };
@@ -65,11 +71,11 @@ export function Sidebar() {
         <img 
           src="/lovable-uploads/ef390a68-1963-4918-9790-9ff892f14485.png" 
           alt="Shelfy Logo" 
-          className="h-8" 
+          className="h-8 mx-auto" 
         />
       </div>
       
-      <div className="flex flex-col gap-1 p-3 flex-1 overflow-y-auto">
+      <div className="flex flex-col gap-2 p-3 flex-1 overflow-y-auto">
         {sidebarItems.map((item) => (
           <SidebarItem
             key={item.path}

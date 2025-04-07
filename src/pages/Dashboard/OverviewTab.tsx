@@ -14,7 +14,9 @@ import {
   Legend, 
   LabelList,
   LineChart,
-  Line
+  Line,
+  AreaChart,
+  Area
 } from 'recharts';
 import { ShoppingBag, FileText, Users, BarChart3, ArrowUp, ArrowDown } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
@@ -133,7 +135,7 @@ export default function OverviewTab() {
         </div>
       </div>
       
-      {/* Performance Chart */}
+      {/* Performance Chart - Updated with Area Chart */}
       <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-medium">Performance</h3>
@@ -146,24 +148,42 @@ export default function OverviewTab() {
         </div>
         <div className="h-[320px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
+            <AreaChart
               data={monthlyData}
               margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <defs>
+                <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#FF6B35" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#FF6B35" stopOpacity={0.1}/>
+                </linearGradient>
+                <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#4CAF50" stopOpacity={0.1}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
               <XAxis dataKey="name" axisLine={false} tickLine={false} />
               <YAxis axisLine={false} tickLine={false} />
               <Tooltip />
-              <Bar dataKey="views" fill="#FF6B35" radius={[5, 5, 0, 0]} />
-              <Line
-                type="monotone"
-                dataKey="clicks"
-                stroke="#4CAF50"
+              <Legend />
+              <Area 
+                type="monotone" 
+                dataKey="views" 
+                stroke="#FF6B35" 
                 strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 5 }}
+                fillOpacity={1} 
+                fill="url(#colorViews)" 
               />
-            </BarChart>
+              <Area 
+                type="monotone" 
+                dataKey="clicks" 
+                stroke="#4CAF50" 
+                strokeWidth={2}
+                fillOpacity={1} 
+                fill="url(#colorClicks)" 
+              />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
