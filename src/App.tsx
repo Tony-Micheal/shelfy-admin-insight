@@ -6,6 +6,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Assortment from "./pages/Assortment";
+import SOS from "./pages/SOS";
+import Activities from "./pages/Activities";
+import Stores from "./pages/Stores";
+import Invoices from "./pages/Invoices";
+import Products from "./pages/Products";
+import OSAReports from "./pages/OSAReports";
+import PointsBonuses from "./pages/PointsBonuses";
+import Cleanliness from "./pages/Cleanliness";
+import Users from "./pages/Users";
+import Settings from "./pages/Settings";
+import ImportExport from "./pages/ImportExport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,18 +30,17 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/assortment" element={<Assortment />} />
-          {/* Future routes will be added here */}
-          <Route path="/stores" element={<NotFound />} />
-          <Route path="/invoices" element={<NotFound />} />
-          <Route path="/products" element={<NotFound />} />
-          <Route path="/activities" element={<NotFound />} />
-          <Route path="/sos" element={<NotFound />} />
-          <Route path="/osa-reports" element={<NotFound />} />
-          <Route path="/points-bonuses" element={<NotFound />} />
-          <Route path="/cleanliness" element={<NotFound />} />
-          <Route path="/users" element={<NotFound />} />
-          <Route path="/settings" element={<NotFound />} />
-          <Route path="/import-export" element={<NotFound />} />
+          <Route path="/sos" element={<SOS />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/stores" element={<Stores />} />
+          <Route path="/invoices" element={<Invoices />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/osa-reports" element={<OSAReports />} />
+          <Route path="/points-bonuses" element={<PointsBonuses />} />
+          <Route path="/cleanliness" element={<Cleanliness />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/import-export" element={<ImportExport />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
