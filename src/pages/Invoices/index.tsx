@@ -1,4 +1,3 @@
-
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -106,15 +105,15 @@ export default function Invoices() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-shelfy-orange">428</div>
+                <div className="text-3xl font-bold text-shelfy-teal">428</div>
                 <div className="text-sm text-gray-500">Accepted</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-red-500">84</div>
+                <div className="text-3xl font-bold text-shelfy-red">84</div>
                 <div className="text-sm text-gray-500">Rejected</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-yellow-500">56</div>
+                <div className="text-3xl font-bold text-shelfy-yellow">56</div>
                 <div className="text-sm text-gray-500">Pending</div>
               </div>
             </div>
@@ -130,11 +129,6 @@ export default function Invoices() {
               <div className="relative w-full md:w-96">
                 <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input placeholder="Search invoices..." className="pl-9" />
-              </div>
-              
-              <div className="flex space-x-2">
-                <Button variant="outline" size="sm">All Status</Button>
-                <Button variant="outline" size="sm">Date Range</Button>
               </div>
             </div>
             
