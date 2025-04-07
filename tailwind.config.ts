@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -20,7 +19,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				kufi: ['"Noto Sans Kufi Arabic"', 'sans-serif'],
+				kufi: ['"Reem Kufi"', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

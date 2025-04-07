@@ -21,7 +21,7 @@ export function Header() {
   return (
     <div className="flex items-center justify-between py-3 px-6">
       <div>
-        <h2 className="text-2xl font-bold">Shelfy Intelligence Dashboard</h2>
+        {/* Removed the duplicate heading */}
       </div>
       
       <div className="flex items-center space-x-4">
