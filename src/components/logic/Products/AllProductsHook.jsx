@@ -34,9 +34,11 @@ const AllProductsHook = () => {
     }
     
       // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page)
-    getAllProductsAction(page,15);
+  const handlePageChange = async (page) => {
+   await  getAllProductsAction(page,15);
+   setCurrentPage(page)
+   console.log("nume",page);
+
   };
     return [allProducts,totalPages,currentPage,handlePageChange]
 }
