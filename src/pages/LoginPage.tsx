@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import LoginHook from './../components/logic/LoginHook';
+import shelfyLogo from '/shelfy-logo.svg';
 
 const LoginPage = () => {
   const [Email, setEmail] = useState('');
@@ -14,6 +15,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const [email,pass,emailMessage,passMessage,generalMessage,emailLoginRef,passLoginRef,onChangeEmail,onChangePass,onSubmitLogin,loading,press]=LoginHook();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -26,7 +28,6 @@ const LoginPage = () => {
       return;
     }
 
-    // Here you would typically handle the login logic
     toast({
       title: "Login Attempt",
       description: "This is a demo. Integration with authentication will be added later.",
@@ -37,6 +38,13 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
+          <div className="flex justify-center mb-4">
+            <img 
+              src={shelfyLogo} 
+              alt="Shelfy Logo" 
+              className="h-20 w-auto"
+            />
+          </div>
           <CardTitle className="text-3xl font-bold tracking-tight text-gray-900">
             Welcome to Shelfy
           </CardTitle>
