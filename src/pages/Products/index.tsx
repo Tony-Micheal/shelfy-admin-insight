@@ -26,10 +26,9 @@ import {
 
 export default function Products() {
   const navigate = useNavigate();
-  const [allProducts] = AllProductsHook();
+  const  [allProducts,totalPages,currentPage,handlePageChange] = AllProductsHook();
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 15;
 
   // Filter products based on search term
   const filteredProducts = allProducts.filter(product => 
@@ -40,14 +39,10 @@ export default function Products() {
   );
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+
 
   return (
     <MainLayout>

@@ -4,10 +4,11 @@ import { getAllProductsAction } from '../../../redux/actions/products/ProductsAc
 
 const AllProductsHook = () => {
     const dispatch=useDispatch();
+    const [currentPage, setCurrentPage] = useState(1);
 
     //authReducer
     const getData=async()=>{
-        await dispatch(getAllProductsAction())
+        await dispatch(getAllProductsAction(1,15))
     
     }
     useEffect(()=>{
@@ -16,19 +17,27 @@ const AllProductsHook = () => {
     const res=useSelector(state=> state.ProductsReducer.allProducts);
     
     let allProducts=[];
+    let totalPages=0;;
+    
     try {
         if(res){
-            console.log("prod",res);
             if(res.data){
                 allProducts=[...res.data];
+            }
+            if(res.pagination){
+                totalPages=res.pagination.last_page;
             }
         }
     } catch (e) {
         console.log(e);
     }
     
-    
-    return [allProducts]
+      // Handle page change
+  const handlePageChange = (page) => {
+    getAllProductsAction(page,15);
+    setCurrentPage(page)
+  };
+    return [allProducts,totalPages,currentPage,handlePageChange]
 }
     
     

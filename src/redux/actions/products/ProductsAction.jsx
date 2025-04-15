@@ -2,9 +2,9 @@ import React from 'react'
 import { GET_ALL_PRODUCTS } from './../../type';
 import { useGetData, useGetDataWithToken } from "../../../hooks/useGetData";
 
-const getAllProductsAction =  (data)=> async (dispatch)=>{
+const getAllProductsAction =  (page,limit)=> async (dispatch)=>{
     try{
-        const response=await useGetDataWithToken(`/products`,data);
+        const response=await useGetDataWithToken(`/products?page=${page}&paginate=${limit}`);
         dispatch({
             type:GET_ALL_PRODUCTS,
             payload:response,
