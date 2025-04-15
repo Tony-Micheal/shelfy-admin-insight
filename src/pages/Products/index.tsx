@@ -82,7 +82,7 @@ export default function Products() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedProducts.map(product => (
+                  {allProducts.map(product => (
                     <TableRow key={product.id}>
                       <TableCell className="font-medium">#{product.id}</TableCell>
                       <TableCell>{product.name}</TableCell>
