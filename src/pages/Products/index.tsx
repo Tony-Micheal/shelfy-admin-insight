@@ -1,4 +1,3 @@
-
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -12,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SearchIcon, Box, PenSquare } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const products = [
   { 
@@ -52,6 +52,8 @@ const products = [
 ];
 
 export default function Products() {
+  const navigate = useNavigate();
+
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -98,7 +100,12 @@ export default function Products() {
                       </TableCell>
                       <TableCell>{product.brand}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8"
+                          onClick={() => navigate(`/products/${product.id}/edit`)}
+                        >
                           <PenSquare size={16} />
                         </Button>
                       </TableCell>
