@@ -1,4 +1,3 @@
-
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -64,36 +63,28 @@ export default function Users() {
     );
   };
 
-  // Generate an array of page numbers for pagination
   const generatePaginationItems = () => {
     const pageItems = [];
     const maxVisiblePages = 5; // Max number of page links to show
     
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if there are less than maxVisiblePages
       for (let i = 1; i <= totalPages; i++) {
         pageItems.push(i);
       }
     } else {
-      // Always show first page
       pageItems.push(1);
       
-      // Calculate start and end of visible pages
       let startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
       let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 3);
       
-      // Adjust if at the beginning or end
       if (startPage > 2) pageItems.push('ellipsis-start');
       
-      // Add visible pages
       for (let i = startPage; i <= endPage; i++) {
         pageItems.push(i);
       }
       
-      // Add ellipsis if needed
       if (endPage < totalPages - 1) pageItems.push('ellipsis-end');
       
-      // Always show last page
       pageItems.push(totalPages);
     }
     
@@ -209,28 +200,6 @@ export default function Users() {
                         className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                       />
                     </PaginationItem>
-                    
-                    {generatePaginationItems().map((item, index) => {
-                      if (item === 'ellipsis-start' || item === 'ellipsis-end') {
-                        return (
-                          <PaginationItem key={`ellipsis-${index}`}>
-                            <PaginationEllipsis />
-                          </PaginationItem>
-                        );
-                      }
-                      
-                      return (
-                        <PaginationItem key={`page-${item}`}>
-                          <PaginationLink 
-                            isActive={currentPage === item}
-                            onClick={() => handlePageChange(item)}
-                            className="cursor-pointer"
-                          >
-                            {item}
-                          </PaginationLink>
-                        </PaginationItem>
-                      );
-                    })}
                     
                     <PaginationItem>
                       <PaginationNext 
