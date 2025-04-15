@@ -38,7 +38,7 @@ const SidebarItem = ({ icon: Icon, label, path, isActive }: SidebarItemProps) =>
         "flex items-center justify-center w-8 h-8 rounded-md",
         isActive ? "bg-[#329E9A]" : "bg-gray-800"
       )}>
-        <Icon size={18} />
+        <Icon size={18} className="m-auto" />
       </div>
       <span className="text-sm font-medium ml-3 hidden md:block">{label}</span>
     </Link>
@@ -46,8 +46,18 @@ const SidebarItem = ({ icon: Icon, label, path, isActive }: SidebarItemProps) =>
 };
 
 export function Sidebar() {
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  // Safely get user data from localStorage with null checking
+  const getUserFromStorage = () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch (error) {
+      console.error("Error parsing user data from localStorage:", error);
+      return null;
+    }
+  };
+  
+  const user = getUserFromStorage();
   const location = useLocation();
   const currentPath = location.pathname;
   
@@ -95,11 +105,13 @@ export function Sidebar() {
       
       <div className="p-4 border-t border-gray-800 flex items-center">
         <div className="w-8 h-8 bg-shelfy-teal rounded-full flex items-center justify-center">
-          <span className="text-sm font-medium text-white">O</span>
+          <span className="text-sm font-medium text-white">
+            {user ? user.name.charAt(0).toUpperCase() : 'G'}
+          </span>
         </div>
         <div className="ml-3 hidden md:block">
-          <p className="text-sm font-medium text-white">{user.name}</p>
-             <p className="text-xs text-gray-400">{user.email}</p>
+          <p className="text-sm font-medium text-white">{user ? user.name : 'Guest User'}</p>
+          <p className="text-xs text-gray-400">{user ? user.email : 'guest@example.com'}</p>
         </div>
       </div>
     </div>
