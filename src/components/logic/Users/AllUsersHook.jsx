@@ -12,7 +12,7 @@ const AllUsersHook = () => {
   // Function to retrieve users with pagination
   const getData = async (page = 1, search = '') => {
     setLoading(true);
-    await dispatch(getAllUsersAction(page, 3, search));
+    await dispatch(getAllUsersAction(page, 5, search));
     setLoading(false);
   };
 
