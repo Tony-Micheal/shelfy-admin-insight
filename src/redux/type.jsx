@@ -1,3 +1,4 @@
+
 //Authentication
 export const LOGIN_USER="LOGIN_USER"
 export const LOGOUT_USER="LOGOUT_USER"
@@ -17,9 +18,5 @@ export const UPDATE_USER_SEGMENT="UPDATE_USER_SEGMENT"
 export const CREATE_USER="CREATE_USER"
 export const DELETE_USER="DELETE_USER"
 
-
-
-
-
-
-
+//Admins
+export const GET_ALL_ADMINS="GET_ALL_ADMINS"

@@ -1,14 +1,13 @@
-import { combineReducers } from "redux";
-import { AuthReducer } from "./Auth/AuthReducer";
-import { ProductsReducer } from "./Products/ProductsReducer";
-import { UsersReducer } from "./UsersReducer";
 
-
+import { combineReducers } from 'redux';
+import AuthReducer from './Auth/AuthReducer';
+import ProductsReducer from './Products/ProductsReducer';
+import UsersReducer from './UsersReducer';
+import AdminsReducer from './AdminsReducer';
 
 export default combineReducers({
-  AuthReducer:AuthReducer,
-  ProductsReducer:ProductsReducer,
-  UsersReducer:UsersReducer
-
-
-})
+    AuthReducer,
+    ProductsReducer,
+    UsersReducer,
+    AdminsReducer,
+});
