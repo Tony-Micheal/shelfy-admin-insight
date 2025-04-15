@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/pagination';
 import { useState } from 'react';
 import { PermissionMatrix } from '@/components/users/PermissionMatrix';
+import { UserStats } from '@/components/users/UserStats';
 
 type User = {
   id: number;
@@ -103,6 +104,8 @@ export default function Users() {
             Add New User
           </Button>
         </div>
+        
+        <UserStats users={users} />
         
         <Card>
           <div className="p-6">
