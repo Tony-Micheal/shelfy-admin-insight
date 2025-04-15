@@ -11,10 +11,9 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon, Box, PenSquare } from 'lucide-react';
+import { SearchIcon, Box, PenSquare, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AllProductsHook from './../../components/logic/Products/AllProductsHook';
-import { useState } from 'react';
 import {
   Pagination,
   PaginationContent,
@@ -26,23 +25,7 @@ import {
 
 export default function Products() {
   const navigate = useNavigate();
-  const  [allProducts,totalPages,currentPage,handlePageChange] = AllProductsHook();
-  const [searchTerm, setSearchTerm] = useState('');
-  const itemsPerPage = 15;
-
-  // Filter products based on search term
-  const filteredProducts = allProducts.filter(product => 
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.name_ar.includes(searchTerm) ||
-    product.barcode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.brand.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Calculate pagination
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
-
-
+  const [allProducts, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading] = AllProductsHook();
 
   return (
     <MainLayout>
@@ -64,7 +47,7 @@ export default function Products() {
                   placeholder="Search products..." 
                   className="pl-9"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => handleSearch(e.target.value)}
                 />
               </div>
             </div>
@@ -82,30 +65,47 @@ export default function Products() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {allProducts.map(product => (
-                    <TableRow key={product.id}>
-                      <TableCell className="font-medium">#{product.id}</TableCell>
-                      <TableCell>{product.name}</TableCell>
-                      <TableCell className="font-arabic">{product.name_ar}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center">
-                          <Box size={16} className="mr-2 text-gray-500" />
-                          {product.barcode}
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8">
+                        <div className="flex justify-center items-center">
+                          <Loader className="h-6 w-6 animate-spin mr-2" />
+                          Loading...
                         </div>
                       </TableCell>
-                      <TableCell>{product.brand}</TableCell>
-                      <TableCell className="text-right">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8"
-                          onClick={() => navigate(`/products/${product.id}/edit`)}
-                        >
-                          <PenSquare size={16} />
-                        </Button>
+                    </TableRow>
+                  ) : allProducts.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8">
+                        No products found
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    allProducts.map(product => (
+                      <TableRow key={product.id}>
+                        <TableCell className="font-medium">#{product.id}</TableCell>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell className="font-arabic">{product.name_ar}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center">
+                            <Box size={16} className="mr-2 text-gray-500" />
+                            {product.barcode}
+                          </div>
+                        </TableCell>
+                        <TableCell>{product.brand}</TableCell>
+                        <TableCell className="text-right">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8"
+                            onClick={() => navigate(`/products/${product.id}/edit`)}
+                          >
+                            <PenSquare size={16} />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>
