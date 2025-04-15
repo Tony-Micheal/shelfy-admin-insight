@@ -1,4 +1,4 @@
-import { useGetData } from "../../hooks/useGetData";
+import { useGetData, useGetDataWithToken } from "../../hooks/useGetData";
 import { usePatchData } from "../../hooks/usePatchData";
 import { usePostData } from "../../hooks/usePostData";
 import { CREATE_USER, GET_ALL_USERS, GET_USER_DETAILS, UPDATE_USER, UPDATE_USER_SEGMENT, UPDATE_USER_STATUS } from './../type';
@@ -6,9 +6,9 @@ import useDeleteData from './../../hooks/useDeleteData';
 
 
 
-const getAllUsersAction =  (page)=> async (dispatch)=>{
+const getAllUsersAction =  (page,limit,searchTerm = '')=> async (dispatch)=>{
     try{
-        const response=await useGetData(`/customers?page=${page}`);
+        const response=await useGetDataWithToken(`/customers?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
         dispatch({
             type:GET_ALL_USERS,
             payload:response,
@@ -28,7 +28,7 @@ const getAllUsersAction =  (page)=> async (dispatch)=>{
 
 const getUserDetailsAction =  (id)=> async (dispatch)=>{
     try{
-        const response=await useGetData(`/customers/show?id=${id}`);
+        const response=await useGetDataWithToken(`/customers/show?id=${id}`);
         dispatch({
             type:GET_USER_DETAILS,
             payload:response,

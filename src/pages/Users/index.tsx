@@ -23,6 +23,7 @@ import {
 import { useState } from 'react';
 import { PermissionMatrix } from '@/components/users/PermissionMatrix';
 import { UserStats } from '@/components/users/UserStats';
+import AllUsersHook from './../../components/logic/Users/AllUsersHook';
 
 type User = {
   id: number;
@@ -50,7 +51,7 @@ const users: User[] = [
 const ITEMS_PER_PAGE = 10;
 
 export default function Users() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [allUsers, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading]=AllUsersHook();;
 
   const getStoreStatusBadge = (status: number) => {
     switch(status) {
@@ -79,21 +80,19 @@ export default function Users() {
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
+      // setCurrentPage(prev => prev - 1);
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
+      // setCurrentPage(prev => prev + 1);
     }
   };
 
-  const totalPages = Math.ceil(users.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentUsers = users.slice(startIndex, endIndex);
-  
   return (
     <MainLayout showFilters={false}>
       <div className="space-y-6">
@@ -136,7 +135,7 @@ export default function Users() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentUsers.map(user => (
+                  {allUsers.map(user => (
                     <TableRow key={user.id}>
                       <TableCell className="font-mono text-sm text-gray-500">#{user.id}</TableCell>
                       <TableCell className="font-medium">{user.name}</TableCell>
@@ -199,7 +198,7 @@ export default function Users() {
           </div>
         </Card>
 
-        <PermissionMatrix />
+        {/* <PermissionMatrix /> */}
       </div>
     </MainLayout>
   );
