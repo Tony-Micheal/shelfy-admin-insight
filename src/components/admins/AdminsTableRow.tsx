@@ -8,7 +8,8 @@ interface Admin {
   name: string;
   email: string;
   phone: string;
-  role: string;
+  role?: string;
+  roles?: Array<{id: number, name: string}>;
 }
 
 interface AdminsTableRowProps {
@@ -16,13 +17,19 @@ interface AdminsTableRowProps {
 }
 
 export const AdminsTableRow = ({ admin }: AdminsTableRowProps) => {
+  // Extract role from either the role property or the roles array
+  const roleDisplay = admin.role || 
+    (admin.roles && admin.roles.length > 0 
+      ? admin.roles.map(r => r.name).join(', ') 
+      : 'N/A');
+
   return (
     <TableRow key={admin.id}>
       <TableCell className="font-mono text-sm text-gray-500">#{admin.id}</TableCell>
       <TableCell>{admin.name}</TableCell>
       <TableCell>{admin.email}</TableCell>
       <TableCell>{admin.phone}</TableCell>
-      <TableCell>{admin.role}</TableCell>
+      <TableCell>{roleDisplay}</TableCell>
       <TableCell>
         <div className="flex space-x-2">
           <Button variant="ghost" size="icon" className="h-8 w-8">

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllAdminsAction } from './../../../redux/actions/AdminsAction';
 
@@ -7,7 +7,7 @@ const AllAdminsHook = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Function to retrieve users with pagination
   const getData = async (page = 1, search = '') => {
@@ -35,9 +35,15 @@ const AllAdminsHook = () => {
     if (res) {
       if (res.data) {
         allAdmins = [...res.data];
+      } else if (Array.isArray(res)) {
+        // Handle case where res is directly an array of admins
+        allAdmins = [...res];
       }
       if (res.pagination) {
         totalPages = res.pagination.last_page;
+      } else {
+        // If no pagination info, estimate based on array length
+        totalPages = allAdmins.length > 0 ? Math.ceil(allAdmins.length / 5) : 0;
       }
     }
   } catch (e) {

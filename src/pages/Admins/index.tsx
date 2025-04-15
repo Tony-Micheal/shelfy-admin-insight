@@ -2,11 +2,20 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { AdminsTable } from '@/components/admins/AdminsTable';
-import AllAdminsHook from './../../components/logic/Admins/AllAdminsHook';
+import AllAdminsHook from '../../components/logic/Admins/AllAdminsHook';
 
 export default function Admins() {
-  const [allAdmins, totalPages, currentPage, handlePreviousPage, handleNextPage, loading] = AllAdminsHook();
-  console.log(allAdmins);
+  const [
+    allAdmins, 
+    totalPages, 
+    currentPage, 
+    handlePageChange, 
+    handlePreviousPage, 
+    handleNextPage, 
+    searchTerm, 
+    handleSearch, 
+    loading
+  ] = AllAdminsHook();
   
   return (
     <MainLayout showFilters={false}>
@@ -17,7 +26,14 @@ export default function Admins() {
         
         <Card>
           <div className="p-6">
-            <AdminsTable admins={allAdmins} loading={loading} />
+            <AdminsTable 
+              admins={allAdmins} 
+              loading={loading} 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPreviousPage={handlePreviousPage}
+              onNextPage={handleNextPage}
+            />
           </div>
         </Card>
       </div>
