@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SearchIcon, Box, PenSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import AllProductsHook from './../../components/logic/Products/AllProductsHook';
 
 const products = [
   { 
@@ -53,7 +54,8 @@ const products = [
 
 export default function Products() {
   const navigate = useNavigate();
-
+  const [allProducts]=AllProductsHook();
+  
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -87,11 +89,11 @@ export default function Products() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {products.map(product => (
+                  {allProducts.map(product => (
                     <TableRow key={product.id}>
                       <TableCell className="font-medium">#{product.id}</TableCell>
-                      <TableCell>{product.nameEn}</TableCell>
-                      <TableCell className="font-arabic">{product.nameAr}</TableCell>
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell className="font-arabic">{product.name_ar}</TableCell>
                       <TableCell>
                         <div className="flex items-center">
                           <Box size={16} className="mr-2 text-gray-500" />
