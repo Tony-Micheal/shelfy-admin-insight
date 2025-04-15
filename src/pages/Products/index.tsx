@@ -1,3 +1,4 @@
+
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -13,12 +14,41 @@ import { Button } from '@/components/ui/button';
 import { SearchIcon, Box, PenSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AllProductsHook from './../../components/logic/Products/AllProductsHook';
-
+import { useState } from 'react';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function Products() {
   const navigate = useNavigate();
-  const [allProducts]=AllProductsHook();
-  
+  const [allProducts] = AllProductsHook();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Filter products based on search term
+  const filteredProducts = allProducts.filter(product => 
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.name_ar.includes(searchTerm) ||
+    product.barcode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -35,7 +65,12 @@ export default function Products() {
             <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 mb-6">
               <div className="relative w-full md:w-96">
                 <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input placeholder="Search products..." className="pl-9" />
+                <Input 
+                  placeholder="Search products..." 
+                  className="pl-9"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
             </div>
             
@@ -52,7 +87,7 @@ export default function Products() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {allProducts.map(product => (
+                  {paginatedProducts.map(product => (
                     <TableRow key={product.id}>
                       <TableCell className="font-medium">#{product.id}</TableCell>
                       <TableCell>{product.name}</TableCell>
@@ -78,6 +113,38 @@ export default function Products() {
                   ))}
                 </TableBody>
               </Table>
+            </div>
+
+            {/* Pagination */}
+            <div className="mt-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                  
+                  {[...Array(totalPages)].map((_, index) => (
+                    <PaginationItem key={index + 1}>
+                      <PaginationLink
+                        onClick={() => handlePageChange(index + 1)}
+                        isActive={currentPage === index + 1}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
           </div>
         </Card>
