@@ -37,7 +37,7 @@ export const AdminsTable = ({ admins, loading }: AdminsTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading ? (
+          {!loading ? (
             <TableRow>
               <TableCell colSpan={6} className="text-center py-6">Loading...</TableCell>
             </TableRow>
