@@ -34,8 +34,8 @@ const AllProductsHook = () => {
     
       // Handle page change
   const handlePageChange = (page) => {
-    getAllProductsAction(page,15);
     setCurrentPage(page)
+    getAllProductsAction(page,15);
   };
     return [allProducts,totalPages,currentPage,handlePageChange]
 }
