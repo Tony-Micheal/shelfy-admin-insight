@@ -7,11 +7,12 @@ type KpiCardProps = {
   percentValue?: number;
   icon?: ReactNode;
   className?: string;
+  footer?: ReactNode;
 };
 
-export function KpiCard({ title, value, percentValue, icon, className = '' }: KpiCardProps) {
+export function KpiCard({ title, value, percentValue, icon, className = '', footer }: KpiCardProps) {
   return (
-    <div className={`shelfy-kpi-card ${className}`}>
+    <div className={`p-6 rounded-lg ${className}`}>
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-gray-600">{title}</h3>
         {icon && <div>{icon}</div>}
@@ -60,6 +61,8 @@ export function KpiCard({ title, value, percentValue, icon, className = '' }: Kp
           </div>
         )}
       </div>
+      
+      {footer && footer}
     </div>
   );
 }
