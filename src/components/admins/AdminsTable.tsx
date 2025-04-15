@@ -84,11 +84,6 @@ export const AdminsTable = ({
               />
             </PaginationItem>
             <PaginationItem>
-              <span className="px-4">
-                Page {currentPage} of {totalPages || 1}
-              </span>
-            </PaginationItem>
-            <PaginationItem>
               <PaginationNext 
                 onClick={onNextPage} 
                 className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
