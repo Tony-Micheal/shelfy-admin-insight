@@ -13,7 +13,7 @@ const AllUsersHook = () => {
   // Function to retrieve products from page 1
   const getData = async (page = 1, search = '') => {
     setLoading(true);
-    await dispatch(getAllUsersAction(page, 15, search));
+    await dispatch(getAllUsersAction(page, 3, search));
     setLoading(false);
   };
 
