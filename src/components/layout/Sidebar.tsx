@@ -87,7 +87,9 @@ export function Sidebar() {
         />
       </div>
       
-      <div className="flex flex-col gap-2 p-3 flex-1 overflow-y-auto">
+      <div className="flex flex-col gap-2 p-3 flex-1 overflow-y-auto 
+        scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-shelfy-dark
+        hover:scrollbar-thumb-gray-700 transition-colors duration-200">
         {sidebarItems.map((item) => (
           <SidebarItem
             key={item.path}
@@ -117,3 +119,4 @@ export function Sidebar() {
     </div>
   );
 }
+
