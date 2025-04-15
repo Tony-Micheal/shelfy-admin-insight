@@ -21,6 +21,7 @@ import {
   PaginationLink
 } from '@/components/ui/pagination';
 import { useState } from 'react';
+import { PermissionMatrix } from '@/components/users/PermissionMatrix';
 
 type User = {
   id: number;
@@ -194,6 +195,8 @@ export default function Users() {
             </div>
           </div>
         </Card>
+
+        <PermissionMatrix />
       </div>
     </MainLayout>
   );
