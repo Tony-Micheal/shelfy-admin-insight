@@ -1,4 +1,3 @@
-
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -11,10 +10,17 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon, UsersIcon, UserPlus, MapPin, Users2, Building2 } from 'lucide-react';
+import { SearchIcon, UsersIcon, UserPlus, MapPin, Mail, Phone } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationNext, 
+  PaginationPrevious 
+} from '@/components/ui/pagination';
+import { useState } from 'react';
 
-// Updated type definition to match the new data structure
 type User = {
   id: number;
   name: string;
@@ -38,7 +44,11 @@ const users: User[] = [
   // Add more sample data with the same structure
 ];
 
+const ITEMS_PER_PAGE = 10;
+
 export default function Users() {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const getStoreStatusBadge = (status: number) => {
     switch(status) {
       case 1:
@@ -63,6 +73,12 @@ export default function Users() {
       </Badge>
     );
   };
+
+  // Calculate pagination
+  const totalPages = Math.ceil(users.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentUsers = users.slice(startIndex, endIndex);
   
   return (
     <MainLayout showFilters={false}>
@@ -95,7 +111,8 @@ export default function Users() {
                   <TableRow>
                     <TableHead>ID</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>Contact Info</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Phone</TableHead>
                     <TableHead>Location</TableHead>
                     <TableHead>Segment</TableHead>
                     <TableHead>Store Status</TableHead>
@@ -103,14 +120,20 @@ export default function Users() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {users.map(user => (
+                  {currentUsers.map(user => (
                     <TableRow key={user.id}>
                       <TableCell className="font-mono text-sm text-gray-500">#{user.id}</TableCell>
                       <TableCell className="font-medium">{user.name}</TableCell>
                       <TableCell>
-                        <div className="space-y-1">
-                          <div className="text-sm text-gray-600">{user.email}</div>
-                          <div className="text-sm font-medium">{user.phone}</div>
+                        <div className="flex items-center gap-2">
+                          <Mail size={16} className="text-gray-500" />
+                          <span className="text-sm">{user.email}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Phone size={16} className="text-gray-500" />
+                          <span className="text-sm font-medium">{user.phone}</span>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -137,6 +160,25 @@ export default function Users() {
                   ))}
                 </TableBody>
               </Table>
+            </div>
+
+            <div className="mt-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
           </div>
         </Card>
