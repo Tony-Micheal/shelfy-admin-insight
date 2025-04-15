@@ -46,6 +46,8 @@ const SidebarItem = ({ icon: Icon, label, path, isActive }: SidebarItemProps) =>
 };
 
 export function Sidebar() {
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
   const location = useLocation();
   const currentPath = location.pathname;
   
@@ -93,11 +95,11 @@ export function Sidebar() {
       
       <div className="p-4 border-t border-gray-800 flex items-center">
         <div className="w-8 h-8 bg-shelfy-teal rounded-full flex items-center justify-center">
-          <span className="text-sm font-medium text-white">A</span>
+          <span className="text-sm font-medium text-white">O</span>
         </div>
         <div className="ml-3 hidden md:block">
-          <p className="text-sm font-medium text-white">Admin User</p>
-          <p className="text-xs text-gray-400">admin@shelfy.com</p>
+          <p className="text-sm font-medium text-white">{user.name}</p>
+             <p className="text-xs text-gray-400">{user.email}</p>
         </div>
       </div>
     </div>
