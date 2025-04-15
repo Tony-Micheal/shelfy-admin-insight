@@ -1,4 +1,3 @@
-
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -18,7 +17,6 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -110,7 +108,6 @@ export default function Products() {
               </Table>
             </div>
 
-            {/* Pagination */}
             <div className="mt-4">
               <Pagination>
                 <PaginationContent>
@@ -120,17 +117,6 @@ export default function Products() {
                       className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                     />
                   </PaginationItem>
-                  
-                  {[...Array(totalPages)].map((_, index) => (
-                    <PaginationItem key={index + 1}>
-                      <PaginationLink
-                        onClick={() => handlePageChange(index + 1)}
-                        isActive={currentPage === index + 1}
-                      >
-                        {index + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
                   
                   <PaginationItem>
                     <PaginationNext 
