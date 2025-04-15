@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -13,7 +12,8 @@ import {
   Users, 
   Settings, 
   FileUp,
-  Car
+  Car,
+  UserCog
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -46,7 +46,6 @@ const SidebarItem = ({ icon: Icon, label, path, isActive }: SidebarItemProps) =>
 };
 
 export function Sidebar() {
-  // Safely get user data from localStorage with null checking
   const getUserFromStorage = () => {
     try {
       const storedUser = localStorage.getItem("user");
@@ -71,9 +70,8 @@ export function Sidebar() {
     { icon: PieChart, label: 'SOS', path: '/sos' },
     { icon: BarChart3, label: 'OSA Reports', path: '/osa-reports' },
     { icon: Award, label: 'Points & Bonuses', path: '/points-bonuses' },
-    // { icon: Star, label: 'Cleanliness', path: '/cleanliness' },
     { icon: Users, label: 'Users', path: '/users' },
-    // { icon: Settings, label: 'Settings', path: '/settings' },
+    { icon: UserCog, label: 'Admins', path: '/admins' },
     { icon: FileUp, label: 'Import/Export', path: '/import-export' },
   ];
 
@@ -119,4 +117,3 @@ export function Sidebar() {
     </div>
   );
 }
-

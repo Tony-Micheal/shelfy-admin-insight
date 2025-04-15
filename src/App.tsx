@@ -19,6 +19,7 @@ import ImportExport from "./pages/ImportExport";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import EditProduct from "./pages/Products/EditProduct";
+import Admins from "./pages/Admins";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="/import-export" element={<ImportExport />} />
           <Route path="/products/:id/edit" element={<EditProduct />} />
+          <Route path="/admins" element={<Admins />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
