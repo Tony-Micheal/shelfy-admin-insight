@@ -71,9 +71,9 @@ export function Sidebar() {
     { icon: PieChart, label: 'SOS', path: '/sos' },
     { icon: BarChart3, label: 'OSA Reports', path: '/osa-reports' },
     { icon: Award, label: 'Points & Bonuses', path: '/points-bonuses' },
-    { icon: Star, label: 'Cleanliness', path: '/cleanliness' },
+    // { icon: Star, label: 'Cleanliness', path: '/cleanliness' },
     { icon: Users, label: 'Users', path: '/users' },
-    { icon: Settings, label: 'Settings', path: '/settings' },
+    // { icon: Settings, label: 'Settings', path: '/settings' },
     { icon: FileUp, label: 'Import/Export', path: '/import-export' },
   ];
 

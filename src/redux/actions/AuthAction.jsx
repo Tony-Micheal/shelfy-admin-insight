@@ -45,23 +45,5 @@ const logoutAction =  ()=> async (dispatch)=>{
 
 
 
-// const getUserDataAction =  ()=> async (dispatch)=>{
-//     try{
-//         const response=await useGetDataWithToken(`/auth/user`);
-//         dispatch({
-//             type:GET_USER_DATA,
-//             payload:response,
-//             loading:true
 
-//         })
-//     }
-//     catch(e){
-//         dispatch({
-//             type:GET_USER_DATA,
-//             payload:e.response
-//         })
-//     }
-
-
-// }
 export {loginUserAction,logoutAction}
