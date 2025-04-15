@@ -1,52 +1,85 @@
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllAdminsAction } from '../../../redux/actions/AdminsAction';
-
-// Mock data for development until API is ready
-const mockAdmins = [
-  { id: 1, name: 'John Admin', email: 'john@admin.com', phone: '555-123-4567', role: 'Super Admin' },
-  { id: 2, name: 'Sarah Manager', email: 'sarah@admin.com', phone: '555-987-6543', role: 'Manager' },
-  { id: 3, name: 'David Support', email: 'david@admin.com', phone: '555-456-7890', role: 'Support' },
-  { id: 4, name: 'Lisa Analyst', email: 'lisa@admin.com', phone: '555-789-0123', role: 'Analyst' },
-  { id: 5, name: 'Mark Editor', email: 'mark@admin.com', phone: '555-321-6547', role: 'Editor' },
-];
+import { getAllAdminsAction } from './../../../redux/actions/AdminsAction';
 
 const AllAdminsHook = () => {
-    const dispatch = useDispatch();
-    const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    const getData = async (page = 1) => {
-        setLoading(true);
-        await dispatch(getAllAdminsAction(page, 10));
-        setLoading(false);
-    };
+  // Function to retrieve users with pagination
+  const getData = async (page = 1, search = '') => {
+    setLoading(true);
+    await dispatch(getAllAdminsAction(page, 5, search));
+    setLoading(false);
+  };
 
-    useEffect(() => {
-        getData(currentPage);
-    }, [currentPage]);
+  // Initial data fetch
+  useEffect(() => {
+    getData(1);
+  }, []);
 
-    // Uncomment this when API is ready and adjust reducer
-    // const { allAdmins } = useSelector(state => state.AdminsReducer);
-    
-    // Using mock data for development
-    let allAdmins = mockAdmins; 
-    let totalPages = 2; // Mock total pages
+  // Re-fetch data when page or search term changes
+  useEffect(() => {
+    getData(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
 
-    const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(prevPage => prevPage - 1);
-        }
-    };
+  const res = useSelector(state => state.AdminsReducer.allAdmins);
+  
+  let allAdmins = [];
+  let totalPages = 0;
 
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(prevPage => prevPage + 1);
-        }
-    };
+  try {
+    if (res) {
+      if (res.data) {
+        allAdmins = [...res.data];
+      }
+      if (res.pagination) {
+        totalPages = res.pagination.last_page;
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
 
-    return [allAdmins, totalPages, currentPage, handlePreviousPage, handleNextPage, loading];
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Handle previous page
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+  // Handle next page
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  // Handle search
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
+  return [
+    allAdmins, 
+    totalPages, 
+    currentPage, 
+    handlePageChange, 
+    handlePreviousPage, 
+    handleNextPage, 
+    searchTerm, 
+    handleSearch, 
+    loading
+  ];
 };
 
 export default AllAdminsHook;

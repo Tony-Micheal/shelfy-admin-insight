@@ -2,11 +2,12 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { AdminsTable } from '@/components/admins/AdminsTable';
-import AllAdminsHook from '@/components/logic/Admins/AllAdminsHook';
+import AllAdminsHook from './../../components/logic/Admins/AllAdminsHook';
 
 export default function Admins() {
   const [allAdmins, totalPages, currentPage, handlePreviousPage, handleNextPage, loading] = AllAdminsHook();
-
+  console.log(allAdmins);
+  
   return (
     <MainLayout showFilters={false}>
       <div className="space-y-6">
