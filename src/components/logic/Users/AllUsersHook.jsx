@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProductsAction } from '../../../redux/actions/products/ProductsAction';
 import { getAllUsersAction } from '../../../redux/actions/UsersAction';
 
 const AllUsersHook = () => {
@@ -10,7 +9,7 @@ const AllUsersHook = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Function to retrieve products from page 1
+  // Function to retrieve users with pagination
   const getData = async (page = 1, search = '') => {
     setLoading(true);
     await dispatch(getAllUsersAction(page, 15, search));
@@ -22,6 +21,11 @@ const AllUsersHook = () => {
     getData(1);
   }, []);
 
+  // Re-fetch data when page or search term changes
+  useEffect(() => {
+    getData(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
+
   const res = useSelector(state => state.UsersReducer.allUsers);
   
   let allUsers = [];
@@ -29,7 +33,6 @@ const AllUsersHook = () => {
 
   try {
     if (res) {
-        console.log(res);
       if (res.data) {
         allUsers = [...res.data];
       }
@@ -41,20 +44,42 @@ const AllUsersHook = () => {
     console.error(e);
   }
 
-  // Handle page change by dispatching the action with the new page number
-  const handlePageChange = async (page) => {
+  // Handle page change
+  const handlePageChange = (page) => {
     setCurrentPage(page);
-    await getData(page, searchTerm);
+  };
+
+  // Handle previous page
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+  // Handle next page
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
   };
 
   // Handle search
-  const handleSearch = async (term) => {
+  const handleSearch = (term) => {
     setSearchTerm(term);
     setCurrentPage(1); // Reset to first page when searching
-    await getData(1, term);
   };
 
-  return [allUsers, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];
+  return [
+    allUsers, 
+    totalPages, 
+    currentPage, 
+    handlePageChange, 
+    handlePreviousPage, 
+    handleNextPage, 
+    searchTerm, 
+    handleSearch, 
+    loading
+  ];
 };
 
 export default AllUsersHook;

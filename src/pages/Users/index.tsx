@@ -1,3 +1,4 @@
+
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -18,40 +19,25 @@ import {
   PaginationItem, 
   PaginationNext, 
   PaginationPrevious,
-  PaginationLink
+  PaginationLink,
+  PaginationEllipsis
 } from '@/components/ui/pagination';
-import { useState } from 'react';
-import { PermissionMatrix } from '@/components/users/PermissionMatrix';
 import { UserStats } from '@/components/users/UserStats';
 import AllUsersHook from './../../components/logic/Users/AllUsersHook';
-
-type User = {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  city: string;
-  segment: string;
-  store_status: number;
-};
-
-const users: User[] = [
-  {
-    id: 61741,
-    name: "كريم",
-    phone: "01121348951",
-    email: "mohameda.shaker16@gmail.com",
-    city: "Cairo",
-    segment: "2",
-    store_status: 1
-  },
-  // Add more sample data with the same structure
-];
-
-const ITEMS_PER_PAGE = 10;
+import { useEffect } from 'react';
 
 export default function Users() {
-  const [allUsers, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading]=AllUsersHook();;
+  const [
+    allUsers, 
+    totalPages, 
+    currentPage, 
+    handlePageChange, 
+    handlePreviousPage, 
+    handleNextPage, 
+    searchTerm, 
+    handleSearch, 
+    loading
+  ] = AllUsersHook();
 
   const getStoreStatusBadge = (status: number) => {
     switch(status) {
@@ -78,21 +64,42 @@ export default function Users() {
     );
   };
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      // setCurrentPage(prev => prev - 1);
+  // Generate an array of page numbers for pagination
+  const generatePaginationItems = () => {
+    const pageItems = [];
+    const maxVisiblePages = 5; // Max number of page links to show
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if there are less than maxVisiblePages
+      for (let i = 1; i <= totalPages; i++) {
+        pageItems.push(i);
+      }
+    } else {
+      // Always show first page
+      pageItems.push(1);
+      
+      // Calculate start and end of visible pages
+      let startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 3);
+      
+      // Adjust if at the beginning or end
+      if (startPage > 2) pageItems.push('ellipsis-start');
+      
+      // Add visible pages
+      for (let i = startPage; i <= endPage; i++) {
+        pageItems.push(i);
+      }
+      
+      // Add ellipsis if needed
+      if (endPage < totalPages - 1) pageItems.push('ellipsis-end');
+      
+      // Always show last page
+      pageItems.push(totalPages);
     }
+    
+    return pageItems;
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      // setCurrentPage(prev => prev + 1);
-    }
-  };
-
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentUsers = users.slice(startIndex, endIndex);
   return (
     <MainLayout showFilters={false}>
       <div className="space-y-6">
@@ -104,7 +111,7 @@ export default function Users() {
           </Button>
         </div>
         
-        <UserStats users={users} />
+        <UserStats users={allUsers} />
         
         <Card>
           <div className="p-6">
@@ -116,7 +123,12 @@ export default function Users() {
             <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 mb-6">
               <div className="relative w-full md:w-96">
                 <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input placeholder="Search users..." className="pl-9" />
+                <Input 
+                  placeholder="Search users..." 
+                  className="pl-9" 
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
               </div>
             </div>
             
@@ -135,70 +147,103 @@ export default function Users() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {allUsers.map(user => (
-                    <TableRow key={user.id}>
-                      <TableCell className="font-mono text-sm text-gray-500">#{user.id}</TableCell>
-                      <TableCell className="font-medium">{user.name}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Mail size={16} className="text-gray-500" />
-                          <span className="text-sm">{user.email}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Phone size={16} className="text-gray-500" />
-                          <span className="text-sm font-medium">{user.phone}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center">
-                          <MapPin size={16} className="mr-2 text-gray-500" />
-                          {user.city}
-                        </div>
-                      </TableCell>
-                      <TableCell>{getSegmentBadge(user.segment)}</TableCell>
-                      <TableCell>{getStoreStatusBadge(user.store_status)}</TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">Edit</Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className={user.store_status === 1 ? "text-red-500" : "text-green-500"}
-                          >
-                            {user.store_status === 1 ? 'Deactivate' : 'Activate'}
-                          </Button>
-                        </div>
-                      </TableCell>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={8} className="text-center py-6">Loading...</TableCell>
                     </TableRow>
-                  ))}
+                  ) : allUsers.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={8} className="text-center py-6">No users found</TableCell>
+                    </TableRow>
+                  ) : (
+                    allUsers.map(user => (
+                      <TableRow key={user.id}>
+                        <TableCell className="font-mono text-sm text-gray-500">#{user.id}</TableCell>
+                        <TableCell className="font-medium">{user.name}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Mail size={16} className="text-gray-500" />
+                            <span className="text-sm">{user.email}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Phone size={16} className="text-gray-500" />
+                            <span className="text-sm font-medium">{user.phone}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center">
+                            <MapPin size={16} className="mr-2 text-gray-500" />
+                            {user.city}
+                          </div>
+                        </TableCell>
+                        <TableCell>{getSegmentBadge(user.segment)}</TableCell>
+                        <TableCell>{getStoreStatusBadge(user.store_status)}</TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button variant="ghost" size="sm">Edit</Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className={user.store_status === 1 ? "text-red-500" : "text-green-500"}
+                            >
+                              {user.store_status === 1 ? 'Deactivate' : 'Activate'}
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>
 
-            <div className="mt-4">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={handlePreviousPage}
-                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                    />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext 
-                      onClick={handleNextPage}
-                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
+            {totalPages > 0 && (
+              <div className="mt-4">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={handlePreviousPage}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                    
+                    {generatePaginationItems().map((item, index) => {
+                      if (item === 'ellipsis-start' || item === 'ellipsis-end') {
+                        return (
+                          <PaginationItem key={`ellipsis-${index}`}>
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        );
+                      }
+                      
+                      return (
+                        <PaginationItem key={`page-${item}`}>
+                          <PaginationLink 
+                            isActive={currentPage === item}
+                            onClick={() => handlePageChange(item)}
+                            className="cursor-pointer"
+                          >
+                            {item}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+                    
+                    <PaginationItem>
+                      <PaginationNext 
+                        onClick={handleNextPage}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
           </div>
         </Card>
-
-        {/* <PermissionMatrix /> */}
       </div>
     </MainLayout>
   );
