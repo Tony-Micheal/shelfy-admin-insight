@@ -100,10 +100,7 @@ export default function Invoices() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Invoices</h1>
-          <Button>
-            <Upload size={16} className="mr-2" />
-            Upload Invoice
-          </Button>
+        
         </div>
         
         <Card>
