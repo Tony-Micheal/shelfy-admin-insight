@@ -12,6 +12,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock, AlertTriangle, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationNext, 
+  PaginationPrevious 
+} from '@/components/ui/pagination';
+import { useState } from 'react';
 
 const invoices = [
   { 
@@ -51,7 +59,11 @@ const invoices = [
   },
 ];
 
+const ITEMS_PER_PAGE = 5;
+
 export default function Invoices() {
+  const [currentPage, setCurrentPage] = useState(1);
+  
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'Accepted':
@@ -85,6 +97,19 @@ export default function Invoices() {
       default:
         return <Badge>{status}</Badge>;
     }
+  };
+  
+  const totalPages = Math.ceil(invoices.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentInvoices = invoices.slice(startIndex, endIndex);
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
   
   return (
@@ -146,7 +171,7 @@ export default function Invoices() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {invoices.map(invoice => (
+                  {currentInvoices.map(invoice => (
                     <TableRow key={invoice.id}>
                       <TableCell className="font-medium">
                         <div className="flex items-center">
