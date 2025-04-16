@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import InvoicesCountHook from './../../components/logic/Invoivces/InvoicesCountHook';
 
 const invoices = [
   { 
@@ -62,6 +63,7 @@ const invoices = [
 ];
 
 export default function Invoices() {
+  const  [invoiceCount,  loading]=InvoicesCountHook();
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'Accepted':
@@ -118,10 +120,7 @@ export default function Invoices() {
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-500">Total invoice amount:</div>
-              <div className="text-xl font-bold">$145,280.75</div>
-            </div>
+        
           </div>
           
           <div className="px-6 pb-6">

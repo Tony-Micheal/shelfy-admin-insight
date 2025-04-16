@@ -24,3 +24,15 @@ export const GET_ADMIN_DETAILS="GET_ADMIN_DETAILS"
 export const UPDATE_ADMIN="UPDATE_ADMIN"
 export const CREATE_ADMIN="CREATE_ADMIN"
 export const DELETE_ADMIN="DELETE_ADMIN"
+
+//Roles
+export const GET_ALL_ROLES="GET_ALL_ROLES"
+export const SHOW_ROLE="EDIT_ROLE"
+export const CREATE_ROLE="UPDATE_ADMIN"
+export const UPDATE_ROLE="UPDATE_ADMIN"
+export const DELETE_ROLE="DELETE_ADMIN"
+
+//invoices
+export const GET_INVOICES_COUNT="GET_INVOICES_COUNT"
+export const GET_ALL_INVOICES="GET_ALL_INVOICES"
+
