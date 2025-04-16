@@ -63,7 +63,6 @@ const invoices = [
 ];
 
 export default function Invoices() {
-  const  [invoiceCount,  loading]=InvoicesCountHook();
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'Accepted':
@@ -80,13 +79,6 @@ export default function Invoices() {
             Rejected
           </Badge>
         );
-      case 'Pending':
-        return (
-          <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 flex items-center gap-1">
-            <Clock size={12} />
-            Pending
-          </Badge>
-        );
       case 'Partially Rejected':
         return (
           <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 flex items-center gap-1">
@@ -94,11 +86,25 @@ export default function Invoices() {
             Partially Rejected
           </Badge>
         );
+      case 'Pending':
+        return (
+          <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 flex items-center gap-1">
+            <Clock size={12} />
+            Pending
+          </Badge>
+        );
+
       default:
         return <Badge>{status}</Badge>;
     }
   };
+  console.log("before");
+
+  const  [invoiceCount,  loading]=InvoicesCountHook();
+ 
   
+  
+
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -114,21 +120,22 @@ export default function Invoices() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-green-600">428</div>
+                <div className="text-3xl font-bold text-green-600">{invoiceCount&&invoiceCount.acceepted_invices.count}</div>
                 <div className="text-sm text-gray-500">Accepted</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-red-600">84</div>
+                <div className="text-3xl font-bold text-red-600">{invoiceCount&&invoiceCount.rejected_invices.count}</div>
                 <div className="text-sm text-gray-500">Rejected</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-yellow-600">56</div>
-                <div className="text-sm text-gray-500">Pending</div>
-              </div>
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-orange-600">32</div>
+                <div className="text-3xl font-bold text-orange-600">{invoiceCount&&invoiceCount.partially_rejected_invices.count}</div>
                 <div className="text-sm text-gray-500">Partially Rejected</div>
               </div>
+              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+                <div className="text-3xl font-bold text-yellow-600">{invoiceCount&&invoiceCount.pending_invices.count}</div>
+                <div className="text-sm text-gray-500">Pending</div>
+              </div>
+           
             </div>
             
         
