@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Table,
@@ -9,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from '@/components/ui/button';
 import SegmentsHook from '../logic/SegmentsHook';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Edit, Trash } from 'lucide-react';
 
 const SegmentsTable = () => {
   const [
@@ -68,14 +69,14 @@ const SegmentsTable = () => {
                       size="icon"
                       onClick={() => handleEdit(segment.id)}
                     >
-                      <Edit2 className="h-4 w-4" />
+                      <Edit className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => handleDelete(segment.id)}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash className="h-4 w-4" />
                     </Button>
                   </div>
                 </TableCell>
