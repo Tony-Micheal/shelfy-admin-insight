@@ -12,8 +12,8 @@ const AllInvoicesHook = () => {
 
   // Function to retrieve products from page 1
   const getData = async (page = 1, search = '') => {
-    setoading2(true);
-    await dispatch(getAllInvoicesAction(page, 15, search));
+    setloading2(true);
+    await dispatch(getAllInvoicesAction(page, 10, search));
     setloading2(false);
   };
 
@@ -29,6 +29,7 @@ const AllInvoicesHook = () => {
 
   try {
     if (res) {
+        console.log("ssdsd",res);
       if (res.data) {
         allInvoices = [...res.data];
       }
@@ -53,7 +54,7 @@ const AllInvoicesHook = () => {
     await getData(1, term);
   };
 
-  return [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2];
+  return [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch,loading2];
 };
 
 export default AllInvoicesHook;

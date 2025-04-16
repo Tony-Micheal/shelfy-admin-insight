@@ -94,9 +94,10 @@ export default function Invoices() {
     }
   };
 
-  const  [invoiceCount,  loading]=InvoicesCountHook();
-  const  [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch,loading2]=AllInvoicesHook();
- 
+  const  [invoiceCount,  loading2]=InvoicesCountHook();
+  const  [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch,Loading2]=AllInvoicesHook();
+  console.log("all",allInvoices);
+  
   
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -116,19 +117,19 @@ export default function Invoices() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-green-600">{invoiceCount&&invoiceCount.acceepted_invices.count}</div>
+                <div className="text-3xl font-bold text-green-600">{invoiceCount.acceepted_invices&&invoiceCount.acceepted_invices.count}</div>
                 <div className="text-sm text-gray-500">Accepted</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-red-600">{invoiceCount&&invoiceCount.rejected_invices.count}</div>
+                <div className="text-3xl font-bold text-red-600">{invoiceCount.rejected_invices&&invoiceCount.rejected_invices.count}</div>
                 <div className="text-sm text-gray-500">Rejected</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-orange-600">{invoiceCount&&invoiceCount.partially_rejected_invices.count}</div>
+                <div className="text-3xl font-bold text-orange-600">{invoiceCount.partially_rejected_invices&&invoiceCount.partially_rejected_invices.count}</div>
                 <div className="text-sm text-gray-500">Partially Rejected</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-yellow-600">{invoiceCount&&invoiceCount.pending_invices.count}</div>
+                <div className="text-3xl font-bold text-yellow-600">{invoiceCount.pending_invices&&invoiceCount.pending_invices.count}</div>
                 <div className="text-sm text-gray-500">Pending</div>
               </div>
            
