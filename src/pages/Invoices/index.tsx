@@ -1,4 +1,3 @@
-
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -24,7 +23,6 @@ import {
 } from "@/components/ui/pagination";
 
 export default function Invoices() {
-  
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'Accepted':
@@ -61,7 +59,7 @@ export default function Invoices() {
   };
 
   const [invoiceCount, loading] = InvoicesCountHook();
-  const  [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2,invoiceStatus,handleFilter]= AllInvoicesHook();
+  const [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2, invoiceStatus, handleFilter] = AllInvoicesHook();
   
   const getCount = (data, field) => {
     if (!data || !data[field]) return 0;
@@ -75,6 +73,13 @@ export default function Invoices() {
            getCount(data, 'partially_rejected_invices') + 
            getCount(data, 'pending_invices');
   };
+
+  const statusFilterMap = {
+    1: 'Accepted',
+    2: 'Rejected',
+    3: 'Partially Rejected',
+    4: 'Pending'
+  };
   
   return (
     <MainLayout>
@@ -82,32 +87,47 @@ export default function Invoices() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Invoices</h1>
           <div className="text-sm text-gray-500">
-            Total Invoices: <span className="font-bold text-gray-900">{invoiceCount.total_invices}</span>
+            Total Invoices: <span className="font-bold text-gray-900">{getTotalCount(invoiceCount)}</span>
           </div>
         </div>
         
         <Card>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
             <div className="flex flex-wrap items-center gap-4">
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50" onClick={()=>{handleFilter(1)}}>
+              <div 
+                className={`flex flex-col items-center p-6 border rounded-md cursor-pointer transition-colors ${invoiceStatus === 1 ? 'bg-green-50 border-green-200' : 'bg-gray-50 hover:bg-gray-100'}`}
+                onClick={() => handleFilter(invoiceStatus === 1 ? null : 1)}
+              >
                 <div className="text-3xl font-bold text-green-600">
                   {getCount(invoiceCount, 'acceepted_invices')}
                 </div>
                 <div className="text-sm text-gray-500">Accepted</div>
               </div>
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+              
+              <div 
+                className={`flex flex-col items-center p-6 border rounded-md cursor-pointer transition-colors ${invoiceStatus === 2 ? 'bg-red-50 border-red-200' : 'bg-gray-50 hover:bg-gray-100'}`}
+                onClick={() => handleFilter(invoiceStatus === 2 ? null : 2)}
+              >
                 <div className="text-3xl font-bold text-red-600">
                   {getCount(invoiceCount, 'rejected_invices')}
                 </div>
                 <div className="text-sm text-gray-500">Rejected</div>
               </div>
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+              
+              <div 
+                className={`flex flex-col items-center p-6 border rounded-md cursor-pointer transition-colors ${invoiceStatus === 3 ? 'bg-orange-50 border-orange-200' : 'bg-gray-50 hover:bg-gray-100'}`}
+                onClick={() => handleFilter(invoiceStatus === 3 ? null : 3)}
+              >
                 <div className="text-3xl font-bold text-orange-600">
                   {getCount(invoiceCount, 'partially_rejected_invices')}
                 </div>
                 <div className="text-sm text-gray-500">Partially Rejected</div>
               </div>
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+              
+              <div 
+                className={`flex flex-col items-center p-6 border rounded-md cursor-pointer transition-colors ${invoiceStatus === 4 ? 'bg-yellow-50 border-yellow-200' : 'bg-gray-50 hover:bg-gray-100'}`}
+                onClick={() => handleFilter(invoiceStatus === 4 ? null : 4)}
+              >
                 <div className="text-3xl font-bold text-yellow-600">
                   {getCount(invoiceCount, 'pending_invices')}
                 </div>

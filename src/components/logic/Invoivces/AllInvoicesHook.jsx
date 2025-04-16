@@ -8,19 +8,31 @@ const AllInvoicesHook = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading2, setloading2] = useState(false);
-  const [invoiceStatus,setInvoiceStatus]=useState();
+  const [invoiceStatus, setInvoiceStatus] = useState(null);
 
-  const handleFilter=(id)=>{
-    setInvoiceStatus(id)
-  }
-  const getData = async (page = 1, search = '') => {
+  const statusMap = {
+    1: 'Accepted',
+    2: 'Rejected',
+    3: 'Partially Rejected',
+    4: 'Pending'
+  };
+
+  const handleFilter = (id) => {
+    setInvoiceStatus(id);
+    setCurrentPage(1); // Reset to first page when changing filters
+    getData(1, searchTerm, id);
+  };
+
+  const getData = async (page = 1, search = '', status = invoiceStatus) => {
     setloading2(true);
-    if(invoiceStatus){
-        await dispatch(getInvoicesByFilterAction(invoiceStatus,page, 10, search)); // Changed to 10 items per page
-
-    }else{
-        await dispatch(getAllInvoicesAction(page, 10, search)); // Changed to 10 items per page
-
+    try {
+      if (status) {
+        await dispatch(getInvoicesByFilterAction(statusMap[status], page, 10, search));
+      } else {
+        await dispatch(getAllInvoicesAction(page, 10, search));
+      }
+    } catch (error) {
+      console.error('Error fetching invoices:', error);
     }
     setloading2(false);
   };
@@ -56,7 +68,7 @@ const AllInvoicesHook = () => {
     await getData(1, term);
   };
 
-  return [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2,invoiceStatus,handleFilter];
+  return [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2, invoiceStatus, handleFilter];
 };
 
 export default AllInvoicesHook;
