@@ -11,6 +11,7 @@ const AllInvoicesHook = () => {
 
   const handleFilter = (id) => {
     setInvoiceStatus(id);
+    console.log(id);
     setCurrentPage(1);
     getData(1, searchTerm, id);
   };
@@ -18,7 +19,7 @@ const AllInvoicesHook = () => {
   const getData = async (page = 1, search = '', status = invoiceStatus) => {
     setloading2(true);
     try {
-      if (status) {
+      if (status != null) {
         await dispatch(getInvoicesByFilterAction(status, page, 10, search));
       } else {
         await dispatch(getAllInvoicesAction(page, 10, search));
