@@ -15,6 +15,7 @@ import {
   PaginationNext, 
   PaginationPrevious 
 } from '@/components/ui/pagination';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Admin {
   id: number;
@@ -42,24 +43,30 @@ export const AdminsTable = ({
   onPreviousPage, 
   onNextPage 
 }: AdminsTableProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="space-y-4">
-      <div className="rounded-md border">
+    <div className="space-y-4 w-full overflow-x-auto">
+      <div className="rounded-md border min-w-[320px]">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
+              <TableHead className="w-[60px] lg:w-[80px]">ID</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className={isMobile ? "hidden" : ""}>Email</TableHead>
+              <TableHead className={isMobile ? "hidden" : ""}>Phone</TableHead>
+              <TableHead className={isMobile ? "hidden" : ""}>Role</TableHead>
+              <TableHead className="w-[100px] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6">Loading...</TableCell>
+                <TableCell colSpan={6} className="text-center py-6">
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin h-6 w-6 border-2 border-shelfy-teal border-t-transparent rounded-full"></div>
+                  </div>
+                </TableCell>
               </TableRow>
             ) : admins.length === 0 ? (
               <TableRow>
@@ -67,7 +74,7 @@ export const AdminsTable = ({
               </TableRow>
             ) : (
               admins.map(admin => (
-                <AdminsTableRow key={admin.id} admin={admin} />
+                <AdminsTableRow key={admin.id} admin={admin} isMobile={isMobile} />
               ))
             )}
           </TableBody>
@@ -75,22 +82,24 @@ export const AdminsTable = ({
       </div>
       
       {!loading && admins.length > 0 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious 
-                onClick={onPreviousPage} 
-                className={currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-              />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext 
-                onClick={onNextPage} 
-                className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <div className="flex justify-center mt-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  onClick={onPreviousPage} 
+                  className={`${currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} whitespace-nowrap`}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext 
+                  onClick={onNextPage} 
+                  className={`${currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"} whitespace-nowrap`}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       )}
     </div>
   );
