@@ -3,6 +3,7 @@ import React from 'react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import SegmentsTable from '@/components/segments/SegmentsTable';
 import CreateSegmentDialog from '@/components/segments/CreateSegmentDialog';
+import SegmentsHook from './../../components/logic/SegmentsHook';
 
 const Segments = () => {
   return (

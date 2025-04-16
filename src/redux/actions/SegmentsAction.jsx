@@ -4,9 +4,9 @@ import { usePatchData } from "../../hooks/usePatchData";
 import { usePostData } from "../../hooks/usePostData";
 import { CREATE_SEGMENT, DELETE_SEGMENT, GET_ALL_SEGMENTS, GET_SEGMENT_DETAILS, UPDATE_SEGMENT } from './../type';
 
- const getAllSegmentsAction = (page, limit, searchTerm = '') => async (dispatch) => {
+ const getAllSegmentsAction = (page, limit) => async (dispatch) => {
     try {
-        const response = await useGetDataWithToken(`/segments?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
+        const response = await useGetDataWithToken(`/segments?page=${page}&paginate=${limit}`);
         dispatch({
             type: GET_ALL_SEGMENTS,
             payload: response,

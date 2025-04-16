@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Edit2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SegmentsHook from './../logic/SegmentsHook';
 
 // Temporary mock data - replace with actual data from your API
 const mockSegments = [
@@ -39,6 +40,14 @@ const SegmentsTable = () => {
   const handleDelete = (id: number) => {
     console.log('Delete segment:', id);
   };
+  const [allSegments, 
+    totalPages, 
+    currentPage, 
+    handlePageChange, 
+    handlePreviousPage, 
+    handleNextPage, 
+    loading
+  ]=SegmentsHook();
 
   return (
     <div className="rounded-md border">
@@ -53,12 +62,12 @@ const SegmentsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockSegments.map((segment) => (
+          {allSegments.map((segment) => (
             <TableRow key={segment.id}>
               <TableCell>{segment.id}</TableCell>
               <TableCell>{segment.segment}</TableCell>
-              <TableCell>{segment.osaPoints}</TableCell>
-              <TableCell>{segment.plangramsPoints}</TableCell>
+              <TableCell>{segment.osa_points}</TableCell>
+              <TableCell>{segment.product_images_points}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button
