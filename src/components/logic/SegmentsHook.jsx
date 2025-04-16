@@ -11,7 +11,7 @@ const SegmentsHook = () => {
   // Function to retrieve users with pagination
   const getData = async (page = 1) => {
     setLoading(true);
-    await dispatch(getAllSegmentsAction(page, 5));
+    await dispatch(getAllSegmentsAction(page, 1));
     setLoading(false);
   };
 
