@@ -1,5 +1,5 @@
 import { useGetDataWithToken } from "../../hooks/useGetData";
-import { GET_ALL_INVOICES, GET_INVOICES_COUNT } from "../type";
+import { GET_ALL_INVOICES, GET_FILTER_INVOICES, GET_INVOICES_COUNT } from "../type";
 
 
 
@@ -44,7 +44,25 @@ const  getAllInvoicesAction=  (page, limit, searchTerm = '')=> async (dispatch)=
 
 }
 
+const  getInvoicesByFilterAction=  (status,page, limit, searchTerm = '')=> async (dispatch)=>{
+    try{
+        const response=await useGetDataWithToken(`/invoices?status=${status}&page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
+        dispatch({
+            type:GET_FILTER_INVOICES,
+            payload:response,
+            loading:true
+
+        })
+    }
+    catch(e){
+        dispatch({
+            type:GET_FILTER_INVOICES,
+            payload:e.response
+        })
+    }
 
 
+}
 
-export {getInvoicesCountAction,getAllInvoicesAction}
+
+export {getInvoicesCountAction,getAllInvoicesAction,getInvoicesByFilterAction}

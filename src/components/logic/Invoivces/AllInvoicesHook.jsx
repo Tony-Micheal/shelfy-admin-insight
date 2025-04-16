@@ -1,17 +1,27 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllInvoicesAction } from '../../../redux/actions/InvoicesAction';
+import { getAllInvoicesAction, getInvoicesByFilterAction } from '../../../redux/actions/InvoicesAction';
 
 const AllInvoicesHook = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading2, setloading2] = useState(false);
+  const [invoiceStatus,setInvoiceStatus]=useState();
 
+  const handleFilter=(id)=>{
+    setInvoiceStatus(id)
+  }
   const getData = async (page = 1, search = '') => {
     setloading2(true);
-    await dispatch(getAllInvoicesAction(page, 10, search));
+    if(invoiceStatus){
+        await dispatch(getInvoicesByFilterAction(invoiceStatus,page, 10, search)); // Changed to 10 items per page
+
+    }else{
+        await dispatch(getAllInvoicesAction(page, 10, search)); // Changed to 10 items per page
+
+    }
     setloading2(false);
   };
 
@@ -46,7 +56,7 @@ const AllInvoicesHook = () => {
     await getData(1, term);
   };
 
-  return [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch,loading2];
+  return [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2,invoiceStatus,handleFilter];
 };
 
 export default AllInvoicesHook;

@@ -60,15 +60,8 @@ export default function Invoices() {
     }
   };
 
-<<<<<<< HEAD
-  const  [invoiceCount,  loading2]=InvoicesCountHook();
-  const  [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch,Loading2]=AllInvoicesHook();
-  console.log("all",allInvoices);
-  
-=======
   const [invoiceCount, loading] = InvoicesCountHook();
-  const [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2] = AllInvoicesHook();
->>>>>>> ac5591f0791a1c89bc9a607915b053008d76f180
+  const  [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2,invoiceStatus,handleFilter]= AllInvoicesHook();
   
   const getCount = (data, field) => {
     if (!data || !data[field]) return 0;
@@ -89,29 +82,14 @@ export default function Invoices() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Invoices</h1>
           <div className="text-sm text-gray-500">
-            Total Invoices: <span className="font-bold text-gray-900">{getTotalCount(invoiceCount)}</span>
+            Total Invoices: <span className="font-bold text-gray-900">{invoiceCount.total_invices}</span>
           </div>
         </div>
         
         <Card>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
             <div className="flex flex-wrap items-center gap-4">
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-<<<<<<< HEAD
-                <div className="text-3xl font-bold text-green-600">{invoiceCount.acceepted_invices&&invoiceCount.acceepted_invices.count}</div>
-                <div className="text-sm text-gray-500">Accepted</div>
-              </div>
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-red-600">{invoiceCount.rejected_invices&&invoiceCount.rejected_invices.count}</div>
-                <div className="text-sm text-gray-500">Rejected</div>
-              </div>
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-orange-600">{invoiceCount.partially_rejected_invices&&invoiceCount.partially_rejected_invices.count}</div>
-                <div className="text-sm text-gray-500">Partially Rejected</div>
-              </div>
-              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-yellow-600">{invoiceCount.pending_invices&&invoiceCount.pending_invices.count}</div>
-=======
+              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50" onClick={()=>{handleFilter(1)}}>
                 <div className="text-3xl font-bold text-green-600">
                   {getCount(invoiceCount, 'acceepted_invices')}
                 </div>
@@ -133,7 +111,6 @@ export default function Invoices() {
                 <div className="text-3xl font-bold text-yellow-600">
                   {getCount(invoiceCount, 'pending_invices')}
                 </div>
->>>>>>> ac5591f0791a1c89bc9a607915b053008d76f180
                 <div className="text-sm text-gray-500">Pending</div>
               </div>
             </div>
