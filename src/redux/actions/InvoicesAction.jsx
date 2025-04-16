@@ -24,9 +24,9 @@ const getInvoicesCountAction =  ()=> async (dispatch)=>{
 
 }
 
-const  getAllInvoicesAction=  ()=> async (dispatch)=>{
+const  getAllInvoicesAction=  (page, limit, searchTerm = '')=> async (dispatch)=>{
     try{
-        const response=await useGetDataWithToken(`/invoices`);
+        const response=await useGetDataWithToken(`/invoices?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
         dispatch({
             type:GET_ALL_INVOICES,
             payload:response,

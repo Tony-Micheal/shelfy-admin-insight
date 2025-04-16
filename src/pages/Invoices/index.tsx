@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock, AlertTriangle, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import InvoicesCountHook from './../../components/logic/Invoivces/InvoicesCountHook';
+import { useState } from 'react';
+import AllInvoicesHook from './../../components/logic/Invoivces/AllInvoicesHook';
 
 const invoices = [
   { 
@@ -52,7 +54,10 @@ const invoices = [
   },
 ];
 
+const ITEMS_PER_PAGE = 5;
+
 export default function Invoices() {
+  
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'Accepted':
@@ -88,13 +93,17 @@ export default function Invoices() {
         return <Badge>{status}</Badge>;
     }
   };
-  console.log("before");
 
   const  [invoiceCount,  loading]=InvoicesCountHook();
+  const  [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch,loading2]=AllInvoicesHook();
  
   
-  
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentInvoices = invoices.slice(startIndex, endIndex);
 
+  
+  
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -149,7 +158,7 @@ export default function Invoices() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {invoices.map(invoice => (
+                  {allInvoices.map(invoice => (
                     <TableRow key={invoice.id}>
                       <TableCell className="font-medium">
                         <div className="flex items-center">
@@ -157,7 +166,7 @@ export default function Invoices() {
                           {invoice.id}
                         </div>
                       </TableCell>
-                      <TableCell>{invoice.store}</TableCell>
+                      <TableCell>{invoice.customer.name}</TableCell>
                       <TableCell>{invoice.date}</TableCell>
                       <TableCell className="font-medium">{invoice.points.toLocaleString()}</TableCell>
                       <TableCell>{getStatusBadge(invoice.status)}</TableCell>

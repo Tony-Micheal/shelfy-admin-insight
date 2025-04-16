@@ -2,18 +2,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProductsAction } from '../../../redux/actions/products/ProductsAction';
+import { getAllInvoicesAction } from '../../../redux/actions/InvoicesAction';
 
 const AllInvoicesHook = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading2, setloading2] = useState(false);
 
   // Function to retrieve products from page 1
   const getData = async (page = 1, search = '') => {
-    setLoading(true);
-    await dispatch(getAllProductsAction(page, 15, search));
-    setLoading(false);
+    setoading2(true);
+    await dispatch(getAllInvoicesAction(page, 15, search));
+    setloading2(false);
   };
 
   // Initial data fetch
@@ -21,16 +22,15 @@ const AllInvoicesHook = () => {
     getData(1);
   }, []);
 
-  const res = useSelector(state => state.ProductsReducer.allProducts);
+  const res = useSelector(state => state.InvoicesReducer.allInvoices);
   
-  let allProducts = [];
+  let allInvoices = [];
   let totalPages = 0;
 
   try {
     if (res) {
       if (res.data) {
-        allProducts = [...res.data];
-        console.log(allProducts);
+        allInvoices = [...res.data];
       }
       if (res.pagination) {
         totalPages = res.pagination.last_page;
@@ -53,7 +53,7 @@ const AllInvoicesHook = () => {
     await getData(1, term);
   };
 
-  return [allProducts, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];
+  return [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2];
 };
 
 export default AllInvoicesHook;
