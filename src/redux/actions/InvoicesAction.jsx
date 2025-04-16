@@ -40,7 +40,7 @@ const getAllInvoicesAction = (page, limit, searchTerm = '') => async (dispatch) 
 
 const getInvoicesByFilterAction = (statusId, page, limit, searchTerm = '') => async (dispatch) => {
     try {
-        const response = await useGetDataWithToken(`/invoices?status_id=${statusId}&page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
+        const response = await useGetDataWithToken(`/invoices?status=${statusId}&page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
         dispatch({
             type: GET_FILTER_INVOICES,
             payload: response,

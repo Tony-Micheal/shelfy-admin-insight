@@ -10,6 +10,7 @@ const AllInvoicesHook = () => {
   const [invoiceStatus, setInvoiceStatus] = useState(null);
 
   const handleFilter = (id) => {
+    console.log(id,"idddd");
     setInvoiceStatus(id);
     setCurrentPage(1);
     getData(1, searchTerm, id);
