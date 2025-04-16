@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProductsAction } from '../../../redux/actions/products/ProductsAction';
 import { getAllInvoicesAction } from '../../../redux/actions/InvoicesAction';
 
 const AllInvoicesHook = () => {
@@ -10,9 +9,9 @@ const AllInvoicesHook = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading2, setloading2] = useState(false);
 
-  // Function to retrieve products from page 1
+  // Function to retrieve invoices
   const getData = async (page = 1, search = '') => {
-    setoading2(true);
+    setloading2(true);
     await dispatch(getAllInvoicesAction(page, 15, search));
     setloading2(false);
   };
@@ -28,16 +27,14 @@ const AllInvoicesHook = () => {
   let totalPages = 0;
 
   try {
-    if (res) {
-      if (res.data) {
-        allInvoices = [...res.data];
-      }
+    if (res && res.data) {
+      allInvoices = res.data || [];
       if (res.pagination) {
-        totalPages = res.pagination.last_page;
+        totalPages = res.pagination.last_page || 0;
       }
     }
   } catch (e) {
-    console.error(e);
+    console.error('Error processing invoices data:', e);
   }
 
   // Handle page change by dispatching the action with the new page number
