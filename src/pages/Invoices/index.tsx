@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react';
+import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock, AlertTriangle, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const invoices = [
@@ -18,46 +18,36 @@ const invoices = [
     id: 'INV-001', 
     store: 'Metro Supermarket', 
     date: '2023-04-05', 
-    amount: '$1,240.50',
-    status: 'Accepted',
-    uploader: 'John Smith',
-    uploadDate: '2023-04-05'
+    points: 1240,
+    status: 'Accepted'
   },
   { 
     id: 'INV-002', 
     store: 'Daily Market', 
     date: '2023-04-04', 
-    amount: '$852.25',
-    status: 'Pending',
-    uploader: 'Maria Garcia',
-    uploadDate: '2023-04-04'
+    points: 852,
+    status: 'Pending'
   },
   { 
     id: 'INV-003', 
     store: 'Express Store', 
     date: '2023-04-03', 
-    amount: '$375.00',
-    status: 'Rejected',
-    uploader: 'David Johnson',
-    uploadDate: '2023-04-03'
+    points: 375,
+    status: 'Rejected'
   },
   { 
     id: 'INV-004', 
     store: 'Super Grocers', 
     date: '2023-04-02', 
-    amount: '$980.75',
-    status: 'Partially Rejected',
-    uploader: 'Sarah Lee',
-    uploadDate: '2023-04-02'
+    points: 980,
+    status: 'Partially Rejected'
   },
   { 
     id: 'INV-005', 
     store: 'Quick Mart', 
     date: '2023-04-01', 
-    amount: '$645.30',
-    status: 'Pending',
-    uploader: 'Michael Brown',
-    uploadDate: '2023-04-01'
+    points: 645,
+    status: 'Pending'
   },
 ];
 
@@ -150,10 +140,8 @@ export default function Invoices() {
                     <TableHead>Invoice ID</TableHead>
                     <TableHead>Store</TableHead>
                     <TableHead>Date</TableHead>
-                    <TableHead>Amount</TableHead>
+                    <TableHead>Points</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Uploaded By</TableHead>
-                    <TableHead>Upload Date</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -168,26 +156,13 @@ export default function Invoices() {
                       </TableCell>
                       <TableCell>{invoice.store}</TableCell>
                       <TableCell>{invoice.date}</TableCell>
-                      <TableCell className="font-medium">{invoice.amount}</TableCell>
+                      <TableCell className="font-medium">{invoice.points.toLocaleString()}</TableCell>
                       <TableCell>{getStatusBadge(invoice.status)}</TableCell>
-                      <TableCell>{invoice.uploader}</TableCell>
-                      <TableCell>{invoice.uploadDate}</TableCell>
                       <TableCell>
-                        <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">View</Button>
-                          {invoice.status === 'Pending' && (
-                            <>
-                              <Button variant="outline" size="sm" className="text-green-600">
-                                <CheckCircle size={14} className="mr-1" />
-                                Accept
-                              </Button>
-                              <Button variant="outline" size="sm" className="text-red-600">
-                                <XCircle size={14} className="mr-1" />
-                                Reject
-                              </Button>
-                            </>
-                          )}
-                        </div>
+                        <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                          <Eye size={14} />
+                          View
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
