@@ -5,19 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useParams, useNavigate } from 'react-router-dom';
+import EditProductHook from './../../components/logic/Products/EditProductHook';
 
 export default function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  // For now using mock data - this would typically come from an API
-  const product = {
-    id: 1,
-    nameEn: 'Fresh Milk',
-    nameAr: 'حليب طازج',
-    barcode: '8901234567890',
-    brand: 'Daily Fresh',
-  };
+  const [product,loading]=EditProductHook(id);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +32,7 @@ export default function EditProduct() {
                 <Label htmlFor="nameEn">Name (English)</Label>
                 <Input
                   id="nameEn"
-                  defaultValue={product.nameEn}
+                  defaultValue={product.name}
                   placeholder="Enter product name in English"
                 />
               </div>
@@ -48,7 +41,7 @@ export default function EditProduct() {
                 <Label htmlFor="nameAr">Name (Arabic)</Label>
                 <Input
                   id="nameAr"
-                  defaultValue={product.nameAr}
+                  defaultValue={product.name_ar}
                   placeholder="Enter product name in Arabic"
                   className="font-arabic"
                 />
