@@ -17,7 +17,7 @@ import { InvoiceTable } from '@/components/invoices/InvoiceTable';
 export default function Invoices() {
   const [invoiceCount, loading] = InvoicesCountHook();
   const [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2, invoiceStatus, handleFilter] = AllInvoicesHook();
-  
+    
   const getCount = (data: any, field: string) => {
     if (!data || !data[field]) return 0;
     return data[field].count || 0;
@@ -46,7 +46,7 @@ export default function Invoices() {
             <StatusCards 
               invoiceCount={invoiceCount}
               invoiceStatus={invoiceStatus}
-              handleFilter={()=>handleFilter(invoiceCount)}
+              handleFilter={()=>handleFilter(invoiceCount["pending_invices"].status_id)}
               getCount={getCount}
             />
           </div>
