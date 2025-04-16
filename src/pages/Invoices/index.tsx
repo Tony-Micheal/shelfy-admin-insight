@@ -46,7 +46,7 @@ export default function Invoices() {
             <StatusCards 
               invoiceCount={invoiceCount}
               invoiceStatus={invoiceStatus}
-              handleFilter={()=>handleFilter(invoiceCount["pending_invices"].status_id)}
+              handleFilter={handleFilter}
               getCount={getCount}
             />
           </div>
