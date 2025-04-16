@@ -9,14 +9,12 @@ const AllInvoicesHook = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading2, setloading2] = useState(false);
 
-  // Function to retrieve invoices
   const getData = async (page = 1, search = '') => {
     setloading2(true);
-    await dispatch(getAllInvoicesAction(page, 15, search));
+    await dispatch(getAllInvoicesAction(page, 10, search)); // Changed to 10 items per page
     setloading2(false);
   };
 
-  // Initial data fetch
   useEffect(() => {
     getData(1);
   }, []);
@@ -27,8 +25,8 @@ const AllInvoicesHook = () => {
   let totalPages = 0;
 
   try {
-    if (res && res.data) {
-      allInvoices = res.data || [];
+    if (res?.data) {
+      allInvoices = res.data;
       if (res.pagination) {
         totalPages = res.pagination.last_page || 0;
       }
@@ -37,16 +35,14 @@ const AllInvoicesHook = () => {
     console.error('Error processing invoices data:', e);
   }
 
-  // Handle page change by dispatching the action with the new page number
   const handlePageChange = async (page) => {
     setCurrentPage(page);
     await getData(page, searchTerm);
   };
 
-  // Handle search
   const handleSearch = async (term) => {
     setSearchTerm(term);
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
     await getData(1, term);
   };
 

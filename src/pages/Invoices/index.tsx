@@ -1,4 +1,3 @@
-
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -19,7 +18,6 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -64,7 +62,6 @@ export default function Invoices() {
   const [invoiceCount, loading] = InvoicesCountHook();
   const [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2] = AllInvoicesHook();
   
-  // Handle case where data is not yet loaded
   const getCount = (data, field) => {
     if (!data || !data[field]) return 0;
     return data[field].count || 0;
@@ -174,18 +171,14 @@ export default function Invoices() {
                     <PaginationItem>
                       <PaginationPrevious 
                         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                       />
-                    </PaginationItem>
-                    
-                    <PaginationItem>
-                      <PaginationLink isActive>{currentPage}</PaginationLink>
                     </PaginationItem>
                     
                     <PaginationItem>
                       <PaginationNext 
                         onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                        className={currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                        className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
                       />
                     </PaginationItem>
                   </PaginationContent>
