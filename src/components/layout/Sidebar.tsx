@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -13,7 +14,10 @@ import {
   Settings, 
   FileUp,
   Car,
-  UserCog
+  UserCog,
+  Folder,
+  Boxes,
+  BadgeCheck
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -70,6 +74,9 @@ export function Sidebar() {
     { icon: PieChart, label: 'SOS', path: '/sos' },
     { icon: BarChart3, label: 'OSA Reports', path: '/osa-reports' },
     { icon: Award, label: 'Points & Bonuses', path: '/points-bonuses' },
+    { icon: Folder, label: 'Categories', path: '/categories' },
+    { icon: Boxes, label: 'Segments', path: '/segments' },
+    { icon: BadgeCheck, label: 'Roles', path: '/roles' },
     { icon: Users, label: 'Users', path: '/users' },
     { icon: UserCog, label: 'Admins', path: '/admins' },
     { icon: FileUp, label: 'Import/Export', path: '/import-export' },

@@ -39,12 +39,13 @@ const App = () => (
           <Route path="/products" element={<Products />} />
           <Route path="/osa-reports" element={<OSAReports />} />
           <Route path="/points-bonuses" element={<PointsBonuses />} />
-          <Route path="/cleanliness" element={<Cleanliness />} />
+          <Route path="/categories" element={<NotFound />} />
+          <Route path="/segments" element={<NotFound />} />
+          <Route path="/roles" element={<NotFound />} />
           <Route path="/users" element={<Users />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/import-export" element={<ImportExport />} />
-          <Route path="/products/:id/edit" element={<EditProduct />} />
           <Route path="/admins" element={<Admins />} />
+          <Route path="/products/:id/edit" element={<EditProduct />} />
+          <Route path="/import-export" element={<ImportExport />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
