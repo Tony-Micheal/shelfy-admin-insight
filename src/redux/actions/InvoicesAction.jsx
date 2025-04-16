@@ -1,9 +1,6 @@
 import { useGetDataWithToken } from "../../hooks/useGetData";
 import { GET_ALL_INVOICES, GET_FILTER_INVOICES, GET_INVOICES_COUNT } from "../type";
 
-
-
-
 const getInvoicesCountAction =  ()=> async (dispatch)=>{
     try{
         const response=await useGetDataWithToken(`/invoices/count`);
@@ -24,45 +21,38 @@ const getInvoicesCountAction =  ()=> async (dispatch)=>{
 
 }
 
-const  getAllInvoicesAction=  (page, limit, searchTerm = '')=> async (dispatch)=>{
-    try{
-        const response=await useGetDataWithToken(`/invoices?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
+const getAllInvoicesAction = (page, limit, searchTerm = '') => async (dispatch) => {
+    try {
+        const response = await useGetDataWithToken(`/invoices?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
         dispatch({
-            type:GET_ALL_INVOICES,
-            payload:response,
-            loading:true
-
+            type: GET_ALL_INVOICES,
+            payload: response,
+            loading: true
         })
     }
-    catch(e){
+    catch(e) {
         dispatch({
-            type:GET_ALL_INVOICES,
-            payload:e.response
+            type: GET_ALL_INVOICES,
+            payload: e.response
         })
     }
-
-
 }
 
-const  getInvoicesByFilterAction=  (status,page, limit, searchTerm = '')=> async (dispatch)=>{
-    try{
-        const response=await useGetDataWithToken(`/invoices?status=${status}&page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
+const getInvoicesByFilterAction = (statusId, page, limit, searchTerm = '') => async (dispatch) => {
+    try {
+        const response = await useGetDataWithToken(`/invoices?status_id=${statusId}&page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
         dispatch({
-            type:GET_FILTER_INVOICES,
-            payload:response,
-            loading:true
-
+            type: GET_FILTER_INVOICES,
+            payload: response,
+            loading: true
         })
     }
-    catch(e){
+    catch(e) {
         dispatch({
-            type:GET_FILTER_INVOICES,
-            payload:e.response
+            type: GET_FILTER_INVOICES,
+            payload: e.response
         })
     }
-
-
 }
-
 
 export {getInvoicesCountAction,getAllInvoicesAction,getInvoicesByFilterAction}

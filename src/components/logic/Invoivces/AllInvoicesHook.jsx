@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllInvoicesAction, getInvoicesByFilterAction } from '../../../redux/actions/InvoicesAction';
@@ -10,16 +9,9 @@ const AllInvoicesHook = () => {
   const [loading2, setloading2] = useState(false);
   const [invoiceStatus, setInvoiceStatus] = useState(null);
 
-  const statusMap = {
-    1: 'Accepted',
-    2: 'Rejected',
-    3: 'Partially Rejected',
-    4: 'Pending'
-  };
-
   const handleFilter = (id) => {
     setInvoiceStatus(id);
-    setCurrentPage(1); // Reset to first page when changing filters
+    setCurrentPage(1);
     getData(1, searchTerm, id);
   };
 
@@ -27,7 +19,7 @@ const AllInvoicesHook = () => {
     setloading2(true);
     try {
       if (status) {
-        await dispatch(getInvoicesByFilterAction(statusMap[status], page, 10, search));
+        await dispatch(getInvoicesByFilterAction(status, page, 10, search));
       } else {
         await dispatch(getAllInvoicesAction(page, 10, search));
       }
