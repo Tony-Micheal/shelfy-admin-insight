@@ -1,3 +1,4 @@
+
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -66,12 +67,23 @@ export default function Invoices() {
     if (!data || !data[field]) return 0;
     return data[field].count || 0;
   };
+
+  const getTotalCount = (data) => {
+    if (!data) return 0;
+    return getCount(data, 'acceepted_invices') + 
+           getCount(data, 'rejected_invices') + 
+           getCount(data, 'partially_rejected_invices') + 
+           getCount(data, 'pending_invices');
+  };
   
   return (
     <MainLayout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Invoices</h1>
+          <div className="text-sm text-gray-500">
+            Total Invoices: <span className="font-bold text-gray-900">{getTotalCount(invoiceCount)}</span>
+          </div>
         </div>
         
         <Card>
