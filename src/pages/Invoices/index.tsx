@@ -1,3 +1,4 @@
+
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -10,51 +11,17 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock, AlertTriangle, Eye } from 'lucide-react';
+import { SearchIcon, FileText, Eye, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import InvoicesCountHook from './../../components/logic/Invoivces/InvoicesCountHook';
-import { useState } from 'react';
-import AllInvoicesHook from './../../components/logic/Invoivces/AllInvoicesHook';
-
-const invoices = [
-  { 
-    id: 'INV-001', 
-    store: 'Metro Supermarket', 
-    date: '2023-04-05', 
-    points: 1240,
-    status: 'Accepted'
-  },
-  { 
-    id: 'INV-002', 
-    store: 'Daily Market', 
-    date: '2023-04-04', 
-    points: 852,
-    status: 'Pending'
-  },
-  { 
-    id: 'INV-003', 
-    store: 'Express Store', 
-    date: '2023-04-03', 
-    points: 375,
-    status: 'Rejected'
-  },
-  { 
-    id: 'INV-004', 
-    store: 'Super Grocers', 
-    date: '2023-04-02', 
-    points: 980,
-    status: 'Partially Rejected'
-  },
-  { 
-    id: 'INV-005', 
-    store: 'Quick Mart', 
-    date: '2023-04-01', 
-    points: 645,
-    status: 'Pending'
-  },
-];
-
-const ITEMS_PER_PAGE = 5;
+import InvoicesCountHook from '../../components/logic/Invoivces/InvoicesCountHook';
+import AllInvoicesHook from '../../components/logic/Invoivces/AllInvoicesHook';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function Invoices() {
   
@@ -88,35 +55,49 @@ export default function Invoices() {
             Pending
           </Badge>
         );
-
       default:
         return <Badge>{status}</Badge>;
     }
   };
 
+<<<<<<< HEAD
   const  [invoiceCount,  loading2]=InvoicesCountHook();
   const  [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch,Loading2]=AllInvoicesHook();
   console.log("all",allInvoices);
   
+=======
+  const [invoiceCount, loading] = InvoicesCountHook();
+  const [allInvoices, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading2] = AllInvoicesHook();
+>>>>>>> ac5591f0791a1c89bc9a607915b053008d76f180
   
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentInvoices = invoices.slice(startIndex, endIndex);
+  const getCount = (data, field) => {
+    if (!data || !data[field]) return 0;
+    return data[field].count || 0;
+  };
 
-  
+  const getTotalCount = (data) => {
+    if (!data) return 0;
+    return getCount(data, 'acceepted_invices') + 
+           getCount(data, 'rejected_invices') + 
+           getCount(data, 'partially_rejected_invices') + 
+           getCount(data, 'pending_invices');
+  };
   
   return (
     <MainLayout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Invoices</h1>
-        
+          <div className="text-sm text-gray-500">
+            Total Invoices: <span className="font-bold text-gray-900">{getTotalCount(invoiceCount)}</span>
+          </div>
         </div>
         
         <Card>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+<<<<<<< HEAD
                 <div className="text-3xl font-bold text-green-600">{invoiceCount.acceepted_invices&&invoiceCount.acceepted_invices.count}</div>
                 <div className="text-sm text-gray-500">Accepted</div>
               </div>
@@ -130,19 +111,44 @@ export default function Invoices() {
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
                 <div className="text-3xl font-bold text-yellow-600">{invoiceCount.pending_invices&&invoiceCount.pending_invices.count}</div>
+=======
+                <div className="text-3xl font-bold text-green-600">
+                  {getCount(invoiceCount, 'acceepted_invices')}
+                </div>
+                <div className="text-sm text-gray-500">Accepted</div>
+              </div>
+              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+                <div className="text-3xl font-bold text-red-600">
+                  {getCount(invoiceCount, 'rejected_invices')}
+                </div>
+                <div className="text-sm text-gray-500">Rejected</div>
+              </div>
+              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+                <div className="text-3xl font-bold text-orange-600">
+                  {getCount(invoiceCount, 'partially_rejected_invices')}
+                </div>
+                <div className="text-sm text-gray-500">Partially Rejected</div>
+              </div>
+              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+                <div className="text-3xl font-bold text-yellow-600">
+                  {getCount(invoiceCount, 'pending_invices')}
+                </div>
+>>>>>>> ac5591f0791a1c89bc9a607915b053008d76f180
                 <div className="text-sm text-gray-500">Pending</div>
               </div>
-           
             </div>
-            
-        
           </div>
           
           <div className="px-6 pb-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 mb-6">
               <div className="relative w-full md:w-96">
                 <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input placeholder="Search invoices..." className="pl-9" />
+                <Input 
+                  placeholder="Search invoices..." 
+                  className="pl-9" 
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
               </div>
             </div>
             
@@ -159,29 +165,61 @@ export default function Invoices() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {allInvoices.map(invoice => (
-                    <TableRow key={invoice.id}>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center">
-                          <FileText size={16} className="mr-2 text-gray-500" />
-                          {invoice.id}
-                        </div>
-                      </TableCell>
-                      <TableCell>{invoice.customer.name}</TableCell>
-                      <TableCell>{invoice.date}</TableCell>
-                      <TableCell className="font-medium">{invoice.points.toLocaleString()}</TableCell>
-                      <TableCell>{getStatusBadge(invoice.status)}</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                          <Eye size={14} />
-                          View
-                        </Button>
+                  {Array.isArray(allInvoices) && allInvoices.length > 0 ? (
+                    allInvoices.map((invoice) => (
+                      <TableRow key={invoice.id}>
+                        <TableCell className="font-medium">
+                          <div className="flex items-center">
+                            <FileText size={16} className="mr-2 text-gray-500" />
+                            {invoice.id}
+                          </div>
+                        </TableCell>
+                        <TableCell>{invoice.customer?.name || 'N/A'}</TableCell>
+                        <TableCell>{invoice.date || 'N/A'}</TableCell>
+                        <TableCell className="font-medium">
+                          {typeof invoice.points === 'number' ? invoice.points.toLocaleString() : 'N/A'}
+                        </TableCell>
+                        <TableCell>{getStatusBadge(invoice.status)}</TableCell>
+                        <TableCell>
+                          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                            <Eye size={14} />
+                            View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-6">
+                        {loading2 ? "Loading invoices..." : "No invoices found"}
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </div>
+            
+            {totalPages > 0 && (
+              <div className="mt-4 flex justify-center">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                    
+                    <PaginationItem>
+                      <PaginationNext 
+                        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                        className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
           </div>
         </Card>
       </div>
