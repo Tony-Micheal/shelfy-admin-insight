@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { SearchIcon, FileText, Upload, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const invoices = [
@@ -46,7 +46,7 @@ const invoices = [
     store: 'Super Grocers', 
     date: '2023-04-02', 
     amount: '$980.75',
-    status: 'Accepted',
+    status: 'Partially Rejected',
     uploader: 'Sarah Lee',
     uploadDate: '2023-04-02'
   },
@@ -66,23 +66,30 @@ export default function Invoices() {
     switch(status) {
       case 'Accepted':
         return (
-          <Badge className="bg-green-100 text-green-800 flex items-center gap-1">
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-200 flex items-center gap-1">
             <CheckCircle size={12} />
             Accepted
           </Badge>
         );
       case 'Rejected':
         return (
-          <Badge className="bg-red-100 text-red-800 flex items-center gap-1">
+          <Badge className="bg-red-100 text-red-800 hover:bg-red-200 flex items-center gap-1">
             <XCircle size={12} />
             Rejected
           </Badge>
         );
       case 'Pending':
         return (
-          <Badge className="bg-yellow-100 text-yellow-800 flex items-center gap-1">
+          <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 flex items-center gap-1">
             <Clock size={12} />
             Pending
+          </Badge>
+        );
+      case 'Partially Rejected':
+        return (
+          <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 flex items-center gap-1">
+            <AlertTriangle size={12} />
+            Partially Rejected
           </Badge>
         );
       default:
@@ -103,18 +110,22 @@ export default function Invoices() {
         
         <Card>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-shelfy-teal">428</div>
+                <div className="text-3xl font-bold text-green-600">428</div>
                 <div className="text-sm text-gray-500">Accepted</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-shelfy-red">84</div>
+                <div className="text-3xl font-bold text-red-600">84</div>
                 <div className="text-sm text-gray-500">Rejected</div>
               </div>
               <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
-                <div className="text-3xl font-bold text-shelfy-yellow">56</div>
+                <div className="text-3xl font-bold text-yellow-600">56</div>
                 <div className="text-sm text-gray-500">Pending</div>
+              </div>
+              <div className="flex flex-col items-center p-6 border rounded-md bg-gray-50">
+                <div className="text-3xl font-bold text-orange-600">32</div>
+                <div className="text-sm text-gray-500">Partially Rejected</div>
               </div>
             </div>
             
