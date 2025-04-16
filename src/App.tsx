@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import EditProduct from "./pages/Products/EditProduct";
 import Admins from "./pages/Admins";
+import Segments from "./pages/Segments";
 
 const queryClient = new QueryClient();
 
@@ -40,7 +41,7 @@ const App = () => (
           <Route path="/osa-reports" element={<OSAReports />} />
           <Route path="/points-bonuses" element={<PointsBonuses />} />
           <Route path="/categories" element={<NotFound />} />
-          <Route path="/segments" element={<NotFound />} />
+          <Route path="/segments" element={<Segments />} />
           <Route path="/roles" element={<NotFound />} />
           <Route path="/users" element={<Users />} />
           <Route path="/admins" element={<Admins />} />
