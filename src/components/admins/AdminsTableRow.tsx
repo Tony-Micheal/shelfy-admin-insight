@@ -1,7 +1,8 @@
 
 import { TableRow, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash2, ChevronRight } from 'lucide-react';
+import { Pencil, Trash2, ChevronRight, User, Phone, Mail, Shield } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import {
   Drawer,
   DrawerClose,
@@ -35,62 +36,77 @@ export const AdminsTableRow = ({ admin, isMobile }: AdminsTableRowProps) => {
 
   if (isMobile) {
     return (
-      <TableRow key={admin.id}>
-        <TableCell className="font-mono text-sm text-gray-500">#{admin.id}</TableCell>
-        <TableCell>{admin.name}</TableCell>
-        <TableCell className="text-right">
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <div className="mx-auto w-full max-w-sm">
-                <DrawerHeader>
-                  <DrawerTitle>Admin Details</DrawerTitle>
-                  <DrawerDescription>View or modify admin information</DrawerDescription>
-                </DrawerHeader>
-                <div className="p-4 space-y-4">
+      <Card className="p-4">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <div className="flex items-center justify-between cursor-pointer">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">{admin.name}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Shield className="h-3 w-3" />
+                  <span>{roleDisplay}</span>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-muted-foreground" />
+            </div>
+          </DrawerTrigger>
+          <DrawerContent>
+            <div className="mx-auto w-full max-w-sm">
+              <DrawerHeader>
+                <DrawerTitle className="text-xl">{admin.name}</DrawerTitle>
+                <DrawerDescription>ID: #{admin.id}</DrawerDescription>
+              </DrawerHeader>
+              <div className="p-4 space-y-4">
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                  <Mail className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Email</label>
+                    <p className="text-sm font-medium text-muted-foreground">Email</p>
                     <p className="mt-1">{admin.email}</p>
                   </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                  <Phone className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Phone</label>
+                    <p className="text-sm font-medium text-muted-foreground">Phone</p>
                     <p className="mt-1">{admin.phone}</p>
                   </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                  <Shield className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Role</label>
+                    <p className="text-sm font-medium text-muted-foreground">Role</p>
                     <p className="mt-1">{roleDisplay}</p>
                   </div>
                 </div>
-                <DrawerFooter>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Pencil className="h-4 w-4 mr-2" />
-                      Edit
-                    </Button>
-                    <Button variant="destructive" size="sm" className="flex-1">
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
-                  </div>
-                  <DrawerClose asChild>
-                    <Button variant="outline">Close</Button>
-                  </DrawerClose>
-                </DrawerFooter>
               </div>
-            </DrawerContent>
-          </Drawer>
-        </TableCell>
-      </TableRow>
+              <DrawerFooter>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" size="lg" className="w-full">
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Edit
+                  </Button>
+                  <Button variant="destructive" size="lg" className="w-full">
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
+                  </Button>
+                </div>
+                <DrawerClose asChild>
+                  <Button variant="outline" className="w-full">Close</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </Card>
     );
   }
 
   return (
-    <TableRow key={admin.id}>
-      <TableCell className="font-mono text-sm text-gray-500">#{admin.id}</TableCell>
+    <TableRow>
+      <TableCell className="font-mono text-sm text-muted-foreground">#{admin.id}</TableCell>
       <TableCell>{admin.name}</TableCell>
       <TableCell>{admin.email}</TableCell>
       <TableCell>{admin.phone}</TableCell>
@@ -100,7 +116,7 @@ export const AdminsTableRow = ({ admin, isMobile }: AdminsTableRowProps) => {
           <Button variant="ghost" size="icon" className="h-8 w-8">
             <Pencil className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
