@@ -1,8 +1,12 @@
 
-import { GET_ALL_ADMINS } from '../type';
+import { CREATE_ADMIN, GET_ADMIN_DETAILS, GET_ALL_ADMINS, UPDATE_ADMIN } from '../type';
 
 const initial = {
     allAdmins: [],
+    adminDetails:[],
+    updateAdmin:[],
+    createAdmin:[],
+    deleteAdmin:[],
     loading: true,
 };
 
@@ -12,6 +16,30 @@ export const AdminsReducer = (state = initial, action) => {
             return {
                 ...state,
                 allAdmins: action.payload,
+                loading: false
+            }
+        case GET_ADMIN_DETAILS:
+            return {
+                ...state,
+                adminDetails: action.payload,
+                loading: false
+            }
+        case UPDATE_ADMIN:
+            return {
+                ...state,
+                updateAdmin: action.payload,
+                loading: false
+            }
+        case CREATE_ADMIN:
+            return {
+                ...state,
+                createAdmin: action.payload,
+                loading: false
+            }
+        case UPDATE_ADMIN:
+            return {
+                ...state,
+                updateAdmin: action.payload,
                 loading: false
             }
         default:

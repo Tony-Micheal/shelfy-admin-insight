@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllAdminsAction } from './../../../redux/actions/AdminsAction';
+import { getAllAdminsAction } from '../../../redux/actions/AdminsAction';
 
 const AllAdminsHook = () => {
   const dispatch = useDispatch();
