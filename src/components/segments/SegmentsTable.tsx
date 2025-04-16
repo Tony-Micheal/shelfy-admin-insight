@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit2, Trash2, Settings } from 'lucide-react';
+import { Edit2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Temporary mock data - replace with actual data from your API
@@ -62,11 +62,11 @@ const SegmentsTable = () => {
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button
-                    variant="ghost"
-                    size="icon"
+                    variant="outline"
+                    size="sm"
                     onClick={() => handleEditPoints(segment.id)}
                   >
-                    <Settings className="h-4 w-4" />
+                    Edit Points
                   </Button>
                   <Button
                     variant="ghost"
