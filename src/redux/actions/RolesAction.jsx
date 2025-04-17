@@ -14,7 +14,8 @@ const getAllRolesAction = (page, limit, searchTerm = '') => async (dispatch) => 
     
     // Encode the search term to handle special characters
     const encodedSearchTerm = encodeURIComponent(searchTerm);
-    const response = await useGetDataWithToken(`/Roles?page=${page}&paginate=${limit}${encodedSearchTerm ? `&search=${encodedSearchTerm}` : ''}`);
+    // Explicitly specify that we want to search by name field
+    const response = await useGetDataWithToken(`/Roles?page=${page}&paginate=${limit}${encodedSearchTerm ? `&search=${encodedSearchTerm}&searchBy=name` : ''}`);
     
     dispatch({
       type: GET_ALL_ROLES,

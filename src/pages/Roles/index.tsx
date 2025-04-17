@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
@@ -41,7 +40,6 @@ export default function Roles() {
     }
   };
 
-  // Generate page numbers for pagination
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxDisplayedPages = 5;
@@ -64,7 +62,6 @@ export default function Roles() {
     console.log('Edit role:', role);
   };
   
-  // Updated to match the expected type in RolesTable - takes roleId (number) instead of Role object
   const handleDeleteRole = (roleId: number) => {
     const roleToDelete = allRoles.find(role => role.id === roleId);
     setSelectedRole(roleToDelete || null);
@@ -94,11 +91,11 @@ export default function Roles() {
                 <div className="relative w-full md:w-96">
                   <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input 
-                    placeholder="Search roles..." 
+                    placeholder="Search by role name..." 
                     className="pl-9" 
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
-                    aria-label="Search roles"
+                    aria-label="Search roles by name"
                   />
                 </div>
               </div>

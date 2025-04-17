@@ -10,7 +10,7 @@ const AllRolesHook = () => {
   const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
-  // Function to retrieve roles with pagination and search
+  // Function to retrieve roles with pagination and name search
   const getData = async (page = 1, search = '') => {
     setLoading(true);
     try {
@@ -22,20 +22,20 @@ const AllRolesHook = () => {
     }
   };
 
-  // Improved debounce search term implementation
+  // Improved debounce for name search
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-      // Reset to first page when search term changes
+      // Always reset to first page when search term changes
       if (currentPage !== 1) {
         setCurrentPage(1);
       }
-    }, 500);
+    }, 300); // Reduced debounce time for more responsive search
 
     return () => {
       clearTimeout(handler);
     };
-  }, [searchTerm]);
+  }, [searchTerm, currentPage]);
 
   // Get data when page or debounced search term changes
   useEffect(() => {
@@ -65,7 +65,7 @@ const AllRolesHook = () => {
     setCurrentPage(page);
   };
 
-  // Handle search with improved implementation
+  // Handle search specifically for role names
   const handleSearch = (term) => {
     setSearchTerm(term);
     // Let the debounce effect handle resetting the page
