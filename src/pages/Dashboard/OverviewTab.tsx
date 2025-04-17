@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDispatch } from 'react-redux';
 import InvoicesCountHook from '@/components/logic/Invoivces/InvoicesCountHook';
+import MapComponent from '@/components/dashboard/MapComponent';
 
 // Updated data for store types and invoices
 const storeData = [
@@ -340,39 +341,7 @@ export default function OverviewTab() {
       </div>
       
       {/* Section 4: Map Chart for Invoice Regions */}
-      <Card className="bg-white">
-        <CardHeader>
-          <CardTitle>Invoice Distribution by Region</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[350px] bg-gray-100 rounded-lg flex items-center justify-center mb-4">
-            <div className="text-center">
-              <span className="text-gray-500 block mb-2">Map Visualization</span>
-              <div className="grid grid-cols-3 gap-4 p-4">
-                {regionData.map((region, index) => (
-                  <div key={index} className="bg-white p-3 rounded-md shadow-sm">
-                    <p className="font-semibold">{region.region}</p>
-                    <p className="text-orange-500 text-lg">{region.invoices}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-5 gap-4 mt-2">
-            {regionData.map((region, index) => (
-              <div key={index} className="text-center">
-                <p className="text-sm font-medium">{region.region}</p>
-                <div className="h-2 bg-gray-200 rounded-full mt-1">
-                  <div 
-                    className="h-full bg-orange-500 rounded-full" 
-                    style={{ width: `${(region.invoices / Math.max(...regionData.map(r => r.invoices))) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <MapComponent regionData={regionData} />
 
       {/* Original Stats - Hidden but keeping functionality */}
       <div className="hidden">
