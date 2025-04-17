@@ -34,6 +34,10 @@ const EditCategory = () => {
     );
   }
 
+  // Debug the data being passed to the form
+  console.log('CategoryData being passed to form:', categoryData);
+  console.log('All categories for dropdown:', allCategories);
+
   return (
     <MainLayout>
       <CategoryForm

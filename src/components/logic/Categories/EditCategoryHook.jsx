@@ -27,8 +27,10 @@ const EditCategoryHook = () => {
           // Prepare the initial form data
           setCategoryData({
             ...category,
-            // Convert parent_id to string for the form
-            parent_id: category.parent_id ? category.parent_id.toString() : ''
+            // Ensure parent_id is always a string (even if it's 0, convert it to "0")
+            parent_id: category.parent_id !== null && category.parent_id !== undefined 
+              ? category.parent_id.toString() 
+              : '0' // Default to '0' if null or undefined
           });
           // Set image preview
           if (category.image) {
@@ -79,9 +81,8 @@ const EditCategoryHook = () => {
       formData.append('name_ar', values.name_ar);
       formData.append('points', values.points.toString());
       
-      if (values.parent_id && values.parent_id !== 'none') {
-        formData.append('parent_id', values.parent_id);
-      }
+      // Always include parent_id, even if it's '0'
+      formData.append('parent_id', values.parent_id || '0');
       
       if (values.image && values.image.length > 0) {
         formData.append('image', values.image[0]);
