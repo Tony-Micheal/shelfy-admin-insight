@@ -10,7 +10,7 @@ const initial = {
     loading: true,
 };
 
-export const AdminsReducer = (state = initial, action) => {
+const AdminsReducer = (state = initial, action) => {
     switch (action.type) {
         case GET_ALL_ADMINS:
             return {
@@ -36,14 +36,9 @@ export const AdminsReducer = (state = initial, action) => {
                 createAdmin: action.payload,
                 loading: false
             }
-        case UPDATE_ADMIN:
-            return {
-                ...state,
-                updateAdmin: action.payload,
-                loading: false
-            }
         default:
             return state;
     }
 }
 
+export default AdminsReducer;
