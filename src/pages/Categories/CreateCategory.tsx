@@ -245,7 +245,7 @@ const CreateCategory = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="">None</SelectItem>
+                          <SelectItem value="none">None</SelectItem>
                           {allCategories.map((category: any) => (
                             <SelectItem key={category.id} value={category.id.toString()}>
                               {category.title}
