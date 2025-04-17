@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { getCategoryDetailsAction, updateCategoryAction } from '../../../redux/actions/CategoriesAction';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getCategoryDetailsAction, updateCategoryAction, getAllCategoriesAction } from '../../../redux/actions/CategoriesAction';
 import { useToast } from '@/hooks/use-toast';
 
 const EditCategoryHook = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [categoryData, setCategoryData] = useState(null);
@@ -40,6 +41,9 @@ const EditCategoryHook = () => {
     };
     
     fetchCategoryDetails();
+    
+    // Also fetch all categories for the parent dropdown
+    dispatch(getAllCategoriesAction(1, 100));
   }, [id, dispatch, toast]);
 
   // Handle image change
@@ -84,6 +88,7 @@ const EditCategoryHook = () => {
         description: 'Category updated successfully',
       });
       
+      navigate('/categories');
       return true;
     } catch (error) {
       console.error('Error updating category:', error);
