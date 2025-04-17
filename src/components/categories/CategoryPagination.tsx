@@ -4,7 +4,6 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
@@ -36,34 +35,6 @@ const CategoryPagination = ({ currentPage, totalPages, handlePageChange }: Categ
             />
           </PaginationItem>
         )}
-
-        {[...Array(totalPages)].map((_, index) => {
-          const pageNum = index + 1;
-          if (
-            pageNum === 1 ||
-            pageNum === totalPages ||
-            (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-          ) {
-            return (
-              <PaginationItem key={pageNum}>
-                <PaginationLink
-                  isActive={pageNum === currentPage}
-                  onClick={() => {
-                    console.log(`Navigating to page: ${pageNum}`);
-                    handlePageChange(pageNum);
-                  }}
-                >
-                  {pageNum}
-                </PaginationLink>
-              </PaginationItem>
-            );
-          }
-          // Show ellipsis for gaps
-          if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
-            return <PaginationItem key={pageNum}>...</PaginationItem>;
-          }
-          return null;
-        })}
 
         {currentPage < totalPages && (
           <PaginationItem>
