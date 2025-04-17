@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { ChartCard } from '@/components/dashboard/ChartCard';
 import { 
@@ -18,42 +19,76 @@ import {
   AreaChart,
   Area
 } from 'recharts';
-import { ShoppingBag, FileText, Users, BarChart3, ArrowUp, ArrowDown } from 'lucide-react';
+import { ShoppingBag, FileText, Users, BarChart3, ArrowUp, ArrowDown, CheckCircle, XCircle, AlertTriangle, Clock } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useDispatch } from 'react-redux';
+import InvoicesCountHook from '@/components/logic/Invoivces/InvoicesCountHook';
 
-// Dummy data for charts
-const pieData = [
-  { name: 'OSA Rating', value: 68 },
-  { name: 'OOS Rating', value: 32 },
+// Dummy data for store statistics
+const storeData = [
+  { name: 'Active Stores', value: 68 },
+  { name: 'Inactive Stores', value: 32 },
 ];
 
-const barData = [
-  { name: 'Dairy', value: 45 },
-  { name: 'Beverages', value: 41 },
-  { name: 'Bakery', value: 38 },
-  { name: 'Snacks', value: 37 },
-  { name: 'Produce', value: 28 },
+// Dummy data for stock status
+const stockData = [
+  { name: 'In Stock', value: 75 },
+  { name: 'Out of Stock', value: 25 },
 ];
 
-const monthlyData = [
-  { name: 'Jan', views: 30, clicks: 10 },
-  { name: 'Feb', views: 65, clicks: 12 },
-  { name: 'Mar', views: 45, clicks: 15 },
-  { name: 'Apr', views: 75, clicks: 20 },
-  { name: 'May', views: 50, clicks: 18 },
-  { name: 'Jun', views: 60, clicks: 23 },
-  { name: 'Jul', views: 45, clicks: 15 },
-  { name: 'Aug', views: 45, clicks: 20 },
-  { name: 'Sep', views: 40, clicks: 25 },
-  { name: 'Oct', views: 50, clicks: 30 },
-  { name: 'Nov', views: 65, clicks: 25 },
-  { name: 'Dec', views: 75, clicks: 30 },
+// Monthly invoice data
+const monthlyInvoiceData = [
+  { name: 'Jan', invoices: 30 },
+  { name: 'Feb', invoices: 65 },
+  { name: 'Mar', invoices: 45 },
+  { name: 'Apr', invoices: 75 },
+  { name: 'May', invoices: 50 },
+  { name: 'Jun', invoices: 60 },
+  { name: 'Jul', invoices: 45 },
+  { name: 'Aug', invoices: 45 },
+  { name: 'Sep', invoices: 40 },
+  { name: 'Oct', invoices: 50 },
+  { name: 'Nov', invoices: 65 },
+  { name: 'Dec', invoices: 75 },
 ];
 
-const COLORS = ['#EE6721', '#99A4B9'];
+// Region data for map visualization
+const regionData = [
+  { region: 'North', invoices: 245 },
+  { region: 'South', invoices: 187 },
+  { region: 'East', invoices: 156 },
+  { region: 'West', invoices: 203 },
+  { region: 'Central', invoices: 178 },
+];
+
+const STORE_COLORS = ['#4CAF50', '#99A4B9'];
+const STOCK_COLORS = ['#2196F3', '#F44336'];
 
 export default function OverviewTab() {
+  const [invoiceCount, loading] = InvoicesCountHook();
+  
+  const getCount = (data, field) => {
+    if (!data || !data[field]) return 0;
+    return data[field].count || 0;
+  };
+  
+  const getTotalInvoices = () => {
+    if (!invoiceCount) return 0;
+    
+    const fields = [
+      'acceepted_invices', 
+      'rejected_invices', 
+      'partially_rejected_invices', 
+      'pending_invices'
+    ];
+    
+    return fields.reduce((total, field) => {
+      return total + getCount(invoiceCount, field);
+    }, 0);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Server notification */}
@@ -61,84 +96,197 @@ export default function OverviewTab() {
         <p>We regret to inform you that our server is currently experiencing technical difficulties.</p>
       </div>
 
-      {/* KPI Cards - First Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
-          <div className="flex">
-            <div className="bg-orange-50 p-3 rounded-lg">
-              <ShoppingBag size={24} className="text-orange-500" />
-            </div>
-            <div className="ml-4 flex-1">
-              <p className="text-gray-500 text-sm">Total Orders</p>
-              <h3 className="text-2xl font-bold mt-1">13,647</h3>
-              <div className="flex items-center mt-2">
-                <span className="text-green-500 flex items-center text-xs"><ArrowUp size={14} className="mr-1" /> 2.3%</span>
-                <span className="text-xs text-gray-500 ml-2">Last Week</span>
-                <Button variant="ghost" size="sm" className="ml-auto text-xs font-normal">View More</Button>
+      {/* Section 1: Invoice Statistics */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Invoice Statistics</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {/* Total Invoices */}
+          <Card className="bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-500">Total Invoices</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <div className="bg-orange-50 p-3 rounded-lg mr-3">
+                  <FileText size={24} className="text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{getTotalInvoices()}</p>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
-          <div className="flex">
-            <div className="bg-orange-50 p-3 rounded-lg">
-              <Users size={24} className="text-orange-500" />
-            </div>
-            <div className="ml-4 flex-1">
-              <p className="text-gray-500 text-sm">New Leads</p>
-              <h3 className="text-2xl font-bold mt-1">9,526</h3>
-              <div className="flex items-center mt-2">
-                <span className="text-green-500 flex items-center text-xs"><ArrowUp size={14} className="mr-1" /> 8.1%</span>
-                <span className="text-xs text-gray-500 ml-2">Last Month</span>
-                <Button variant="ghost" size="sm" className="ml-auto text-xs font-normal">View More</Button>
+            </CardContent>
+          </Card>
+          
+          {/* Accepted Invoices */}
+          <Card className="bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-500">Accepted</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <div className="bg-green-50 p-3 rounded-lg mr-3">
+                  <CheckCircle size={24} className="text-green-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{getCount(invoiceCount, 'acceepted_invices')}</p>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* KPI Cards - Second Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
-          <div className="flex">
-            <div className="bg-orange-50 p-3 rounded-lg">
-              <FileText size={24} className="text-orange-500" />
-            </div>
-            <div className="ml-4 flex-1">
-              <p className="text-gray-500 text-sm">Deals</p>
-              <h3 className="text-2xl font-bold mt-1">976</h3>
-              <div className="flex items-center mt-2">
-                <span className="text-red-500 flex items-center text-xs"><ArrowDown size={14} className="mr-1" /> 0.3%</span>
-                <span className="text-xs text-gray-500 ml-2">Last Month</span>
-                <Button variant="ghost" size="sm" className="ml-auto text-xs font-normal">View More</Button>
+            </CardContent>
+          </Card>
+          
+          {/* Rejected Invoices */}
+          <Card className="bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-500">Rejected</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <div className="bg-red-50 p-3 rounded-lg mr-3">
+                  <XCircle size={24} className="text-red-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{getCount(invoiceCount, 'rejected_invices')}</p>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
-          <div className="flex">
-            <div className="bg-orange-50 p-3 rounded-lg">
-              <BarChart3 size={24} className="text-orange-500" />
-            </div>
-            <div className="ml-4 flex-1">
-              <p className="text-gray-500 text-sm">Booked Revenue</p>
-              <h3 className="text-2xl font-bold mt-1">$123.6k</h3>
-              <div className="flex items-center mt-2">
-                <span className="text-red-500 flex items-center text-xs"><ArrowDown size={14} className="mr-1" /> 10.6%</span>
-                <span className="text-xs text-gray-500 ml-2">Last Month</span>
-                <Button variant="ghost" size="sm" className="ml-auto text-xs font-normal">View More</Button>
+            </CardContent>
+          </Card>
+          
+          {/* Partially Rejected Invoices */}
+          <Card className="bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-500">Partially Rejected</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <div className="bg-orange-50 p-3 rounded-lg mr-3">
+                  <AlertTriangle size={24} className="text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{getCount(invoiceCount, 'partially_rejected_invices')}</p>
+                </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
+          
+          {/* Pending Invoices */}
+          <Card className="bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-500">Pending</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <div className="bg-blue-50 p-3 rounded-lg mr-3">
+                  <Clock size={24} className="text-blue-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{getCount(invoiceCount, 'pending_invices')}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
       
-      {/* Performance Chart - Updated with Area Chart */}
+      {/* Section 2: Circle Charts */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Store & Stock Analytics</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Store Statistics */}
+          <Card className="bg-white">
+            <CardHeader>
+              <CardTitle>Store Statistics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={storeData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      paddingAngle={5}
+                      dataKey="value"
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    >
+                      {storeData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={STORE_COLORS[index % STORE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value, name) => [`${value} stores`, name]}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex justify-center mt-4">
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                    <span>Active: 68 stores</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
+                    <span>Inactive: 32 stores</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Stock Status */}
+          <Card className="bg-white">
+            <CardHeader>
+              <CardTitle>Stock Status</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={stockData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      paddingAngle={5}
+                      dataKey="value"
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    >
+                      {stockData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={STOCK_COLORS[index % STOCK_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value, name) => [`${value}%`, name]}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex justify-center mt-4">
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                    <span>In Stock: 75%</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                    <span>Out of Stock: 25%</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      
+      {/* Section 3: Performance Chart - Invoice Average by Month */}
       <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-medium">Performance</h3>
+          <h3 className="text-lg font-medium">Invoice Performance by Month</h3>
           <div className="flex space-x-2">
             <Button variant="outline" size="sm" className="bg-gray-50 border-gray-200">ALL</Button>
             <Button variant="outline" size="sm" className="bg-transparent">1M</Button>
@@ -149,154 +297,68 @@ export default function OverviewTab() {
         <div className="h-[320px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={monthlyData}
+              data={monthlyInvoiceData}
               margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
             >
               <defs>
-                <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="colorInvoices" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#FF6B35" stopOpacity={0.8}/>
                   <stop offset="95%" stopColor="#FF6B35" stopOpacity={0.1}/>
-                </linearGradient>
-                <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#4CAF50" stopOpacity={0.1}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
               <XAxis dataKey="name" axisLine={false} tickLine={false} />
               <YAxis axisLine={false} tickLine={false} />
-              <Tooltip />
+              <Tooltip labelFormatter={(label) => `Month: ${label}`} />
               <Legend />
               <Area 
                 type="monotone" 
-                dataKey="views" 
+                dataKey="invoices" 
+                name="Invoices"
                 stroke="#FF6B35" 
                 strokeWidth={2}
                 fillOpacity={1} 
-                fill="url(#colorViews)" 
-              />
-              <Area 
-                type="monotone" 
-                dataKey="clicks" 
-                stroke="#4CAF50" 
-                strokeWidth={2}
-                fillOpacity={1} 
-                fill="url(#colorClicks)" 
+                fill="url(#colorInvoices)" 
               />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
       
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Conversions Chart */}
-        <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
-          <h3 className="text-lg font-medium mb-4">Conversions</h3>
-          <div className="relative flex justify-center">
-            <div className="w-48 h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={[{ name: 'Returning Customer', value: 65.2 }, { name: 'New Customer', value: 34.8 }]}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={60}
-                    startAngle={90}
-                    endAngle={450}
-                    fill="#FF6B35"
-                    dataKey="value"
-                  >
-                    <Cell fill="#FF6B35" />
-                    <Cell fill="#EEEEEE" />
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold">65.2%</span>
-                <span className="text-xs text-gray-500">Returning Customer</span>
+      {/* Section 4: Map Chart for Invoice Regions */}
+      <Card className="bg-white">
+        <CardHeader>
+          <CardTitle>Invoice Distribution by Region</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[350px] bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+            <div className="text-center">
+              <span className="text-gray-500 block mb-2">Map Visualization</span>
+              <div className="grid grid-cols-3 gap-4 p-4">
+                {regionData.map((region, index) => (
+                  <div key={index} className="bg-white p-3 rounded-md shadow-sm">
+                    <p className="font-semibold">{region.region}</p>
+                    <p className="text-orange-500 text-lg">{region.invoices}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-4 mt-6">
-            <div>
-              <p className="text-sm text-gray-500">This Week</p>
-              <p className="text-xl font-bold">23.5k</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Last Week</p>
-              <p className="text-xl font-bold">41.05k</p>
-            </div>
+          <div className="grid grid-cols-5 gap-4 mt-2">
+            {regionData.map((region, index) => (
+              <div key={index} className="text-center">
+                <p className="text-sm font-medium">{region.region}</p>
+                <div className="h-2 bg-gray-200 rounded-full mt-1">
+                  <div 
+                    className="h-full bg-orange-500 rounded-full" 
+                    style={{ width: `${(region.invoices / Math.max(...regionData.map(r => r.invoices))) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="mt-6">
-            <Button variant="outline" size="sm" className="w-full">View Details</Button>
-          </div>
-        </div>
-        
-        {/* Sessions by Country */}
-        <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
-          <h3 className="text-lg font-medium mb-4">Sessions by Country</h3>
-          <div className="h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-6">
-            <span className="text-gray-400">World Map Visualization</span>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-gray-500">This Week</p>
-              <p className="text-xl font-bold">23.5k</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Last Week</p>
-              <p className="text-xl font-bold">41.05k</p>
-            </div>
-          </div>
-        </div>
-        
-        {/* Top Pages */}
-        <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm col-span-1 md:col-span-2 lg:col-span-1">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium">Top Pages</h3>
-            <Button variant="ghost" size="sm" className="text-xs font-normal">View All</Button>
-          </div>
-          <table className="w-full">
-            <thead>
-              <tr className="text-left text-xs text-gray-500">
-                <th className="pb-2">Page Path</th>
-                <th className="pb-2">Page Views</th>
-                <th className="pb-2">Exit Rate</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              <tr>
-                <td className="py-2">larkon/ecommerce.html</td>
-                <td className="py-2">465</td>
-                <td className="py-2 text-green-500">4.6%</td>
-              </tr>
-              <tr>
-                <td className="py-2">larkon/dashboard.html</td>
-                <td className="py-2">426</td>
-                <td className="py-2 text-red-500">20.4%</td>
-              </tr>
-              <tr>
-                <td className="py-2">larkon/chat.html</td>
-                <td className="py-2">254</td>
-                <td className="py-2 text-yellow-500">15.8%</td>
-              </tr>
-              <tr>
-                <td className="py-2">larkon/auth-login.html</td>
-                <td className="py-2">3369</td>
-                <td className="py-2 text-green-500">5.2%</td>
-              </tr>
-              <tr>
-                <td className="py-2">larkon/email.html</td>
-                <td className="py-2">985</td>
-                <td className="py-2 text-red-500">64.2%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Original Stats - Hidden but keeping functionality */}
       <div className="hidden">
