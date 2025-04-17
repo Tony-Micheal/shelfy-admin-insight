@@ -8,18 +8,32 @@ const AllRolesHook = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
-  // Function to retrieve products from page 1
+  // Function to retrieve roles with pagination and search
   const getData = async (page = 1, search = '') => {
     setLoading(true);
     await dispatch(getAllRolesAction(page, 15, search));
     setLoading(false);
   };
 
-  // Initial data fetch
+  // Debounce search term to avoid too many API calls
   useEffect(() => {
-    getData(1);
-  }, []);
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+  // Get data when page or debounced search term changes
+  useEffect(() => {
+    getData(currentPage, debouncedSearchTerm);
+  }, [currentPage, debouncedSearchTerm]);
+
+  // Initial data fetch handled by above effect
 
   const res = useSelector(state => state.RolesReducer.allRoles);
   
@@ -30,8 +44,6 @@ const AllRolesHook = () => {
     if (res) {
       if (res.data) {
         allRoles = res.data;
-        console.log(allRoles);
-        console.log(res);
       }
       if (res.pagination) {
         totalPages = res.pagination.last_page;
@@ -41,17 +53,15 @@ const AllRolesHook = () => {
     console.error(e);
   }
 
-  // Handle page change by dispatching the action with the new page number
-  const handlePageChange = async (page) => {
+  // Handle page change
+  const handlePageChange = (page) => {
     setCurrentPage(page);
-    await getData(page, searchTerm);
   };
 
   // Handle search
-  const handleSearch = async (term) => {
+  const handleSearch = (term) => {
     setSearchTerm(term);
     setCurrentPage(1); // Reset to first page when searching
-    await getData(1, term);
   };
 
   return [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];

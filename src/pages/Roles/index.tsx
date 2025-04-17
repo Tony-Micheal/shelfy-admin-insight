@@ -11,6 +11,7 @@ import {
   PaginationItem, 
   PaginationNext, 
   PaginationPrevious,
+  PaginationLink,
 } from '@/components/ui/pagination';
 import RolesTable from '@/components/roles/RolesTable';
 import AllRolesHook from '@/components/logic/Roles/AllRolesHook';
@@ -23,9 +24,7 @@ interface Role {
 }
 
 export default function Roles() {
-
-  const [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading]=AllRolesHook();
-
+  const [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading] = AllRolesHook();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
   const handlePreviousPage = () => {
@@ -40,17 +39,34 @@ export default function Roles() {
     }
   };
 
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxDisplayedPages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
+    let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+
+    if (endPage - startPage + 1 < maxDisplayedPages) {
+      startPage = Math.max(1, endPage - maxDisplayedPages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    return pageNumbers;
+  };
+
   const handleEditRole = (role: Role) => {
     setSelectedRole(role);
-    // Open edit modal or navigate to edit page
     console.log('Edit role:', role);
   };
   
   const handleDeleteRole = (role: Role) => {
     setSelectedRole(role);
-    // Open edit modal or navigate to edit page
     console.log('Delete role:', role);
   };
+
   return (
     <Provider store={store}>
       <MainLayout showFilters={false}>
@@ -99,6 +115,18 @@ export default function Roles() {
                           className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                         />
                       </PaginationItem>
+                      
+                      {getPageNumbers().map(page => (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            isActive={page === currentPage}
+                            onClick={() => handlePageChange(page)}
+                            className="cursor-pointer"
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
                       
                       <PaginationItem>
                         <PaginationNext 
