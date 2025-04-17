@@ -7,16 +7,24 @@ import { GET_ALL_ROLES, SHOW_ROLE, CREATE_ROLE, UPDATE_ROLE, DELETE_ROLE } from 
 
 const getAllRolesAction = (page, limit, searchTerm = '') => async (dispatch) => {
   try {
-    const response = await useGetDataWithToken(`/Roles?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
     dispatch({
       type: GET_ALL_ROLES,
-      payload: response,
-      loading: true
+      payload: { loading: true }
+    });
+    
+    // Encode the search term to handle special characters
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
+    const response = await useGetDataWithToken(`/Roles?page=${page}&paginate=${limit}${encodedSearchTerm ? `&search=${encodedSearchTerm}` : ''}`);
+    
+    dispatch({
+      type: GET_ALL_ROLES,
+      payload: response
     });
   } catch (e) {
+    console.error('Error in getAllRolesAction:', e);
     dispatch({
       type: GET_ALL_ROLES,
-      payload: e.response
+      payload: e.response || { error: 'Failed to fetch roles' }
     });
   }
 };

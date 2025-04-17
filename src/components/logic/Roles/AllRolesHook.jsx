@@ -13,14 +13,23 @@ const AllRolesHook = () => {
   // Function to retrieve roles with pagination and search
   const getData = async (page = 1, search = '') => {
     setLoading(true);
-    await dispatch(getAllRolesAction(page, 15, search));
-    setLoading(false);
+    try {
+      await dispatch(getAllRolesAction(page, 15, search));
+    } catch (error) {
+      console.error('Error fetching roles:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Debounce search term to avoid too many API calls
+  // Improved debounce search term implementation
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
+      // Reset to first page when search term changes
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
     }, 500);
 
     return () => {
@@ -32,8 +41,6 @@ const AllRolesHook = () => {
   useEffect(() => {
     getData(currentPage, debouncedSearchTerm);
   }, [currentPage, debouncedSearchTerm]);
-
-  // Initial data fetch handled by above effect
 
   const res = useSelector(state => state.RolesReducer.allRoles);
   
@@ -50,7 +57,7 @@ const AllRolesHook = () => {
       }
     }
   } catch (e) {
-    console.error(e);
+    console.error('Error processing roles data:', e);
   }
 
   // Handle page change
@@ -58,10 +65,10 @@ const AllRolesHook = () => {
     setCurrentPage(page);
   };
 
-  // Handle search
+  // Handle search with improved implementation
   const handleSearch = (term) => {
     setSearchTerm(term);
-    setCurrentPage(1); // Reset to first page when searching
+    // Let the debounce effect handle resetting the page
   };
 
   return [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];

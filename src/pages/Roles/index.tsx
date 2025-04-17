@@ -17,6 +17,7 @@ import RolesTable from '@/components/roles/RolesTable';
 import AllRolesHook from '@/components/logic/Roles/AllRolesHook';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
+import { useToast } from '@/hooks/use-toast';
 
 interface Role {
   id: number;
@@ -26,6 +27,7 @@ interface Role {
 export default function Roles() {
   const [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading] = AllRolesHook();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const { toast } = useToast();
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -96,6 +98,7 @@ export default function Roles() {
                     className="pl-9" 
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
+                    aria-label="Search roles"
                   />
                 </div>
               </div>
