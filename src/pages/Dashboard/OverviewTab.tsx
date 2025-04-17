@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { ChartCard } from '@/components/dashboard/ChartCard';
@@ -27,10 +26,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDispatch } from 'react-redux';
 import InvoicesCountHook from '@/components/logic/Invoivces/InvoicesCountHook';
 
-// Dummy data for store statistics
+// Updated data for store types and invoices
 const storeData = [
-  { name: 'Active Stores', value: 68 },
-  { name: 'Inactive Stores', value: 32 },
+  { name: 'Supermarket', value: 125, invoices: 245 },
+  { name: 'Convenience', value: 85, invoices: 180 },
+  { name: 'Hypermarket', value: 45, invoices: 95 },
 ];
 
 // Dummy data for stock status
@@ -64,7 +64,7 @@ const regionData = [
   { region: 'Central', invoices: 178 },
 ];
 
-const STORE_COLORS = ['#4CAF50', '#99A4B9'];
+const STORE_COLORS = ['#9b87f5', '#33C3F0', '#8B5CF6'];
 const STOCK_COLORS = ['#2196F3', '#F44336'];
 
 // Define the missing variables for the hidden section
@@ -210,7 +210,7 @@ export default function OverviewTab() {
           {/* Store Statistics */}
           <Card className="bg-white">
             <CardHeader>
-              <CardTitle>Store Statistics</CardTitle>
+              <CardTitle>Store Type Statistics</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-[250px]">
@@ -232,21 +232,19 @@ export default function OverviewTab() {
                       ))}
                     </Pie>
                     <Tooltip 
-                      formatter={(value, name) => [`${value} stores`, name]}
+                      formatter={(value, name, props) => [`${value} stores (${props.payload.invoices} invoices)`, name]}
                     />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
               <div className="flex justify-center mt-4">
-                <div className="grid grid-cols-2 gap-8">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                    <span>Active: 68 stores</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
-                    <span>Inactive: 32 stores</span>
-                  </div>
+                <div className="grid grid-cols-3 gap-4">
+                  {storeData.map((store, index) => (
+                    <div key={index} className="flex items-center">
+                      <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: STORE_COLORS[index % STORE_COLORS.length] }}></div>
+                      <span className="text-sm">{store.name}: {store.value} ({store.invoices} inv)</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </CardContent>
