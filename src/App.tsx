@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +22,7 @@ import LoginPage from "./pages/LoginPage";
 import EditProduct from "./pages/Products/EditProduct";
 import Admins from "./pages/Admins";
 import Segments from "./pages/Segments";
+import Roles from "./pages/Roles";
 
 const queryClient = new QueryClient();
 
@@ -42,7 +44,7 @@ const App = () => (
           <Route path="/points-bonuses" element={<PointsBonuses />} />
           <Route path="/categories" element={<NotFound />} />
           <Route path="/segments" element={<Segments />} />
-          <Route path="/roles" element={<NotFound />} />
+          <Route path="/roles" element={<Roles />} />
           <Route path="/users" element={<Users />} />
           <Route path="/admins" element={<Admins />} />
           <Route path="/products/:id/edit" element={<EditProduct />} />
