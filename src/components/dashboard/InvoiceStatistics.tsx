@@ -13,7 +13,14 @@ type InvoiceStatisticsProps = {
 export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: InvoiceStatisticsProps) {
   const navigate = useNavigate();
 
-  const handleCardClick = (statusId: number | null) => {
+  const handleCardClick = (statusId: number | null, statusLabel: string | null) => {
+    // Store status in localStorage
+    if (statusId !== null && statusLabel) {
+      localStorage.setItem('invoiceStatus', statusLabel);
+    } else {
+      localStorage.removeItem('invoiceStatus');
+    }
+
     if (statusId !== null) {
       navigate(`/invoices?status=${statusId}`);
     } else {
@@ -31,7 +38,7 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <Card 
           className="bg-white hover:bg-gray-50 cursor-pointer transition-colors"
-          onClick={() => handleCardClick(null)}
+          onClick={() => handleCardClick(null, null)}
         >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Total Invoices</CardTitle>
@@ -50,7 +57,7 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
         
         <Card 
           className="bg-white hover:bg-green-50 cursor-pointer transition-colors"
-          onClick={() => handleCardClick(getStatusId('acceepted_invices'))}
+          onClick={() => handleCardClick(getStatusId('acceepted_invices'), 'Accepted')}
         >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Accepted</CardTitle>
@@ -69,7 +76,7 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
         
         <Card 
           className="bg-white hover:bg-red-50 cursor-pointer transition-colors"
-          onClick={() => handleCardClick(getStatusId('rejected_invices'))}
+          onClick={() => handleCardClick(getStatusId('rejected_invices'), 'Rejected')}
         >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Rejected</CardTitle>
@@ -88,7 +95,7 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
         
         <Card 
           className="bg-white hover:bg-orange-50 cursor-pointer transition-colors"
-          onClick={() => handleCardClick(getStatusId('partially_rejected_invices'))}
+          onClick={() => handleCardClick(getStatusId('partially_rejected_invices'), 'Partially Rejected')}
         >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Partially Rejected</CardTitle>
@@ -107,7 +114,7 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
         
         <Card 
           className="bg-white hover:bg-blue-50 cursor-pointer transition-colors"
-          onClick={() => handleCardClick(getStatusId('pending_invices'))}
+          onClick={() => handleCardClick(getStatusId('pending_invices'), 'Pending')}
         >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Pending</CardTitle>

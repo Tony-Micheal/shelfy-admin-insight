@@ -13,7 +13,7 @@ const AllInvoicesHook = () => {
   const [invoiceStatus, setInvoiceStatus] = useState(null);
 
   useEffect(() => {
-    // Check URL for status parameter
+    // Check URL for status parameter first
     const queryParams = new URLSearchParams(location.search);
     const statusParam = queryParams.get('status');
     
@@ -48,6 +48,7 @@ const AllInvoicesHook = () => {
 
   useEffect(() => {
     // Initial data load is now handled by the URL params effect
+    console.log('Current invoice status from localStorage:', localStorage.getItem('invoiceStatus'));
   }, []);
 
   const res = useSelector(state => state.InvoicesReducer.allInvoices);

@@ -17,6 +17,17 @@ export const StatusCards = ({ invoiceCount, invoiceStatus, handleFilter, getCoun
   const handleStatusClick = (statusId: number | null) => {
     handleFilter(statusId);
     
+    // Store the status in localStorage
+    if (statusId === null) {
+      localStorage.removeItem('invoiceStatus');
+    } else {
+      const statusLabel = statusConfigs.find(config => 
+        invoiceCount[config.field]?.status_id === statusId
+      )?.label || 'Unknown';
+      
+      localStorage.setItem('invoiceStatus', statusLabel);
+    }
+    
     // Update URL without reloading the page
     const url = statusId === null ? '/invoices' : `/invoices?status=${statusId}`;
     navigate(url, { replace: true });
