@@ -57,9 +57,21 @@ const getInvoicesAVGAction = () => async (dispatch) => {
     }
 }
 
-const getInvoicesMapAction = (lat,lag) => async (dispatch) => {
+const getInvoicesMapAction = (lat, lng) => async (dispatch) => {
     try {
-        const response = await useGetDataWithToken(`/reports/invoices/region?lat=${lat}&lng=${lag}`);
+        // Update API endpoint to include both lat and lng parameters
+        const response = await useGetDataWithToken(`/reports/invoices/region?lat=${lat}&lng=${lng}`);
+        
+        // If the API doesn't return total_invoices, we can simulate it for demonstration
+        // In a real scenario, the backend would provide this data
+        if (response && response.data && Array.isArray(response.data)) {
+            // Calculate total invoices across all regions if not provided by API
+            if (response.total_invoices === undefined) {
+                const totalInvoices = response.data.reduce((sum, region) => sum + (region.invoices || 0), 0);
+                response.total_invoices = totalInvoices;
+            }
+        }
+        
         dispatch({
             type: GET_INVOICES_MAP,
             payload: response,
@@ -74,4 +86,4 @@ const getInvoicesMapAction = (lat,lag) => async (dispatch) => {
     }
 }
 
-export {getStoresChartAction, getStocksChartAction, getInvoicesAVGAction,getInvoicesMapAction}
+export {getStoresChartAction, getStocksChartAction, getInvoicesAVGAction, getInvoicesMapAction}

@@ -28,6 +28,8 @@ const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
   const [regionData, setRegionData] = useState<RegionData[]>(initialRegionData);
   const [activeRegion, setActiveRegion] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
+  const [pointInvoiceCount, setPointInvoiceCount] = useState<number | null>(null);
+  const [loadingPointData, setLoadingPointData] = useState<boolean>(false);
   const { toast } = useToast();
   const dispatch = useDispatch();
   
@@ -37,6 +39,7 @@ const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
   useEffect(() => {
     // If coordinates are selected, fetch region data from API
     if (selectedCoordinates) {
+      setLoadingPointData(true);
       dispatch(getInvoicesMapAction(selectedCoordinates.lat, selectedCoordinates.lng));
     }
   }, [selectedCoordinates, dispatch]);
@@ -45,6 +48,13 @@ const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
     // Update region data when API data changes
     if (invoicesMapData && invoicesMapData.data) {
       try {
+        setLoadingPointData(false);
+        
+        // Extract total invoices at this point if available
+        if (invoicesMapData.total_invoices !== undefined) {
+          setPointInvoiceCount(invoicesMapData.total_invoices);
+        }
+        
         // Transform API data to match our RegionData type
         const apiRegionData = Array.isArray(invoicesMapData.data) 
           ? invoicesMapData.data.map((item: any) => ({
@@ -62,6 +72,7 @@ const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
           });
         }
       } catch (error) {
+        setLoadingPointData(false);
         console.error("Error processing map data:", error);
       }
     }
@@ -89,6 +100,7 @@ const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
     const lat = (90 - (y / height) * 180) / zoom;
     
     setSelectedCoordinates({ lat: parseFloat(lat.toFixed(6)), lng: parseFloat(lng.toFixed(6)) });
+    setPointInvoiceCount(null); // Reset while loading new data
     
     // Show toast notification
     toast({
@@ -245,17 +257,27 @@ const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
                 {/* Selected coordinate marker */}
                 {selectedCoordinates && (
                   <div 
-                    className="absolute flex flex-col items-center animate-pulse z-20"
+                    className="absolute flex flex-col items-center z-20"
                     style={{
                       top: `${((90 - selectedCoordinates.lat * zoom) / 180) * 100}%`,
                       left: `${((selectedCoordinates.lng * zoom + 180) / 360) * 100}%`,
                       transform: 'translate(-50%, -100%)'
                     }}
                   >
-                    <MapPin className="text-red-500" size={24} />
+                    <MapPin className={`${loadingPointData ? 'animate-pulse' : ''} text-red-500`} size={24} />
                     <div className="bg-white px-2 py-1 rounded shadow-md text-xs mt-1">
                       {selectedCoordinates.lat.toFixed(6)}, {selectedCoordinates.lng.toFixed(6)}
                     </div>
+                    {pointInvoiceCount !== null && (
+                      <div className="bg-purple-600 text-white px-3 py-1 rounded-full shadow-md text-xs mt-1 font-semibold">
+                        {pointInvoiceCount} invoices
+                      </div>
+                    )}
+                    {loadingPointData && (
+                      <div className="bg-gray-200 text-gray-600 px-3 py-1 rounded-full shadow-md text-xs mt-1">
+                        Loading...
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
