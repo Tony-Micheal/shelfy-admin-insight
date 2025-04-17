@@ -32,7 +32,7 @@ import {
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  title_ar: z.string().min(1, "Title in Arabic is required"),
+  name_ar: z.string().min(1, "Title in Arabic is required"),
   points: z.coerce.number().min(0, "Points must be a positive number"),
   parent_id: z.string().optional(),
   image: z.instanceof(FileList).optional(),
@@ -52,7 +52,7 @@ const CreateCategory = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      title_ar: "",
+      name_ar: "",
       points: 0,
       parent_id: "",
     },
@@ -76,7 +76,7 @@ const CreateCategory = () => {
           if (response && response.data) {
             form.reset({
               title: response.data.title || "",
-              title_ar: response.data.title_ar || "",
+              name_ar: response.data.name_ar || "",
               points: response.data.points || 0,
               parent_id: response.data.parent_id ? String(response.data.parent_id) : "",
             });
@@ -122,7 +122,7 @@ const CreateCategory = () => {
       // Create FormData for image upload
       const formData = new FormData();
       formData.append('title', values.title);
-      formData.append('name_ar', values.title_ar);
+      formData.append('name_ar', values.name_ar);
       formData.append('points', values.points.toString());
       
 
@@ -196,7 +196,7 @@ const CreateCategory = () => {
 
                 <FormField
                   control={form.control}
-                  name="title_ar"
+                  name="name_ar"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Title (Arabic)</FormLabel>

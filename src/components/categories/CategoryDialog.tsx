@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import EditCategoryHook from './../logic/Categories/EditCategoryHook';
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -57,7 +58,9 @@ const CategoryDialog = ({
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     onSubmit(values);
   };
-
+ const [id]=EditCategoryHook();
+ console.log("Sssssssssssss");
+ 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
