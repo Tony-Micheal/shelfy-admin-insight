@@ -1,3 +1,4 @@
+
 import { LOGIN_USER, LOGOUT_USER } from "../../type";
 
 const initial ={
@@ -5,7 +6,7 @@ const initial ={
     logoutUser:[],
 }
 
-export const AuthReducer=(state=initial,action)=>{
+const AuthReducer = (state=initial,action) => {
     switch(action.type){
         case LOGIN_USER:
             return{
@@ -25,3 +26,5 @@ export const AuthReducer=(state=initial,action)=>{
             return state;
     }
 }
+
+export default AuthReducer;
