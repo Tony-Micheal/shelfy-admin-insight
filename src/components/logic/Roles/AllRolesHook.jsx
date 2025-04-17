@@ -13,10 +13,6 @@ const AllRolesHook = () => {
   // Function to retrieve roles with pagination and name search
   const getData = async (page = 1, search = '') => {
     setLoading(true);
-<<<<<<< HEAD
-    await dispatch(getAllRolesAction(page, 1, search));
-    setLoading(false);
-=======
     try {
       await dispatch(getAllRolesAction(page, 15, search));
     } catch (error) {
@@ -24,7 +20,6 @@ const AllRolesHook = () => {
     } finally {
       setLoading(false);
     }
->>>>>>> 7516fdf7cd3571d2947d7ed3079f837ba66498f7
   };
 
   // Improved debounce for name search
