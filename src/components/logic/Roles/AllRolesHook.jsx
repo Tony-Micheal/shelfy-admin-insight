@@ -10,30 +10,42 @@ const AllRolesHook = () => {
   const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
-  // Function to retrieve roles with pagination and search
+  // Function to retrieve roles with pagination and name search
   const getData = async (page = 1, search = '') => {
     setLoading(true);
+<<<<<<< HEAD
     await dispatch(getAllRolesAction(page, 1, search));
     setLoading(false);
+=======
+    try {
+      await dispatch(getAllRolesAction(page, 15, search));
+    } catch (error) {
+      console.error('Error fetching roles:', error);
+    } finally {
+      setLoading(false);
+    }
+>>>>>>> 7516fdf7cd3571d2947d7ed3079f837ba66498f7
   };
 
-  // Debounce search term to avoid too many API calls
+  // Improved debounce for name search
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 500);
+      // Always reset to first page when search term changes
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
+    }, 300); // Reduced debounce time for more responsive search
 
     return () => {
       clearTimeout(handler);
     };
-  }, [searchTerm]);
+  }, [searchTerm, currentPage]);
 
   // Get data when page or debounced search term changes
   useEffect(() => {
     getData(currentPage, debouncedSearchTerm);
   }, [currentPage, debouncedSearchTerm]);
-
-  // Initial data fetch handled by above effect
 
   const res = useSelector(state => state.RolesReducer.allRoles);
   
@@ -50,7 +62,7 @@ const AllRolesHook = () => {
       }
     }
   } catch (e) {
-    console.error(e);
+    console.error('Error processing roles data:', e);
   }
 
   // Handle page change
@@ -58,10 +70,10 @@ const AllRolesHook = () => {
     setCurrentPage(page);
   };
 
-  // Handle search
+  // Handle search specifically for role names
   const handleSearch = (term) => {
     setSearchTerm(term);
-    setCurrentPage(1); // Reset to first page when searching
+    // Let the debounce effect handle resetting the page
   };
 
   return [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];
