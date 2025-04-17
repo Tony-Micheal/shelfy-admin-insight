@@ -7,7 +7,7 @@ import OverviewTab from './OverviewTab';
 export default function Dashboard() {
   // Define the tabs for the dashboard
   const dashboardTabs: Tab[] = [
-    { label: 'OVERVIEW', path: '/' },
+    { label: 'DAILY CAPSULES', path: '/' },
     { label: 'ASSORTMENT', path: '/assortment' },
     { label: 'SOS', path: '/sos' },
     { label: 'NPD', path: '/npd' },
