@@ -1,5 +1,6 @@
+
 import { useGetData, useGetDataWithToken } from "../../hooks/useGetData";
-import { usePostData } from '../../hooks/usePostData';
+import { usePostData, usePostDataWithDifferentFormat } from '../../hooks/usePostData';
 import { CREATE_CATEGORY, GET_ALL_CATEGORIES, GET_CATEGORY_DETAILS, UPDATE_CATEGORY } from '../type';
 
 const getAllCategoriesAction = (page = 1, limit = 5, searchTerm = '') => async (dispatch) => {
@@ -37,6 +38,7 @@ const getCategoryDetailsAction = (id) => async (dispatch) => {
             payload: response,
             loading: true
         });
+        return response;
     }
     catch (e) {
         console.error('Error in getCategoryDetailsAction:', e);
@@ -45,17 +47,24 @@ const getCategoryDetailsAction = (id) => async (dispatch) => {
             payload: e.response,
             loading: false
         });
+        return null;
     }
 };
 
 const updateCategoryAction = (data) => async (dispatch) => {
     try {
-        const response = await usePostData(`/productCategory/update`, data);
+        // Check if data is FormData (for image upload)
+        const isFormData = data instanceof FormData;
+        const response = isFormData 
+            ? await usePostDataWithDifferentFormat(`/productCategory/update`, data)
+            : await usePostData(`/productCategory/update`, data);
+            
         dispatch({
             type: UPDATE_CATEGORY,
             payload: response,
             loading: true
         });
+        return response;
     }
     catch (e) {
         console.error('Error in updateCategoryAction:', e);
@@ -64,17 +73,24 @@ const updateCategoryAction = (data) => async (dispatch) => {
             payload: e.response,
             loading: false
         });
+        throw e;
     }
 };
 
 const createCategoryAction = (data) => async (dispatch) => {
     try {
-        const response = await usePostData(`/productCategory/create`, data);
+        // Check if data is FormData (for image upload)
+        const isFormData = data instanceof FormData;
+        const response = isFormData 
+            ? await usePostDataWithDifferentFormat(`/productCategory/create`, data)
+            : await usePostData(`/productCategory/create`, data);
+            
         dispatch({
             type: CREATE_CATEGORY,
             payload: response,
             loading: true
         });
+        return response;
     }
     catch (e) {
         console.error('Error in createCategoryAction:', e);
@@ -83,6 +99,7 @@ const createCategoryAction = (data) => async (dispatch) => {
             payload: e.response,
             loading: false
         });
+        throw e;
     }
 };
 
