@@ -24,7 +24,7 @@ const Categories = () => {
   const { toast } = useToast();
   
   const [
-    allCategories,
+    allCates,
     totalPages,
     currentPage,
     handlePageChange,
@@ -181,7 +181,7 @@ const Categories = () => {
           </div>
         ) : (
           <>
-            <CategoriesTable categories={allCategories} onEdit={handleEditClick} />
+            <CategoriesTable categories={allCates} onEdit={handleEditClick} />
             {renderPagination()}
           </>
         )}

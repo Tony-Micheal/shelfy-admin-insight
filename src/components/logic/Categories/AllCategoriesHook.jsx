@@ -1,75 +1,61 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCategoriesAction } from '@/redux/actions/CategoriesAction';
+import { getAllProductsAction } from '../../../redux/actions/products/ProductsAction';
+import { getAllCategoriesAction } from '../../../redux/actions/CategoriesAction';
 
-const AllCategoriesHook = () => {
+const AllProductsHook = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
-  // Function to retrieve categories with pagination and search
+  // Function to retrieve products from page 1
   const getData = async (page = 1, search = '') => {
     setLoading(true);
-    try {
-      await dispatch(getAllCategoriesAction(page, 15, search));
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    } finally {
-      setLoading(false);
-    }
+    await dispatch(getAllCategoriesAction(page, 5, search));
+    setLoading(false);
   };
 
-  // Debounce for search term
+  // Initial data fetch
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-      // Reset to first page when search term changes
-      if (currentPage !== 1) {
-        setCurrentPage(1);
-      }
-    }, 300);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm, currentPage]);
-
-  // Get data when page or debounced search term changes
-  useEffect(() => {
-    getData(currentPage, debouncedSearchTerm);
-  }, [currentPage, debouncedSearchTerm]);
+    getData(1);
+  }, []);
 
   const res = useSelector(state => state.CategoriesReducer.allCates);
   
-  let allCategories = [];
+  let allCates = [];
   let totalPages = 0;
 
   try {
-    if (res && res.data) {
-      allCategories = Array.isArray(res.data) ? res.data : [];
-      
+    if (res) {
+      console.log(res);
+
+      if (res.data) {
+        allCates = [...res.data.alldata];
+      }
       if (res.pagination) {
         totalPages = res.pagination.last_page;
       }
     }
   } catch (e) {
-    console.error('Error processing categories data:', e);
+    console.error(e);
   }
 
-  // Handle page change
-  const handlePageChange = (page) => {
+  // Handle page change by dispatching the action with the new page number
+  const handlePageChange = async (page) => {
     setCurrentPage(page);
+    await getData(page, searchTerm);
   };
 
   // Handle search
-  const handleSearch = (term) => {
+  const handleSearch = async (term) => {
     setSearchTerm(term);
+    setCurrentPage(1); // Reset to first page when searching
+    await getData(1, term);
   };
 
-  return [allCategories, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];
+  return [allCates, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];
 };
 
-export default AllCategoriesHook;
+export default AllProductsHook;

@@ -3,7 +3,7 @@ import { CREATE_CATEGORY, GET_ALL_CATEGORIES } from "../type";
 import { GET_CATEGORY_DETAILS, UPDATE_CATEGORY } from './../type';
 
 const initial = {
-    allCates: { data: [] }, // Initialize with an empty data array
+    allCates: [], // Initialize with an empty data array
     CateDetails: [],
     updateCate: [],
     createCate: [],
