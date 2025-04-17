@@ -10,15 +10,17 @@ const getAllCategoriesAction = (page, limit, searchTerm = '') => async (dispatch
             type: GET_ALL_CATEGORIES,
             payload: response,
             loading: true
-        })
+        });
     }
     catch (e) {
+        console.error('Error in getAllCategoriesAction:', e);
         dispatch({
             type: GET_ALL_CATEGORIES,
-            payload: e.response
-        })
+            payload: { data: [] },  // Ensure we always have a data array property
+            loading: false
+        });
     }
-}
+};
 
 const getCategoryDetailsAction = (id) => async (dispatch) => {
     try {
@@ -27,15 +29,17 @@ const getCategoryDetailsAction = (id) => async (dispatch) => {
             type: GET_CATEGORY_DETAILS,
             payload: response,
             loading: true
-        })
+        });
     }
     catch (e) {
+        console.error('Error in getCategoryDetailsAction:', e);
         dispatch({
             type: GET_CATEGORY_DETAILS,
-            payload: e.response
-        })
+            payload: e.response,
+            loading: false
+        });
     }
-}
+};
 
 const updateCategoryAction = (data) => async (dispatch) => {
     try {
@@ -44,15 +48,17 @@ const updateCategoryAction = (data) => async (dispatch) => {
             type: UPDATE_CATEGORY,
             payload: response,
             loading: true
-        })
+        });
     }
     catch (e) {
+        console.error('Error in updateCategoryAction:', e);
         dispatch({
             type: UPDATE_CATEGORY,
-            payload: e.response
-        })
+            payload: e.response,
+            loading: false
+        });
     }
-}
+};
 
 const createCategoryAction = (data) => async (dispatch) => {
     try {
@@ -61,15 +67,16 @@ const createCategoryAction = (data) => async (dispatch) => {
             type: CREATE_CATEGORY,
             payload: response,
             loading: true
-        })
+        });
     }
     catch (e) {
+        console.error('Error in createCategoryAction:', e);
         dispatch({
             type: CREATE_CATEGORY,
-            payload: e.response
-        })
+            payload: e.response,
+            loading: false
+        });
     }
-}
+};
 
-
-export { getAllCategoriesAction, getCategoryDetailsAction, updateCategoryAction, createCategoryAction }
+export { getAllCategoriesAction, getCategoryDetailsAction, updateCategoryAction, createCategoryAction };

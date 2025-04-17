@@ -48,10 +48,9 @@ const AllCategoriesHook = () => {
   let totalPages = 0;
 
   try {
-    if (res) {
-      if (res.data) {
-        allCategories = res.data;
-      }
+    if (res && res.data) {
+      allCategories = Array.isArray(res.data) ? res.data : [];
+      
       if (res.pagination) {
         totalPages = res.pagination.last_page;
       }

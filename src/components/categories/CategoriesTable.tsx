@@ -25,6 +25,9 @@ interface CategoriesTableProps {
 }
 
 const CategoriesTable = ({ categories, onEdit }: CategoriesTableProps) => {
+  // Ensure categories is always an array
+  const categoriesArray = Array.isArray(categories) ? categories : [];
+
   return (
     <div className="relative overflow-hidden rounded-md border">
       <Table>
@@ -38,14 +41,14 @@ const CategoriesTable = ({ categories, onEdit }: CategoriesTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {categories.length === 0 ? (
+          {categoriesArray.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
                 No categories found
               </TableCell>
             </TableRow>
           ) : (
-            categories.map((category) => (
+            categoriesArray.map((category) => (
               <TableRow key={category.id}>
                 <TableCell className="font-medium">{category.id}</TableCell>
                 <TableCell>{category.title}</TableCell>
