@@ -28,7 +28,7 @@ export const DELETE_ADMIN="DELETE_ADMIN"
 //Roles
 export const GET_ALL_ROLES="GET_ALL_ROLES"
 export const SHOW_ROLE="EDIT_ROLE"
-export const CREATE_ROLE="UPDATE_ADMIN"
+export const CREATE_ROLE="CREATE_ROLE"
 export const UPDATE_ROLE="UPDATE_ADMIN"
 export const DELETE_ROLE="DELETE_ADMIN"
 

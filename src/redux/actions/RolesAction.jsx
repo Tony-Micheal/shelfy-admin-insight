@@ -7,7 +7,7 @@ import { GET_ALL_ROLES, SHOW_ROLE, CREATE_ROLE, UPDATE_ROLE, DELETE_ROLE } from 
 
 const getAllRolesAction = (page, limit, searchTerm = '') => async (dispatch) => {
   try {
-    const response = await useGetDataWithToken(`/roles?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
+    const response = await useGetDataWithToken(`/Roles?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
     dispatch({
       type: GET_ALL_ROLES,
       payload: response,

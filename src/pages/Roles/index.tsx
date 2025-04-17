@@ -23,16 +23,8 @@ interface Role {
 }
 
 export default function Roles() {
-  const [
-    allRoles, 
-    totalPages, 
-    currentPage, 
-    handlePageChange, 
-    searchTerm, 
-    handleSearch, 
-    loading,
-    handleDeleteRole
-  ] = AllRolesHook();
+
+  const [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading]=AllRolesHook();
 
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
@@ -53,7 +45,12 @@ export default function Roles() {
     // Open edit modal or navigate to edit page
     console.log('Edit role:', role);
   };
-
+  
+  const handleDeleteRole = (role: Role) => {
+    setSelectedRole(role);
+    // Open edit modal or navigate to edit page
+    console.log('Delete role:', role);
+  };
   return (
     <Provider store={store}>
       <MainLayout showFilters={false}>

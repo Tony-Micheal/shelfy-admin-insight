@@ -1,87 +1,60 @@
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllRolesAction, deleteRoleAction } from '@/redux/actions/RolesAction';
-import { useToast } from '@/hooks/use-toast';
+import { getAllRolesAction } from '@/redux/actions/RolesAction';
 
 const AllRolesHook = () => {
   const dispatch = useDispatch();
-  const { toast } = useToast();
-  
-  // Local state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Get data from redux
-  const { allRoles, loading } = useSelector(state => state.RolesReducer);
-  const roles = allRoles?.data?.roles || [];
-  const pagination = allRoles?.data?.pagination || {};
-  const totalPages = pagination.total_pages || 1;
+  // Function to retrieve products from page 1
+  const getData = async (page = 1, search = '') => {
+    setLoading(true);
+    await dispatch(getAllRolesAction(page, 15, search));
+    setLoading(false);
+  };
 
-  // Initial load
+  // Initial data fetch
   useEffect(() => {
-    fetchRoles(currentPage, itemsPerPage, searchTerm);
-  }, [currentPage, itemsPerPage]);
+    getData(1);
+  }, []);
 
-  // Search with debounce
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-    
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
+  const res = useSelector(state => state.RolesReducer.allRoles);
+  
+  let allRoles = [];
+  let totalPages = 0;
+
+  try {
+    if (res) {
+      if (res.data) {
+        allRoles = res.data;
+        console.log(allRoles);
+        console.log(res);
+      }
+      if (res.pagination) {
+        totalPages = res.pagination.last_page;
+      }
     }
+  } catch (e) {
+    console.error(e);
+  }
 
-    const timeout = setTimeout(() => {
-      fetchRoles(1, itemsPerPage, term);
-      setCurrentPage(1);
-    }, 500);
-
-    setSearchTimeout(timeout);
-  };
-
-  // Fetch roles
-  const fetchRoles = (page, limit, search) => {
-    dispatch(getAllRolesAction(page, limit, search));
-  };
-
-  // Change page
-  const handlePageChange = (page) => {
+  // Handle page change by dispatching the action with the new page number
+  const handlePageChange = async (page) => {
     setCurrentPage(page);
+    await getData(page, searchTerm);
   };
 
-  // Delete role
-  const handleDeleteRole = (roleId) => {
-    dispatch(deleteRoleAction(roleId))
-      .then(() => {
-        // Refresh the roles list
-        fetchRoles(currentPage, itemsPerPage, searchTerm);
-        
-        toast({
-          title: "Success",
-          description: "Role has been deleted successfully",
-        });
-      })
-      .catch((error) => {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to delete role",
-        });
-      });
+  // Handle search
+  const handleSearch = async (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1); // Reset to first page when searching
+    await getData(1, term);
   };
 
-  return [
-    roles,
-    totalPages,
-    currentPage,
-    handlePageChange,
-    searchTerm,
-    handleSearch,
-    loading,
-    handleDeleteRole
-  ];
+  return [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];
 };
 
 export default AllRolesHook;
