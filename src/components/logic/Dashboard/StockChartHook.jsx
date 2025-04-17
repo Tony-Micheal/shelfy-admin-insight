@@ -21,19 +21,25 @@ const StockChartHook = () => {
 
   const res = useSelector(state => state.DashboardReducer.stocksCahrt);
   
-  let stocks = [];
+  let stockData = {
+    in_stock: 0,
+    out_of_stock: 0
+  };
 
   try {
     if (res && res.data) {
-        console.log(res);
-        stocks=res.data
-        console.log(stocks);
+      console.log('Stock data from API:', res.data);
+      stockData = {
+        in_stock: res.data.in_stock || 0,
+        out_of_stock: res.data.out_of_stock || 0
+      };
+      console.log('Formatted stock data:', stockData);
     }
   } catch (e) {
-    console.error("Error processing store data:", e);
+    console.error("Error processing stock data:", e);
   }
 
-  return [stocks, loadingStocks];
+  return [stockData, loadingStocks];
 };
 
 export default StockChartHook;

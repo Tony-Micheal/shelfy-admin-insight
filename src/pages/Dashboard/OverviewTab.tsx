@@ -83,9 +83,8 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 export default function OverviewTab() {
   const [invoiceCount, loading] = InvoicesCountHook();
   const [stores, loadingStores] = StoresChartHook();
-  const [stocks, loadingStocks]=StockChartHook();
+  const [stockData, loadingStocks] = StockChartHook();
 
-  
   const getCount = (data, field) => {
     if (!data || !data[field]) return 0;
     return data[field].count || 0;
@@ -259,38 +258,50 @@ export default function OverviewTab() {
             </CardHeader>
             <CardContent>
               <div className="h-[250px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={stockData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      paddingAngle={5}
-                      dataKey="value"
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {stockData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={STOCK_COLORS[index % STOCK_COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      formatter={(value, name) => [`${value}%`, name]}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                {loadingStocks ? (
+                  <div className="flex h-full items-center justify-center">
+                    <p>Loading stock data...</p>
+                  </div>
+                ) : (stockData.in_stock > 0 || stockData.out_of_stock > 0) ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'In Stock', value: stockData.in_stock },
+                          { name: 'Out of Stock', value: stockData.out_of_stock }
+                        ]}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        paddingAngle={5}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        <Cell key="cell-0" fill={STOCK_COLORS[0]} />
+                        <Cell key="cell-1" fill={STOCK_COLORS[1]} />
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value, name) => [`${value}%`, name]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <p>No stock data available</p>
+                  </div>
+                )}
               </div>
               <div className="flex justify-center mt-4">
                 <div className="grid grid-cols-2 gap-8">
                   <div className="flex items-center">
                     <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                    <span>In Stock:{stocks?stocks.in_stock:0} %</span>
+                    <span>In Stock: {stockData.in_stock}%</span>
                   </div>
                   <div className="flex items-center">
                     <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                    <span>Out of Stock:{stocks?stocks.out_of_stock:0} %</span>
+                    <span>Out of Stock: {stockData.out_of_stock}%</span>
                   </div>
                 </div>
               </div>
