@@ -22,10 +22,10 @@ const EditCategoryHook = () => {
       setLoading(true);
       try {
         const response = await dispatch(getCategoryDetailsAction(parseInt(id)));
-        if (response && response.data) {
-          setCategoryData(response.data);
-          if (response.data.image) {
-            setImagePreview(response.data.image);
+        if (response && response.data.category) {
+          setCategoryData(response.data.category);
+          if (response.data.category) {
+            setImagePreview(response.data.category.Image);
           }
         }
       } catch (error) {
