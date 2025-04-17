@@ -3,7 +3,7 @@ import { CREATE_CATEGORY, GET_ALL_CATEGORIES } from "../type";
 import { GET_CATEGORY_DETAILS, UPDATE_CATEGORY } from './../type';
 
 const initial = {
-    allCates: [], // Initialize with an empty data array
+    allCates: { data: { alldata: [] }, pagination: { last_page: 1 } }, // Initialize with proper structure
     CateDetails: [],
     updateCate: [],
     createCate: [],
@@ -15,7 +15,7 @@ const CategoriesReducer = (state = initial, action) => {
         case GET_ALL_CATEGORIES:
             return {
                 ...state,
-                allCates: action.payload || { data: [] }, // Ensure we always have a data property
+                allCates: action.payload || initial.allCates, // Use initial structure if payload is undefined
                 loading: false
             };
         case GET_CATEGORY_DETAILS:

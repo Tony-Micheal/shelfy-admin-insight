@@ -1,16 +1,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProductsAction } from '../../../redux/actions/products/ProductsAction';
 import { getAllCategoriesAction } from '../../../redux/actions/CategoriesAction';
 
-const AllProductsHook = () => {
+const AllCategoriesHook = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Function to retrieve products from page 1
+  // Function to retrieve categories with pagination
   const getData = async (page = 1, search = '') => {
     setLoading(true);
     await dispatch(getAllCategoriesAction(page, 5, search));
@@ -28,18 +27,17 @@ const AllProductsHook = () => {
   let totalPages = 0;
 
   try {
-    if (res) {
-      console.log(res);
-
-      if (res.data) {
-        allCates = [...res.data.alldata];
-      }
+    if (res && res.data) {
+      allCates = Array.isArray(res.data.alldata) ? res.data.alldata : [];
+      
       if (res.pagination) {
-        totalPages = res.pagination.last_page;
+        totalPages = res.pagination.last_page || 0;
       }
     }
   } catch (e) {
-    console.error(e);
+    console.error('Error processing categories data:', e);
+    allCates = [];
+    totalPages = 0;
   }
 
   // Handle page change by dispatching the action with the new page number
@@ -58,4 +56,4 @@ const AllProductsHook = () => {
   return [allCates, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading];
 };
 
-export default AllProductsHook;
+export default AllCategoriesHook;

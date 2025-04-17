@@ -1,24 +1,31 @@
-
 import { useGetData, useGetDataWithToken } from "../../hooks/useGetData";
 import { usePostData } from '../../hooks/usePostData';
 import { CREATE_CATEGORY, GET_ALL_CATEGORIES, GET_CATEGORY_DETAILS, UPDATE_CATEGORY } from '../type';
 
-const getAllCategoriesAction = (page, limit, searchTerm = '') => async (dispatch) => {
+const getAllCategoriesAction = (page = 1, limit = 5, searchTerm = '') => async (dispatch) => {
     try {
         const response = await useGetDataWithToken(`/productCategory?page=${page}&paginate=${limit}${searchTerm ? `&search=${searchTerm}` : ''}`);
         dispatch({
             type: GET_ALL_CATEGORIES,
-            payload: response,
-            loading: true
+            payload: {
+                data: response?.data || { alldata: [] },
+                pagination: response?.pagination || { last_page: 1 }
+            },
+            loading: false
         });
+        return response;
     }
     catch (e) {
         console.error('Error in getAllCategoriesAction:', e);
         dispatch({
             type: GET_ALL_CATEGORIES,
-            payload: { data: [] },  // Ensure we always have a data array property
+            payload: { 
+                data: { alldata: [] }, 
+                pagination: { last_page: 1 } 
+            },
             loading: false
         });
+        return null;
     }
 };
 
