@@ -28,20 +28,17 @@ import InvoicesCountHook from '@/components/logic/Invoivces/InvoicesCountHook';
 import MapComponent from '@/components/dashboard/MapComponent';
 import StoresChartHook from './../../components/logic/Dashboard/StoresChartHook';
 
-// Updated data for store types and invoices
 const storeData = [
   { name: 'Supermarket', value: 125, invoices: 245 },
   { name: 'Convenience', value: 85, invoices: 180 },
   { name: 'Hypermarket', value: 45, invoices: 95 },
 ];
 
-// Dummy data for stock status
 const stockData = [
   { name: 'In Stock', value: 75 },
   { name: 'Out of Stock', value: 25 },
 ];
 
-// Monthly invoice data
 const monthlyInvoiceData = [
   { name: 'Jan', invoices: 30 },
   { name: 'Feb', invoices: 65 },
@@ -57,7 +54,6 @@ const monthlyInvoiceData = [
   { name: 'Dec', invoices: 75 },
 ];
 
-// Region data for map visualization
 const regionData = [
   { region: 'North', invoices: 245 },
   { region: 'South', invoices: 187 },
@@ -66,10 +62,9 @@ const regionData = [
   { region: 'Central', invoices: 178 },
 ];
 
-const STORE_COLORS = ['#9b87f5', '#33C3F0', '#8B5CF6'];
+const STORE_COLORS = ['#9b87f5', '#33C3F0', '#8B5CF6', '#10B981', '#F59E0B'];
 const STOCK_COLORS = ['#2196F3', '#F44336'];
 
-// Define the missing variables for the hidden section
 const pieData = [
   { name: 'OSA', value: 65 },
   { name: 'OOS', value: 35 },
@@ -86,7 +81,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export default function OverviewTab() {
   const [invoiceCount, loading] = InvoicesCountHook();
-  const [stores, loadingStores]=StoresChartHook();
+  const [stores, loadingStores] = StoresChartHook();
   
   const getCount = (data, field) => {
     if (!data || !data[field]) return 0;
@@ -110,16 +105,13 @@ export default function OverviewTab() {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Server notification */}
       <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
         <p>We regret to inform you that our server is currently experiencing technical difficulties.</p>
       </div>
 
-      {/* Section 1: Invoice Statistics */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Invoice Statistics</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Total Invoices */}
           <Card className="bg-white">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Total Invoices</CardTitle>
@@ -136,7 +128,6 @@ export default function OverviewTab() {
             </CardContent>
           </Card>
           
-          {/* Accepted Invoices */}
           <Card className="bg-white">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Accepted</CardTitle>
@@ -153,7 +144,6 @@ export default function OverviewTab() {
             </CardContent>
           </Card>
           
-          {/* Rejected Invoices */}
           <Card className="bg-white">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Rejected</CardTitle>
@@ -170,7 +160,6 @@ export default function OverviewTab() {
             </CardContent>
           </Card>
           
-          {/* Partially Rejected Invoices */}
           <Card className="bg-white">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Partially Rejected</CardTitle>
@@ -187,7 +176,6 @@ export default function OverviewTab() {
             </CardContent>
           </Card>
           
-          {/* Pending Invoices */}
           <Card className="bg-white">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Pending</CardTitle>
@@ -206,46 +194,55 @@ export default function OverviewTab() {
         </div>
       </div>
       
-      {/* Section 2: Circle Charts */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Store & Stock Analytics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Store Statistics */}
           <Card className="bg-white">
             <CardHeader>
               <CardTitle>Store Type Statistics</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-[250px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={storeData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      paddingAngle={5}
-                      dataKey="value"
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {storeData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={STORE_COLORS[index % STORE_COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      formatter={(value, name, props) => [`${value} stores (${props.payload.invoices} invoices)`, name]}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                {loadingStores ? (
+                  <div className="flex h-full items-center justify-center">
+                    <p>Loading store data...</p>
+                  </div>
+                ) : stores.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={stores}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        paddingAngle={5}
+                        dataKey="value"
+                        nameKey="type"
+                        label={({ type, percent }) => `${type}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {stores.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={STORE_COLORS[index % STORE_COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value, type, props) => [`${value} stores (${props.payload.percentage}%)`, type]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <p>No store data available</p>
+                  </div>
+                )}
               </div>
               <div className="flex justify-center mt-4">
                 <div className="grid grid-cols-3 gap-4">
                   {stores.map((store, index) => (
                     <div key={index} className="flex items-center">
                       <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: STORE_COLORS[index % STORE_COLORS.length] }}></div>
-                      <span className="text-sm">{store.type}: {store.value} ({store.invoices} inv)</span>
+                      <span className="text-sm">{store.type}: {store.value} ({store.percentage}%)</span>
                     </div>
                   ))}
                 </div>
@@ -253,7 +250,6 @@ export default function OverviewTab() {
             </CardContent>
           </Card>
           
-          {/* Stock Status */}
           <Card className="bg-white">
             <CardHeader>
               <CardTitle>Stock Status</CardTitle>
@@ -300,7 +296,6 @@ export default function OverviewTab() {
         </div>
       </div>
       
-      {/* Section 3: Performance Chart - Invoice Average by Month */}
       <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-medium">Invoice Performance by Month</h3>
@@ -342,10 +337,8 @@ export default function OverviewTab() {
         </div>
       </div>
       
-      {/* Section 4: Map Chart for Invoice Regions */}
       <MapComponent regionData={regionData} />
 
-      {/* Original Stats - Hidden but keeping functionality */}
       <div className="hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <KpiCard
