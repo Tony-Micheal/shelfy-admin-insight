@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CategoryPaginationProps {
   currentPage: number;
@@ -25,27 +26,29 @@ const CategoryPagination = ({ currentPage, totalPages, handlePageChange }: Categ
   return (
     <Pagination className="mt-4">
       <PaginationContent>
-        {currentPage > 1 && (
-          <PaginationItem>
-            <PaginationPrevious 
-              onClick={() => {
+        <PaginationItem>
+          <PaginationPrevious
+            onClick={() => {
+              if (currentPage > 1) {
                 console.log(`Going to previous page: ${currentPage - 1}`);
                 handlePageChange(currentPage - 1);
-              }} 
-            />
-          </PaginationItem>
-        )}
+              }
+            }}
+            disabled={currentPage === 1}
+          />
+        </PaginationItem>
 
-        {currentPage < totalPages && (
-          <PaginationItem>
-            <PaginationNext 
-              onClick={() => {
+        <PaginationItem>
+          <PaginationNext
+            onClick={() => {
+              if (currentPage < totalPages) {
                 console.log(`Going to next page: ${currentPage + 1}`);
                 handlePageChange(currentPage + 1);
-              }} 
-            />
-          </PaginationItem>
-        )}
+              }
+            }}
+            disabled={currentPage === totalPages}
+          />
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
   );
