@@ -17,20 +17,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-// Form schema for type reference
-const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  title_ar: z.string().min(1, "Title in Arabic is required"),
-  points: z.coerce.number().min(0, "Points must be a positive number"),
-  parent_id: z.string().optional(),
-  image: z.instanceof(FileList).optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { CategoryFormValues } from '@/components/logic/Categories/CreateCategoryHook';
 
 interface BasicInfoFieldsProps {
-  form: UseFormReturn<FormValues>;
+  form: UseFormReturn<CategoryFormValues>;
   allCategories: any[];
 }
 
@@ -53,7 +43,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({ form, allCategories }
 
       <FormField
         control={form.control}
-        name="title_ar"
+        name="name_ar"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Title (Arabic)</FormLabel>

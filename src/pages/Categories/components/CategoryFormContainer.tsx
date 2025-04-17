@@ -5,27 +5,16 @@ import { Button } from "@/components/ui/button";
 import BasicInfoFields from './BasicInfoFields';
 import CategoryImageUpload from './CategoryImageUpload';
 import { UseFormReturn } from 'react-hook-form';
-import { z } from 'zod';
-
-// Form schema type for reference
-const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  title_ar: z.string().min(1, "Title in Arabic is required"),
-  points: z.coerce.number().min(0, "Points must be a positive number"),
-  parent_id: z.string().optional(),
-  image: z.instanceof(FileList).optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { CategoryFormValues } from '@/components/logic/Categories/CreateCategoryHook';
 
 interface CategoryFormContainerProps {
-  form: UseFormReturn<FormValues>;
+  form: UseFormReturn<CategoryFormValues>;
   imagePreview: string | null;
   loading: boolean;
   allCategories: any[];
   isEditing: boolean;
   handleImageChange: (files: FileList | null) => void;
-  onSubmit: (values: FormValues) => void;
+  onSubmit: (values: CategoryFormValues) => void;
   navigate: (path: string) => void;
 }
 

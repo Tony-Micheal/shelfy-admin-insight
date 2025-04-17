@@ -56,7 +56,7 @@ const updateCategory = async (dispatch: any, formData: FormData) => {
   }
 };
 
-interface CreateCategoryHookResult {
+export interface CreateCategoryHookResult {
   form: ReturnType<typeof useForm<CategoryFormValues>>;
   imagePreview: string | null;
   loading: boolean;
@@ -204,7 +204,7 @@ const CreateCategoryHook = (): CreateCategoryHookResult => {
     }
   };
 
-  // Return an object with named properties (not an array)
+  // Return an object with named properties
   return {
     form,
     imagePreview,

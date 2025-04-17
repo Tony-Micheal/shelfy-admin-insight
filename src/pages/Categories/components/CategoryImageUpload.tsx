@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { z } from 'zod';
 import { Image as ImageIcon } from 'lucide-react';
 import {
   FormField,
@@ -11,20 +10,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-// Form schema for type reference
-const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  title_ar: z.string().min(1, "Title in Arabic is required"),
-  points: z.coerce.number().min(0, "Points must be a positive number"),
-  parent_id: z.string().optional(),
-  image: z.instanceof(FileList).optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { CategoryFormValues } from '@/components/logic/Categories/CreateCategoryHook';
 
 interface CategoryImageUploadProps {
-  form: UseFormReturn<FormValues>;
+  form: UseFormReturn<CategoryFormValues>;
   imagePreview: string | null;
   handleImageChange: (files: FileList | null) => void;
 }

@@ -4,7 +4,7 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import CreateCategoryHook from '@/components/logic/Categories/CreateCategoryHook';
+import CreateCategoryHook, { CreateCategoryHookResult } from '@/components/logic/Categories/CreateCategoryHook';
 import CategoryFormContainer from './components/CategoryFormContainer';
 import ErrorFallback from './components/ErrorFallback';
 
@@ -13,12 +13,13 @@ const CreateCategory = () => {
   
   try {
     // Use the hook and get all the needed values
-    const result = CreateCategoryHook();
+    const hookResult: CreateCategoryHookResult = CreateCategoryHook();
     
-    console.log('Form object:', result?.form);
+    // For debugging
+    console.log('Form object:', hookResult?.form);
 
     // Show error fallback if form or result is not available
-    if (!result || !result.form) {
+    if (!hookResult || !hookResult.form) {
       console.error('Form object is undefined');
       return <ErrorFallback navigate={navigate} />;
     }
@@ -31,7 +32,7 @@ const CreateCategory = () => {
       isEditing,
       handleImageChange, 
       onSubmit 
-    } = result;
+    } = hookResult;
 
     return (
       <MainLayout>
