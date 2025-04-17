@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 // Form validation schema
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  title_ar: z.string().min(1, "Title in Arabic is required"),
+  name_ar: z.string().min(1, "Title in Arabic is required"),
   points: z.coerce.number().min(0, "Points must be a positive number"),
   parent_id: z.string().optional(),
   image: z.instanceof(FileList).optional(),
@@ -80,7 +80,7 @@ const CreateCategoryHook = (): CreateCategoryHookResult => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      title_ar: "",
+      name_ar: "",
       points: 0,
       parent_id: "",
     },
@@ -116,9 +116,8 @@ const CreateCategoryHook = (): CreateCategoryHookResult => {
           if (response && response.data) {
             form.reset({
               title: response.data.title || "",
-              title_ar: response.data.title_ar || "",
+              name_ar: response.data.name_ar || "",
               points: response.data.points || 0,
-              parent_id: response.data.parent_id ? String(response.data.parent_id) : "",
             });
             
             if (response.data.image) {
@@ -159,12 +158,8 @@ const CreateCategoryHook = (): CreateCategoryHookResult => {
   const prepareFormData = (values: CategoryFormValues): FormData => {
     const formData = new FormData();
     formData.append('title', values.title);
-    formData.append('name_ar', values.title_ar);
+    formData.append('name_ar', values.name_ar);
     formData.append('points', values.points.toString());
-    
-    if (values.parent_id && values.parent_id !== "none") {
-      formData.append('parent_id', values.parent_id);
-    }
     
     if (values.image && values.image.length > 0) {
       formData.append('image', values.image[0]);
