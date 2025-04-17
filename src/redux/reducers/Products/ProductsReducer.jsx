@@ -7,7 +7,7 @@ const initial ={
     deleteInstruction:[]
 }
 
-export const ProductsReducer=(state=initial,action)=>{
+const ProductsReducer = (state=initial,action) => {
     switch(action.type){
         case GET_ALL_PRODUCTS:
             return{
@@ -34,8 +34,9 @@ export const ProductsReducer=(state=initial,action)=>{
                 loading:false
             }
         
-        
         default:
             return state;
     }
 }
+
+export default ProductsReducer;
