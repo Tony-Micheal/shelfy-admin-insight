@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDispatch } from 'react-redux';
 import InvoicesCountHook from '@/components/logic/Invoivces/InvoicesCountHook';
 import MapComponent from '@/components/dashboard/MapComponent';
+import StoresChartHook from './../../components/logic/Dashboard/StoresChartHook';
 
 // Updated data for store types and invoices
 const storeData = [
@@ -85,6 +86,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export default function OverviewTab() {
   const [invoiceCount, loading] = InvoicesCountHook();
+  const [stores, loadingStores]=StoresChartHook();
   
   const getCount = (data, field) => {
     if (!data || !data[field]) return 0;
@@ -240,10 +242,10 @@ export default function OverviewTab() {
               </div>
               <div className="flex justify-center mt-4">
                 <div className="grid grid-cols-3 gap-4">
-                  {storeData.map((store, index) => (
+                  {stores.map((store, index) => (
                     <div key={index} className="flex items-center">
                       <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: STORE_COLORS[index % STORE_COLORS.length] }}></div>
-                      <span className="text-sm">{store.name}: {store.value} ({store.invoices} inv)</span>
+                      <span className="text-sm">{store.type}: {store.value} ({store.invoices} inv)</span>
                     </div>
                   ))}
                 </div>

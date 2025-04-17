@@ -5,6 +5,7 @@ import { AuthReducer } from './Auth/AuthReducer';
 import { AdminsReducer } from './AdminsReducer';
 import { InvoicesReducer } from './InvoicesReducer';
 import { SegmentsReducer } from './SegmentsReducer';
+import { DashboardReducer } from './DashboardReducer';
 
 export default combineReducers({
   AuthReducer: AuthReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   UsersReducer: UsersReducer,
   AdminsReducer: AdminsReducer,
   InvoicesReducer:InvoicesReducer,
-  SegmentsReducer:SegmentsReducer
+  SegmentsReducer:SegmentsReducer,
+  DashboardReducer:DashboardReducer
 });
