@@ -56,7 +56,17 @@ const updateCategory = async (dispatch: any, formData: FormData) => {
   }
 };
 
-const CreateCategoryHook = () => {
+interface CreateCategoryHookResult {
+  form: ReturnType<typeof useForm<CategoryFormValues>>;
+  imagePreview: string | null;
+  loading: boolean;
+  allCategories: any[];
+  isEditing: boolean;
+  handleImageChange: (fileList: FileList | null) => void;
+  onSubmit: (values: CategoryFormValues) => Promise<void>;
+}
+
+const CreateCategoryHook = (): CreateCategoryHookResult => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -199,6 +209,7 @@ const CreateCategoryHook = () => {
     }
   };
 
+  // Return an object with named properties (not an array)
   return {
     form,
     imagePreview,

@@ -13,6 +13,16 @@ const CreateCategory = () => {
   
   try {
     // Use the hook and get all the needed values
+    const result = CreateCategoryHook();
+    
+    console.log('Form object:', result?.form);
+
+    // Show error fallback if form or result is not available
+    if (!result || !result.form) {
+      console.error('Form object is undefined');
+      return <ErrorFallback navigate={navigate} />;
+    }
+    
     const { 
       form, 
       imagePreview, 
@@ -21,15 +31,7 @@ const CreateCategory = () => {
       isEditing,
       handleImageChange, 
       onSubmit 
-    } = CreateCategoryHook();
-    
-    console.log('Form object:', form);
-
-    // Show error fallback if form is not available
-    if (!form) {
-      console.error('Form object is undefined');
-      return <ErrorFallback navigate={navigate} />;
-    }
+    } = result;
 
     return (
       <MainLayout>
