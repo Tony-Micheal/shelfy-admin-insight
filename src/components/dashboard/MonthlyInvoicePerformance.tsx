@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import InvoicesPerformanceHook from './../logic/Dashboard/InvoicesPerformanceHook';
 
 type MonthlyInvoicePerformanceProps = {
   data: {
@@ -11,6 +12,7 @@ type MonthlyInvoicePerformanceProps = {
 };
 
 export function MonthlyInvoicePerformance({ data }: MonthlyInvoicePerformanceProps) {
+  const [performance, loading]=InvoicesPerformanceHook();
   return (
     <div className="bg-white rounded-lg p-6 border border-gray-100 shadow-sm">
       <div className="flex justify-between items-center mb-6">

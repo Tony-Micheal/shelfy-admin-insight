@@ -28,7 +28,6 @@ const StockChartHook = () => {
 
   try {
     if (res && res.data) {
-      console.log('Stock data from API:', res.data);
       stockData = {
         in_stock: res.data.in_stock || 0,
         out_of_stock: res.data.out_of_stock || 0
