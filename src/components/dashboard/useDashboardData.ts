@@ -1,13 +1,21 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import InvoicesCountHook from '@/components/logic/Invoivces/InvoicesCountHook';
 import StoresChartHook from '@/components/logic/Dashboard/StoresChartHook';
 import StockChartHook from '@/components/logic/Dashboard/StockChartHook';
+import { getInvoicesMapAction } from '@/redux/actions/DashboardAction';
 
 export function useDashboardData() {
   const [invoiceCount, loading] = InvoicesCountHook();
   const [stores, loadingStores] = StoresChartHook();
   const [stockData, loadingStocks] = StockChartHook();
+  const dispatch = useDispatch();
+  
+  // Initial fetch of map data with default coordinates
+  useEffect(() => {
+    dispatch(getInvoicesMapAction(0, 0));
+  }, [dispatch]);
 
   const getCount = (data: any, field: string) => {
     if (!data || !data[field]) return 0;
@@ -44,12 +52,13 @@ export function useDashboardData() {
     { name: 'Dec', invoices: 75 },
   ];
 
+  // Enhanced region data with colors
   const regionData = [
-    { region: 'North', invoices: 245 },
-    { region: 'South', invoices: 187 },
-    { region: 'East', invoices: 156 },
-    { region: 'West', invoices: 203 },
-    { region: 'Central', invoices: 178 },
+    { region: 'North', invoices: 245, color: '#4F46E5' },
+    { region: 'South', invoices: 187, color: '#06B6D4' },
+    { region: 'East', invoices: 156, color: '#059669' },
+    { region: 'West', invoices: 203, color: '#D97706' },
+    { region: 'Central', invoices: 178, color: '#DC2626' },
   ];
 
   return {
