@@ -1,13 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getInvoicesAVGAction, getStocksChartAction } from '../../../redux/actions/DashboardAction';
+import { getInvoicesAVGAction } from '../../../redux/actions/DashboardAction';
 
 const InvoicesPerformanceHook = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  // Function to retrieve store data
+  // Function to retrieve invoice performance data
   const getData = async () => {
     setLoading(true);
     await dispatch(getInvoicesAVGAction());
@@ -21,14 +21,20 @@ const InvoicesPerformanceHook = () => {
 
   const res = useSelector(state => state.DashboardReducer.invoicesAvg);
   
-  let performance =[];
+  let performance = [];
 
   try {
     if (res && res.data) {
-      performance=res.data;
+      performance = res.data.map(item => ({
+        name: item.month,
+        customers: item.customers_count,
+        invoices: item.total_invoices,
+        avgPerCustomer: item.average_invoices_per_customer,
+        percentage: parseFloat(item.average_invoices_percentage)
+      }));
     }
   } catch (e) {
-    console.error("Error processing stock data:", e);
+    console.error("Error processing invoice performance data:", e);
   }
 
   return [performance, loading];
