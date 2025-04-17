@@ -35,6 +35,11 @@ const formSchema = z.object({
 
 const CreateCategory = () => {
   const navigate = useNavigate();
+  
+  // Add console log to debug the hook's return value
+  const hookResult = CreateCategoryHook();
+  console.log('Hook result:', hookResult);
+  
   const { 
     form, 
     imagePreview, 
@@ -43,7 +48,21 @@ const CreateCategory = () => {
     isEditing,
     handleImageChange, 
     onSubmit 
-  } = CreateCategoryHook();
+  } = hookResult;
+
+  // Add additional check to verify form exists before rendering
+  if (!form) {
+    console.error('Form object is undefined');
+    return (
+      <MainLayout>
+        <div className="container mx-auto py-6">
+          <h1 className="text-2xl font-bold text-red-500">Error loading form</h1>
+          <p>There was a problem initializing the form. Please try again.</p>
+          <Button onClick={() => navigate('/categories')}>Back to Categories</Button>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
