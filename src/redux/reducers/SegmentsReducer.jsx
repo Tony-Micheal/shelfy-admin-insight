@@ -1,5 +1,5 @@
-import { CREATE_SEGMENT, DELETE_SEGMENT, GET_ALL_SEGMENTS, GET_SEGMENT_DETAILS, UPDATE_SEGMENT } from "../type";
 
+import { CREATE_SEGMENT, DELETE_SEGMENT, GET_ALL_SEGMENTS, GET_SEGMENT_DETAILS, UPDATE_SEGMENT } from "../type";
 
 const initial = {
     allSegments: [],
@@ -10,7 +10,7 @@ const initial = {
     loading: true,
 };
 
-export const SegmentsReducer = (state = initial, action) => {
+const SegmentsReducer = (state = initial, action) => {
     switch (action.type) {
         case GET_ALL_SEGMENTS:
             return {
@@ -47,3 +47,4 @@ export const SegmentsReducer = (state = initial, action) => {
     }
 }
 
+export default SegmentsReducer;
