@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { ChartCard } from '@/components/dashboard/ChartCard';
@@ -65,6 +66,21 @@ const regionData = [
 
 const STORE_COLORS = ['#4CAF50', '#99A4B9'];
 const STOCK_COLORS = ['#2196F3', '#F44336'];
+
+// Define the missing variables for the hidden section
+const pieData = [
+  { name: 'OSA', value: 65 },
+  { name: 'OOS', value: 35 },
+];
+
+const barData = [
+  { name: 'Category A', value: 85 },
+  { name: 'Category B', value: 72 },
+  { name: 'Category C', value: 56 },
+  { name: 'Category D', value: 92 },
+];
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export default function OverviewTab() {
   const [invoiceCount, loading] = InvoicesCountHook();
