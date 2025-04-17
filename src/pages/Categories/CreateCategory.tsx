@@ -122,12 +122,10 @@ const CreateCategory = () => {
       // Create FormData for image upload
       const formData = new FormData();
       formData.append('title', values.title);
-      formData.append('title_ar', values.title_ar);
+      formData.append('name_ar', values.title_ar);
       formData.append('points', values.points.toString());
       
-      // if (values.parent_id) {
-      //   formData.append('parent_id', values.parent_id);
-      // }
+
       
       if (values.image && values.image.length > 0) {
         formData.append('image', values.image[0]);

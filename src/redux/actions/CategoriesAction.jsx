@@ -82,8 +82,8 @@ const createCategoryAction = (data) => async (dispatch) => {
         // Check if data is FormData (for image upload)
         const isFormData = data instanceof FormData;
         const response = isFormData 
-            ? await usePostDataWithDifferentFormat(`/productCategory/create`, data)
-            : await usePostData(`/productCategory/create`, data);
+            ? await usePostDataWithDifferentFormat(`/productCategory/store`, data)
+            : await usePostData(`/productCategory/store`, data);
             
         dispatch({
             type: CREATE_CATEGORY,
