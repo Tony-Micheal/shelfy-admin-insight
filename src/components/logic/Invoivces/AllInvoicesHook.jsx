@@ -1,17 +1,33 @@
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllInvoicesAction, getInvoicesByFilterAction } from '../../../redux/actions/InvoicesAction';
+import { useLocation } from 'react-router-dom';
 
 const AllInvoicesHook = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading2, setloading2] = useState(false);
   const [invoiceStatus, setInvoiceStatus] = useState(null);
 
+  useEffect(() => {
+    // Check URL for status parameter
+    const queryParams = new URLSearchParams(location.search);
+    const statusParam = queryParams.get('status');
+    
+    if (statusParam) {
+      setInvoiceStatus(parseInt(statusParam, 10));
+      getData(1, searchTerm, parseInt(statusParam, 10));
+    } else {
+      setInvoiceStatus(null);
+      getData(1, searchTerm, null);
+    }
+  }, [location.search]);
+
   const handleFilter = (id) => {
     setInvoiceStatus(id);
-    console.log(id);
     setCurrentPage(1);
     getData(1, searchTerm, id);
   };
@@ -31,7 +47,7 @@ const AllInvoicesHook = () => {
   };
 
   useEffect(() => {
-    getData(1);
+    // Initial data load is now handled by the URL params effect
   }, []);
 
   const res = useSelector(state => state.InvoicesReducer.allInvoices);

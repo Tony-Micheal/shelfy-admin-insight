@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CheckCircle, XCircle, AlertTriangle, Clock, FileText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 type InvoiceStatisticsProps = {
   invoiceCount: any;
@@ -10,11 +11,28 @@ type InvoiceStatisticsProps = {
 };
 
 export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: InvoiceStatisticsProps) {
+  const navigate = useNavigate();
+
+  const handleCardClick = (statusId: number | null) => {
+    if (statusId !== null) {
+      navigate(`/invoices?status=${statusId}`);
+    } else {
+      navigate('/invoices');
+    }
+  };
+
+  const getStatusId = (field: string): number | null => {
+    return invoiceCount[field]?.status_id || null;
+  };
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Invoice Statistics</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <Card className="bg-white">
+        <Card 
+          className="bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+          onClick={() => handleCardClick(null)}
+        >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Total Invoices</CardTitle>
           </CardHeader>
@@ -30,7 +48,10 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
           </CardContent>
         </Card>
         
-        <Card className="bg-white">
+        <Card 
+          className="bg-white hover:bg-green-50 cursor-pointer transition-colors"
+          onClick={() => handleCardClick(getStatusId('acceepted_invices'))}
+        >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Accepted</CardTitle>
           </CardHeader>
@@ -46,7 +67,10 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
           </CardContent>
         </Card>
         
-        <Card className="bg-white">
+        <Card 
+          className="bg-white hover:bg-red-50 cursor-pointer transition-colors"
+          onClick={() => handleCardClick(getStatusId('rejected_invices'))}
+        >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Rejected</CardTitle>
           </CardHeader>
@@ -62,7 +86,10 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
           </CardContent>
         </Card>
         
-        <Card className="bg-white">
+        <Card 
+          className="bg-white hover:bg-orange-50 cursor-pointer transition-colors"
+          onClick={() => handleCardClick(getStatusId('partially_rejected_invices'))}
+        >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Partially Rejected</CardTitle>
           </CardHeader>
@@ -78,7 +105,10 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
           </CardContent>
         </Card>
         
-        <Card className="bg-white">
+        <Card 
+          className="bg-white hover:bg-blue-50 cursor-pointer transition-colors"
+          onClick={() => handleCardClick(getStatusId('pending_invices'))}
+        >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">Pending</CardTitle>
           </CardHeader>

@@ -1,5 +1,7 @@
 
 import { CheckCircle, XCircle, AlertTriangle, Clock } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface StatusCardsProps {
   invoiceCount: any;
@@ -9,6 +11,17 @@ interface StatusCardsProps {
 }
 
 export const StatusCards = ({ invoiceCount, invoiceStatus, handleFilter, getCount }: StatusCardsProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleStatusClick = (statusId: number | null) => {
+    handleFilter(statusId);
+    
+    // Update URL without reloading the page
+    const url = statusId === null ? '/invoices' : `/invoices?status=${statusId}`;
+    navigate(url, { replace: true });
+  };
+
   const statusConfigs = [
     {
       field: 'acceepted_invices',
@@ -49,7 +62,7 @@ export const StatusCards = ({ invoiceCount, invoiceStatus, handleFilter, getCoun
                 ? `bg-${color}-50 border-${color}-200` 
                 : 'bg-gray-50 hover:bg-gray-100'
             }`}
-            onClick={() => handleFilter(invoiceStatus === currentStatusId ? null : currentStatusId)}
+            onClick={() => handleStatusClick(invoiceStatus === currentStatusId ? null : currentStatusId)}
           >
             <div className={`text-3xl font-bold text-${color}-600`}>
               {getCount(invoiceCount, field)}
