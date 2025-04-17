@@ -16,20 +16,29 @@ interface CategoryPaginationProps {
 }
 
 const CategoryPagination = ({ currentPage, totalPages, handlePageChange }: CategoryPaginationProps) => {
-  if (totalPages <= 1) return null;
+  console.log('Pagination Props:', { currentPage, totalPages });
+
+  if (totalPages <= 1) {
+    console.log('Not rendering pagination: totalPages <= 1');
+    return null;
+  }
 
   return (
     <Pagination className="mt-4">
       <PaginationContent>
         {currentPage > 1 && (
           <PaginationItem>
-            <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
+            <PaginationPrevious 
+              onClick={() => {
+                console.log(`Going to previous page: ${currentPage - 1}`);
+                handlePageChange(currentPage - 1);
+              }} 
+            />
           </PaginationItem>
         )}
 
         {[...Array(totalPages)].map((_, index) => {
           const pageNum = index + 1;
-          // Show current page, first, last, and pages around current
           if (
             pageNum === 1 ||
             pageNum === totalPages ||
@@ -39,7 +48,10 @@ const CategoryPagination = ({ currentPage, totalPages, handlePageChange }: Categ
               <PaginationItem key={pageNum}>
                 <PaginationLink
                   isActive={pageNum === currentPage}
-                  onClick={() => handlePageChange(pageNum)}
+                  onClick={() => {
+                    console.log(`Navigating to page: ${pageNum}`);
+                    handlePageChange(pageNum);
+                  }}
                 >
                   {pageNum}
                 </PaginationLink>
@@ -55,7 +67,12 @@ const CategoryPagination = ({ currentPage, totalPages, handlePageChange }: Categ
 
         {currentPage < totalPages && (
           <PaginationItem>
-            <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+            <PaginationNext 
+              onClick={() => {
+                console.log(`Going to next page: ${currentPage + 1}`);
+                handlePageChange(currentPage + 1);
+              }} 
+            />
           </PaginationItem>
         )}
       </PaginationContent>
