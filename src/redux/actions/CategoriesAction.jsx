@@ -1,4 +1,3 @@
-
 import { useGetData, useGetDataWithToken } from "../../hooks/useGetData";
 import { usePostData, usePostDataWithDifferentFormat } from '../../hooks/usePostData';
 import { CREATE_CATEGORY, GET_ALL_CATEGORIES, GET_CATEGORY_DETAILS, UPDATE_CATEGORY } from '../type';
@@ -82,11 +81,21 @@ const createCategoryAction = (data) => async (dispatch) => {
         console.log('Creating category with data:', data);
         // Check if data is FormData (for image upload)
         const isFormData = data instanceof FormData;
+<<<<<<< HEAD
         const response = isFormData 
             ? await usePostDataWithDifferentFormat(`/productCategory/store`, data)
             : await usePostData(`/productCategory/store`, data);
+=======
+        
+        let response;
+        if (isFormData) {
+            response = await usePostDataWithDifferentFormat(`/productCategory`, data);
+        } else {
+            response = await usePostData(`/productCategory`, data);
+        }
         
         console.log('Category creation response:', response);
+>>>>>>> 64728e6e7d9aa78888d10d0a458ac0e462fc9d53
             
         dispatch({
             type: CREATE_CATEGORY,
