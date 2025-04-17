@@ -27,6 +27,7 @@ import { useDispatch } from 'react-redux';
 import InvoicesCountHook from '@/components/logic/Invoivces/InvoicesCountHook';
 import MapComponent from '@/components/dashboard/MapComponent';
 import StoresChartHook from './../../components/logic/Dashboard/StoresChartHook';
+import StockChartHook from './../../components/logic/Dashboard/StockChartHook';
 
 const storeData = [
   { name: 'Supermarket', value: 125, invoices: 245 },
@@ -82,6 +83,8 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 export default function OverviewTab() {
   const [invoiceCount, loading] = InvoicesCountHook();
   const [stores, loadingStores] = StoresChartHook();
+  const [stocks, loadingStocks]=StockChartHook();
+
   
   const getCount = (data, field) => {
     if (!data || !data[field]) return 0;
@@ -283,11 +286,11 @@ export default function OverviewTab() {
                 <div className="grid grid-cols-2 gap-8">
                   <div className="flex items-center">
                     <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                    <span>In Stock: 75%</span>
+                    <span>In Stock:{stocks?stocks.in_stock:0} %</span>
                   </div>
                   <div className="flex items-center">
                     <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                    <span>Out of Stock: 25%</span>
+                    <span>Out of Stock:{stocks?stocks.out_of_stock:0} %</span>
                   </div>
                 </div>
               </div>
