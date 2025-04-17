@@ -62,9 +62,11 @@ export default function Roles() {
     console.log('Edit role:', role);
   };
   
-  const handleDeleteRole = (role: Role) => {
-    setSelectedRole(role);
-    console.log('Delete role:', role);
+  // Updated to match the expected type in RolesTable - takes roleId (number) instead of Role object
+  const handleDeleteRole = (roleId: number) => {
+    const roleToDelete = allRoles.find(role => role.id === roleId);
+    setSelectedRole(roleToDelete || null);
+    console.log('Delete role ID:', roleId);
   };
 
   return (
