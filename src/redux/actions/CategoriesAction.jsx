@@ -79,17 +79,25 @@ const updateCategoryAction = (data) => async (dispatch) => {
 
 const createCategoryAction = (data) => async (dispatch) => {
     try {
+        console.log('Creating category with data:', data);
         // Check if data is FormData (for image upload)
         const isFormData = data instanceof FormData;
-        const response = isFormData 
-            ? await usePostDataWithDifferentFormat(`/productCategory/create`, data)
-            : await usePostData(`/productCategory/create`, data);
+        
+        let response;
+        if (isFormData) {
+            response = await usePostDataWithDifferentFormat(`/productCategory/create`, data);
+        } else {
+            response = await usePostData(`/productCategory/create`, data);
+        }
+        
+        console.log('Category creation response:', response);
             
         dispatch({
             type: CREATE_CATEGORY,
             payload: response,
-            loading: true
+            loading: false
         });
+        
         return response;
     }
     catch (e) {
