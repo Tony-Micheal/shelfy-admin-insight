@@ -28,10 +28,11 @@ const AllCategoriesHook = () => {
 
   try {
     if (res && res.data) {
+      console.log(res);
       allCates = Array.isArray(res.data.alldata) ? res.data.alldata : [];
       
-      if (res.pagination) {
-        totalPages = res.pagination.last_page || 0;
+      if (res.data.pagination) {
+        totalPages = res.data.pagination.last_page || 0;
       }
     }
   } catch (e) {
