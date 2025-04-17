@@ -73,6 +73,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   const handleFormSubmit = async (values: CategoryFormValues) => {
     await onSubmit(values);
   };
+console.log(imagePreview,"sss");
 
   return (
     <div className="container mx-auto py-6">

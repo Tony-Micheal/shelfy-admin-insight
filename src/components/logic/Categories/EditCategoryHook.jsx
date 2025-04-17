@@ -24,6 +24,8 @@ const EditCategoryHook = () => {
         const response = await dispatch(getCategoryDetailsAction(parseInt(id)));
         if (response && response.data.category) {
           const category = response.data.category;
+          console.log(category);
+
           // Prepare the initial form data
           setCategoryData({
             ...category,
@@ -31,8 +33,8 @@ const EditCategoryHook = () => {
             parent_id: category.parent_id ? category.parent_id.toString() : ''
           });
           // Set image preview
-          if (category.image) {
-            setImagePreview(category.image);
+          if (category.Image) {
+            setImagePreview(category.Image);
           }
         }
       } catch (error) {
@@ -84,7 +86,7 @@ const EditCategoryHook = () => {
       }
       
       if (values.image && values.image.length > 0) {
-        formData.append('image', values.image[0]);
+        formData.append('Image', values.image[0]);
       }
       
       formData.append('id', id);

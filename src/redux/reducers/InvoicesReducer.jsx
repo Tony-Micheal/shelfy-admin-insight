@@ -1,9 +1,10 @@
 
-import { GET_ALL_INVOICES, GET_FILTER_INVOICES, GET_INVOICES_COUNT } from '../type';
+import { GET_ALL_INVOICES, GET_FILTER_INVOICES, GET_INVOICES_COUNT, UPDATE_INVOICE } from '../type';
 
 const initial = {
     invoicesCount:[],
     allInvoices:[],
+    updateInvoice:[]
 }
 
 const InvoicesReducer = (state=initial, action) => {
@@ -24,6 +25,12 @@ const InvoicesReducer = (state=initial, action) => {
             return {
                 ...state,
                 invoicesCount:action.payload,
+                loading:false
+            }
+        case UPDATE_INVOICE:
+            return {
+                ...state,
+                updateInvoice:action.payload,
                 loading:false
             }
             

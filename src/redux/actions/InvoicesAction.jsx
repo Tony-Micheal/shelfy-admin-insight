@@ -1,6 +1,7 @@
 
 import { useGetDataWithToken } from "../../hooks/useGetData";
-import { GET_ALL_INVOICES, GET_FILTER_INVOICES, GET_INVOICES_COUNT } from "../type";
+import { usePatchData } from "../../hooks/usePatchData";
+import { GET_ALL_INVOICES, GET_FILTER_INVOICES, GET_INVOICES_COUNT, UPDATE_INVOICE } from "../type";
 
 const getInvoicesCountAction =  ()=> async (dispatch)=>{
     try{
@@ -56,4 +57,23 @@ const getInvoicesByFilterAction = (statusId, page, limit, searchTerm = '') => as
     }
 }
 
-export {getInvoicesCountAction, getAllInvoicesAction, getInvoicesByFilterAction}
+const updateInvoiceAction = (data) => async (dispatch) => {
+    try {
+        const response = await usePatchData(`/invoices/status/update`);
+        dispatch({
+            type: UPDATE_INVOICE,
+            payload: response,
+            loading: true
+        })
+    }
+    catch(e) {
+        dispatch({
+            type: UPDATE_INVOICE,
+            payload: e.response
+        })
+    }
+}
+
+
+
+export {getInvoicesCountAction, getAllInvoicesAction, getInvoicesByFilterAction,updateInvoiceAction}
