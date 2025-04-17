@@ -57,7 +57,7 @@ const updateCategoryAction = (data) => async (dispatch) => {
         const isFormData = data instanceof FormData;
         const response = isFormData 
             ? await usePostDataWithDifferentFormat(`/productCategory/update`, data)
-            : await usePostData(`/productCategory`, data);
+            : await usePostData(`/productCategory/update`, data);
             
         dispatch({
             type: UPDATE_CATEGORY,

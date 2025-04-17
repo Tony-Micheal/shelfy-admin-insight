@@ -25,6 +25,7 @@ import Segments from "./pages/Segments";
 import Roles from "./pages/Roles";
 import Categories from "./pages/Categories";
 import CreateCategory from "./pages/Categories/CreateCategory";
+import EditCategory from "./pages/Categories/EditCategory";
 
 const queryClient = new QueryClient();
 
@@ -46,7 +47,7 @@ const App = () => (
           <Route path="/points-bonuses" element={<PointsBonuses />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/create" element={<CreateCategory />} />
-          <Route path="/categories/edit/:id" element={<CreateCategory />} />
+          <Route path="/categories/edit/:id" element={<EditCategory />} />
           <Route path="/segments" element={<Segments />} />
           <Route path="/roles" element={<Roles />} />
           <Route path="/users" element={<Users />} />

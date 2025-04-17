@@ -1,20 +1,112 @@
-import React, { useState } from 'react'
+
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { getCategoryDetailsAction, updateCategoryAction } from '../../../redux/actions/CategoriesAction';
+import { useToast } from '@/hooks/use-toast';
 
 const EditCategoryHook = () => {
-    const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
-    const {id}=useParams();
-    console.log(id);
-  
-    // Function to retrieve categories with pagination
-    // const getData = async (page = 1, search = '') => {
-    //   setLoading(true);
-    //   await dispatch(getAllCategoriesAction(page, 5, search));
-    //   setLoading(false);
-    // };
-  return [id];
-}
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [categoryData, setCategoryData] = useState(null);
+  const { toast } = useToast();
+  const { id } = useParams();
 
-export default EditCategoryHook
+  // Fetch category details on component mount
+  useEffect(() => {
+    const fetchCategoryDetails = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      try {
+        const response = await dispatch(getCategoryDetailsAction(parseInt(id)));
+        if (response && response.data) {
+          setCategoryData(response.data);
+          if (response.data.image) {
+            setImagePreview(response.data.image);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching category details:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to load category details',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCategoryDetails();
+  }, [id, dispatch, toast]);
+
+  // Handle image change
+  const handleImageChange = (fileList) => {
+    if (fileList && fileList.length > 0) {
+      const file = fileList[0];
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        if (e.target && typeof e.target.result === 'string') {
+          setImagePreview(e.target.result);
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle category update
+  const updateCategory = async (values) => {
+    setLoading(true);
+    try {
+      // Create FormData for image upload
+      const formData = new FormData();
+      formData.append('title', values.title);
+      formData.append('name_ar', values.name_ar);
+      formData.append('points', values.points.toString());
+      
+      if (values.parent_id && values.parent_id !== 'none') {
+        formData.append('parent_id', values.parent_id);
+      }
+      
+      if (values.image && values.image.length > 0) {
+        formData.append('image', values.image[0]);
+      }
+      
+      formData.append('id', id);
+      
+      await dispatch(updateCategoryAction(formData));
+      toast({
+        title: 'Success',
+        description: 'Category updated successfully',
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error updating category:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update category',
+        variant: 'destructive',
+      });
+      
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    id,
+    loading,
+    categoryData,
+    imagePreview,
+    handleImageChange,
+    updateCategory
+  };
+};
+
+export default EditCategoryHook;

@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from 'react-redux';
-import { createCategoryAction, getAllCategoriesAction } from '@/redux/actions/CategoriesAction';
-import { useToast } from '@/hooks/use-toast';
+import { getAllCategoriesAction } from '@/redux/actions/CategoriesAction';
 import { ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import EditCategoryHook from '@/components/logic/Categories/EditCategoryHook';
 
 import {
   Form,
@@ -36,13 +36,18 @@ const formSchema = z.object({
   image: z.instanceof(FileList).optional(),
 });
 
-const CreateCategory = () => {
+const EditCategory = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { toast } = useToast();
   
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const {
+    id,
+    loading,
+    categoryData,
+    imagePreview,
+    handleImageChange,
+    updateCategory
+  } = EditCategoryHook();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,6 +59,18 @@ const CreateCategory = () => {
     },
   });
 
+  // Set form values when category data is loaded
+  useEffect(() => {
+    if (categoryData) {
+      form.reset({
+        title: categoryData.title || "",
+        name_ar: categoryData.name_ar || "",
+        points: categoryData.points || 0,
+        parent_id: categoryData.parent_id ? String(categoryData.parent_id) : "",
+      });
+    }
+  }, [categoryData, form]);
+
   // Fetch all categories for parent category dropdown
   useEffect(() => {
     dispatch(getAllCategoriesAction(1, 100) as any);
@@ -62,54 +79,10 @@ const CreateCategory = () => {
   const categoriesResponse = useSelector((state: any) => state.CategoriesReducer.allCates);
   const allCategories = categoriesResponse?.data?.alldata || [];
 
-  const handleImageChange = (fileList: FileList | null) => {
-    if (fileList && fileList.length > 0) {
-      const file = fileList[0];
-      const reader = new FileReader();
-      
-      reader.onload = (e) => {
-        if (e.target && typeof e.target.result === 'string') {
-          setImagePreview(e.target.result);
-        }
-      };
-      
-      reader.readAsDataURL(file);
-    }
-  };
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setLoading(true);
-    try {
-      // Create FormData for image upload
-      const formData = new FormData();
-      formData.append('title', values.title);
-      formData.append('name_ar', values.name_ar);
-      formData.append('points', values.points.toString());
-      
-      if (values.parent_id && values.parent_id !== 'none') {
-        formData.append('parent_id', values.parent_id);
-      }
-      
-      if (values.image && values.image.length > 0) {
-        formData.append('image', values.image[0]);
-      }
-      
-      await dispatch(createCategoryAction(formData) as any);
-      toast({
-        title: 'Success',
-        description: 'Category created successfully',
-      });
-      
+    const success = await updateCategory(values);
+    if (success) {
       navigate('/categories');
-    } catch (error) {
-      console.error('Error submitting category:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to create category',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -125,7 +98,7 @@ const CreateCategory = () => {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Categories
           </Button>
-          <h1 className="text-2xl font-bold">Create New Category</h1>
+          <h1 className="text-2xl font-bold">Edit Category</h1>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -196,11 +169,13 @@ const CreateCategory = () => {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="none">None</SelectItem>
-                          {allCategories.map((category: any) => (
-                            <SelectItem key={category.id} value={category.id.toString()}>
-                              {category.title}
-                            </SelectItem>
-                          ))}
+                          {allCategories
+                            .filter(category => category.id.toString() !== id)
+                            .map((category: any) => (
+                              <SelectItem key={category.id} value={category.id.toString()}>
+                                {category.title}
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -257,7 +232,7 @@ const CreateCategory = () => {
                   Cancel
                 </Button>
                 <Button type="submit" disabled={loading}>
-                  {loading ? 'Processing...' : 'Create Category'}
+                  {loading ? 'Processing...' : 'Update Category'}
                 </Button>
               </div>
             </form>
@@ -268,4 +243,4 @@ const CreateCategory = () => {
   );
 };
 
-export default CreateCategory;
+export default EditCategory;
