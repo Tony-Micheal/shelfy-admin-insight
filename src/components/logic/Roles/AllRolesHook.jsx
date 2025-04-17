@@ -13,7 +13,7 @@ const AllRolesHook = () => {
   // Function to retrieve roles with pagination and search
   const getData = async (page = 1, search = '') => {
     setLoading(true);
-    await dispatch(getAllRolesAction(page, 15, search));
+    await dispatch(getAllRolesAction(page, 1, search));
     setLoading(false);
   };
 
