@@ -23,30 +23,35 @@ const CategoryPagination = ({ currentPage, totalPages, handlePageChange }: Categ
     return null;
   }
 
+  const isPreviousDisabled = currentPage === 1;
+  const isNextDisabled = currentPage === totalPages;
+
   return (
     <Pagination className="mt-4">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
             onClick={() => {
-              if (currentPage > 1) {
+              if (!isPreviousDisabled) {
                 console.log(`Going to previous page: ${currentPage - 1}`);
                 handlePageChange(currentPage - 1);
               }
             }}
-            disabled={currentPage === 1}
+            className={isPreviousDisabled ? "pointer-events-none opacity-50" : ""}
+            aria-disabled={isPreviousDisabled}
           />
         </PaginationItem>
 
         <PaginationItem>
           <PaginationNext
             onClick={() => {
-              if (currentPage < totalPages) {
+              if (!isNextDisabled) {
                 console.log(`Going to next page: ${currentPage + 1}`);
                 handlePageChange(currentPage + 1);
               }
             }}
-            disabled={currentPage === totalPages}
+            className={isNextDisabled ? "pointer-events-none opacity-50" : ""}
+            aria-disabled={isNextDisabled}
           />
         </PaginationItem>
       </PaginationContent>
