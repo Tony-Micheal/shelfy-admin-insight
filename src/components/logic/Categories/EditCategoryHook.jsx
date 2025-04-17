@@ -23,9 +23,16 @@ const EditCategoryHook = () => {
       try {
         const response = await dispatch(getCategoryDetailsAction(parseInt(id)));
         if (response && response.data.category) {
-          setCategoryData(response.data.category);
-          if (response.data.category) {
-            setImagePreview(response.data.category.Image);
+          const category = response.data.category;
+          // Prepare the initial form data
+          setCategoryData({
+            ...category,
+            // Convert parent_id to string for the form
+            parent_id: category.parent_id ? category.parent_id.toString() : ''
+          });
+          // Set image preview
+          if (category.image) {
+            setImagePreview(category.image);
           }
         }
       } catch (error) {
