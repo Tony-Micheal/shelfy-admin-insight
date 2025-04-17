@@ -1,5 +1,6 @@
 
 import { CREATE_USER, DELETE_USER, GET_ALL_USERS, GET_USER_DETAILS, UPDATE_USER, UPDATE_USER_SEGMENT, UPDATE_USER_STATUS } from './../type';
+
 const initial ={
     allUsers:[],
     userDetails:[],
@@ -10,7 +11,7 @@ const initial ={
     deleteUser:[]
 }
 
-export const UsersReducer=(state=initial,action)=>{
+const UsersReducer = (state=initial,action) => {
     switch(action.type){
         case GET_ALL_USERS:
             return{
@@ -61,3 +62,5 @@ export const UsersReducer=(state=initial,action)=>{
             return state;
     }
 }
+
+export default UsersReducer;
