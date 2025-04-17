@@ -1,3 +1,4 @@
+
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { 
@@ -9,7 +10,6 @@ import {
   TableCell 
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { SearchIcon, Box, PenSquare, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AllProductsHook from './../../components/logic/Products/AllProductsHook';
@@ -30,10 +30,6 @@ export default function Products() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Products</h1>
-          <Button>
-            <Box size={16} className="mr-2" />
-            Add New Product
-          </Button>
         </div>
         
         <Card>
@@ -59,13 +55,12 @@ export default function Products() {
                     <TableHead>Name (Ar)</TableHead>
                     <TableHead>Barcode</TableHead>
                     <TableHead>Brand</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8">
+                      <TableCell colSpan={5} className="text-center py-8">
                         <div className="flex justify-center items-center">
                           <Loader className="h-6 w-6 animate-spin mr-2" />
                           Loading...
@@ -74,7 +69,7 @@ export default function Products() {
                     </TableRow>
                   ) : allProducts.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8">
+                      <TableCell colSpan={5} className="text-center py-8">
                         No products found
                       </TableCell>
                     </TableRow>
@@ -91,16 +86,6 @@ export default function Products() {
                           </div>
                         </TableCell>
                         <TableCell>{product.brand}</TableCell>
-                        <TableCell className="text-right">
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8"
-                            onClick={() => navigate(`/products/${product.id}/edit`)}
-                          >
-                            <PenSquare size={16} />
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))
                   )}

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { SearchIcon, Shield, UserPlus } from 'lucide-react';
+import { SearchIcon, Shield } from 'lucide-react';
 import { 
   Pagination, 
   PaginationContent, 
@@ -16,17 +16,9 @@ import RolesTable from '@/components/roles/RolesTable';
 import AllRolesHook from '@/components/logic/Roles/AllRolesHook';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
-import { useToast } from '@/hooks/use-toast';
-
-interface Role {
-  id: number;
-  name: string;
-}
 
 export default function Roles() {
   const [allRoles, totalPages, currentPage, handlePageChange, searchTerm, handleSearch, loading] = AllRolesHook();
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
-  const { toast } = useToast();
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -57,27 +49,12 @@ export default function Roles() {
     return pageNumbers;
   };
 
-  const handleEditRole = (role: Role) => {
-    setSelectedRole(role);
-    console.log('Edit role:', role);
-  };
-  
-  const handleDeleteRole = (roleId: number) => {
-    const roleToDelete = allRoles.find(role => role.id === roleId);
-    setSelectedRole(roleToDelete || null);
-    console.log('Delete role ID:', roleId);
-  };
-
   return (
     <Provider store={store}>
       <MainLayout showFilters={false}>
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">Role Management</h1>
-            <Button>
-              <UserPlus size={16} className="mr-2" />
-              Add New Role
-            </Button>
           </div>
           
           <Card>
@@ -102,8 +79,6 @@ export default function Roles() {
               
               <RolesTable 
                 roles={allRoles} 
-                onEdit={handleEditRole} 
-                onDelete={handleDeleteRole}
                 loading={loading}
               />
 
