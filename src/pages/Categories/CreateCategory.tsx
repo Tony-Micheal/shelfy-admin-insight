@@ -11,56 +11,60 @@ import ErrorFallback from './components/ErrorFallback';
 const CreateCategory = () => {
   const navigate = useNavigate();
   
-  // Use the hook and get all the needed values
-  const hookResult = CreateCategoryHook();
-  console.log('Hook result:', hookResult);
-  
-  const { 
-    form, 
-    imagePreview, 
-    loading, 
-    allCategories, 
-    isEditing,
-    handleImageChange, 
-    onSubmit 
-  } = hookResult;
+  try {
+    // Use the hook and get all the needed values
+    const { 
+      form, 
+      imagePreview, 
+      loading, 
+      allCategories, 
+      isEditing,
+      handleImageChange, 
+      onSubmit 
+    } = CreateCategoryHook();
+    
+    console.log('Form object:', form);
 
-  // Show error fallback if form is not available
-  if (!form) {
-    console.error('Form object is undefined');
+    // Show error fallback if form is not available
+    if (!form) {
+      console.error('Form object is undefined');
+      return <ErrorFallback navigate={navigate} />;
+    }
+
+    return (
+      <MainLayout>
+        <div className="container mx-auto py-6">
+          <div className="mb-6">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/categories')}
+              className="mb-4"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Categories
+            </Button>
+            <h1 className="text-2xl font-bold">
+              {isEditing ? 'Edit Category' : 'Create New Category'}
+            </h1>
+          </div>
+
+          <CategoryFormContainer
+            form={form}
+            imagePreview={imagePreview}
+            loading={loading}
+            allCategories={allCategories}
+            isEditing={isEditing}
+            handleImageChange={handleImageChange}
+            onSubmit={onSubmit}
+            navigate={navigate}
+          />
+        </div>
+      </MainLayout>
+    );
+  } catch (error) {
+    console.error('Error in CreateCategory component:', error);
     return <ErrorFallback navigate={navigate} />;
   }
-
-  return (
-    <MainLayout>
-      <div className="container mx-auto py-6">
-        <div className="mb-6">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/categories')}
-            className="mb-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Categories
-          </Button>
-          <h1 className="text-2xl font-bold">
-            {isEditing ? 'Edit Category' : 'Create New Category'}
-          </h1>
-        </div>
-
-        <CategoryFormContainer
-          form={form}
-          imagePreview={imagePreview}
-          loading={loading}
-          allCategories={allCategories}
-          isEditing={isEditing}
-          handleImageChange={handleImageChange}
-          onSubmit={onSubmit}
-          navigate={navigate}
-        />
-      </div>
-    </MainLayout>
-  );
 };
 
 export default CreateCategory;
