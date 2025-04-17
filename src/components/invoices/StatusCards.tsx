@@ -63,7 +63,8 @@ export const StatusCards = ({ invoiceCount, invoiceStatus, handleFilter, getCoun
   return (
     <div className="flex flex-wrap items-center gap-4">
       {statusConfigs.map(({ field, label, color, icon: Icon }) => {
-        const currentStatusId = invoiceCount[field]?.status_id;
+        // Using explicit null check to handle status_id=0 properly
+        const currentStatusId = invoiceCount[field]?.status_id != null ? invoiceCount[field]?.status_id : null;
         
         return (
           <div 

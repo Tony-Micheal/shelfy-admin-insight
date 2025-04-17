@@ -17,9 +17,11 @@ const AllInvoicesHook = () => {
     const queryParams = new URLSearchParams(location.search);
     const statusParam = queryParams.get('status');
     
-    if (statusParam) {
-      setInvoiceStatus(parseInt(statusParam, 10));
-      getData(1, searchTerm, parseInt(statusParam, 10));
+    if (statusParam !== null) {
+      // Parse the status parameter, including handling '0'
+      const parsedStatus = parseInt(statusParam, 10);
+      setInvoiceStatus(parsedStatus);
+      getData(1, searchTerm, parsedStatus);
     } else {
       setInvoiceStatus(null);
       getData(1, searchTerm, null);
@@ -35,6 +37,7 @@ const AllInvoicesHook = () => {
   const getData = async (page = 1, search = '', status = invoiceStatus) => {
     setloading2(true);
     try {
+      // Check if status is not null (0 is a valid status)
       if (status != null) {
         await dispatch(getInvoicesByFilterAction(status, page, 10, search));
       } else {

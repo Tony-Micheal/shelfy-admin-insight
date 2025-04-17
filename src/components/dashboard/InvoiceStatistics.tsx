@@ -21,6 +21,7 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
       localStorage.removeItem('invoiceStatus');
     }
 
+    // Handle the navigation with status parameter, including 0 as a valid status value
     if (statusId !== null) {
       navigate(`/invoices?status=${statusId}`);
     } else {
@@ -28,8 +29,13 @@ export function InvoiceStatistics({ invoiceCount, getCount, getTotalInvoices }: 
     }
   };
 
+  // Safely get status ID, handling cases where it might be 0 (which is falsy in JavaScript)
   const getStatusId = (field: string): number | null => {
-    return invoiceCount[field]?.status_id || null;
+    // Check if the field exists in invoiceCount
+    if (!invoiceCount || !invoiceCount[field]) return null;
+    
+    // Handle both undefined and explicitly set status_id, including 0
+    return invoiceCount[field]?.status_id != null ? invoiceCount[field].status_id : null;
   };
 
   return (
