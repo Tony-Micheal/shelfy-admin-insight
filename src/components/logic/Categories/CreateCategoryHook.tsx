@@ -17,6 +17,45 @@ const formSchema = z.object({
   image: z.instanceof(FileList).optional(),
 });
 
+export type CategoryFormValues = z.infer<typeof formSchema>;
+
+// API functions separated for better testability
+const fetchCategoryDetails = async (dispatch: any, id: string) => {
+  try {
+    return await dispatch(getCategoryDetailsAction(parseInt(id)) as any);
+  } catch (error) {
+    console.error('Error fetching category details:', error);
+    throw error;
+  }
+};
+
+const fetchAllCategories = async (dispatch: any) => {
+  try {
+    return await dispatch(getAllCategoriesAction(1, 100) as any);
+  } catch (error) {
+    console.error('Error fetching all categories:', error);
+    throw error;
+  }
+};
+
+const createCategory = async (dispatch: any, formData: FormData) => {
+  try {
+    return await dispatch(createCategoryAction(formData) as any);
+  } catch (error) {
+    console.error('Error creating category:', error);
+    throw error;
+  }
+};
+
+const updateCategory = async (dispatch: any, formData: FormData) => {
+  try {
+    return await dispatch(updateCategoryAction(formData) as any);
+  } catch (error) {
+    console.error('Error updating category:', error);
+    throw error;
+  }
+};
+
 const CreateCategoryHook = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,7 +66,7 @@ const CreateCategoryHook = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<CategoryFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
@@ -39,8 +78,20 @@ const CreateCategoryHook = () => {
 
   // Fetch all categories for parent category dropdown
   useEffect(() => {
-    dispatch(getAllCategoriesAction(1, 100) as any); // Get all categories for dropdown
-  }, [dispatch]);
+    const loadAllCategories = async () => {
+      try {
+        await fetchAllCategories(dispatch);
+      } catch (error) {
+        toast({
+          title: 'Error',
+          description: 'Failed to load categories',
+          variant: 'destructive',
+        });
+      }
+    };
+    
+    loadAllCategories();
+  }, [dispatch, toast]);
 
   const categoriesResponse = useSelector((state: any) => state.CategoriesReducer.allCates);
   const allCategories = categoriesResponse?.data?.alldata || [];
@@ -48,10 +99,10 @@ const CreateCategoryHook = () => {
   // If editing, fetch category details
   useEffect(() => {
     if (isEditing && id) {
-      const fetchCategoryDetails = async () => {
+      const loadCategoryDetails = async () => {
         setLoading(true);
         try {
-          const response = await dispatch(getCategoryDetailsAction(parseInt(id)) as any);
+          const response = await fetchCategoryDetails(dispatch, id);
           if (response && response.data) {
             form.reset({
               title: response.data.title || "",
@@ -65,7 +116,6 @@ const CreateCategoryHook = () => {
             }
           }
         } catch (error) {
-          console.error('Error fetching category details:', error);
           toast({
             title: 'Error',
             description: 'Failed to load category details',
@@ -76,7 +126,7 @@ const CreateCategoryHook = () => {
         }
       };
       
-      fetchCategoryDetails();
+      loadCategoryDetails();
     }
   }, [isEditing, id, dispatch, form, toast]);
 
@@ -95,32 +145,41 @@ const CreateCategoryHook = () => {
     }
   };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  // Prepare form data for submission
+  const prepareFormData = (values: CategoryFormValues): FormData => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('name_ar', values.title_ar);
+    formData.append('points', values.points.toString());
+    
+    if (values.parent_id && values.parent_id !== "none") {
+      formData.append('parent_id', values.parent_id);
+    }
+    
+    if (values.image && values.image.length > 0) {
+      formData.append('image', values.image[0]);
+    }
+    
+    if (isEditing && id) {
+      formData.append('id', id);
+    }
+
+    return formData;
+  };
+
+  const onSubmit = async (values: CategoryFormValues) => {
     setLoading(true);
     try {
-      // Create FormData for image upload
-      const formData = new FormData();
-      formData.append('title', values.title);
-      formData.append('name_ar', values.title_ar);
-      formData.append('points', values.points.toString());
-      
-      if (values.parent_id && values.parent_id !== "none") {
-        formData.append('parent_id', values.parent_id);
-      }
-      
-      if (values.image && values.image.length > 0) {
-        formData.append('image', values.image[0]);
-      }
+      const formData = prepareFormData(values);
       
       if (isEditing && id) {
-        formData.append('id', id);
-        await dispatch(updateCategoryAction(formData) as any);
+        await updateCategory(dispatch, formData);
         toast({
           title: 'Success',
           description: 'Category updated successfully',
         });
       } else {
-        await dispatch(createCategoryAction(formData) as any);
+        await createCategory(dispatch, formData);
         toast({
           title: 'Success',
           description: 'Category created successfully',
