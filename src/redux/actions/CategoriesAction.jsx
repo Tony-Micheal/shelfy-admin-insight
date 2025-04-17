@@ -1,10 +1,7 @@
 
-import React from 'react'
-import { DELETE_INSTRUCTION, GET_ALL_PRODUCTS, GET_PRODUCTS_DETAILS, UPDATE_PRODUCT } from './../../type';
-import { useGetData, useGetDataWithToken } from "../../../hooks/useGetData";
-import { usePostData } from '../../../hooks/usePostData';
-import useDeleteData from './../../../hooks/useDeleteData';
-import { GET_ALL_CATEGORIES, GET_CATEGORY_DETAILS, UPDATE_CATEGORY } from '../type';
+import { useGetData, useGetDataWithToken } from "../../hooks/useGetData";
+import { usePostData } from '../../hooks/usePostData';
+import { CREATE_CATEGORY, GET_ALL_CATEGORIES, GET_CATEGORY_DETAILS, UPDATE_CATEGORY } from '../type';
 
 const getAllCategoriesAction = (page, limit, searchTerm = '') => async (dispatch) => {
     try {
@@ -42,7 +39,7 @@ const getCategoryDetailsAction = (id) => async (dispatch) => {
 
 const updateCategoryAction = (data) => async (dispatch) => {
     try {
-        const response = await usePostData(`/products/update`,data);
+        const response = await usePostData(`/productCategory/update`, data);
         dispatch({
             type: UPDATE_CATEGORY,
             payload: response,
@@ -59,20 +56,20 @@ const updateCategoryAction = (data) => async (dispatch) => {
 
 const createCategoryAction = (data) => async (dispatch) => {
     try {
-        const response = await usePostData(`/products/update`,data);
+        const response = await usePostData(`/productCategory/create`, data);
         dispatch({
-            type: UPDATE_CATEGORY,
+            type: CREATE_CATEGORY,
             payload: response,
             loading: true
         })
     }
     catch (e) {
         dispatch({
-            type: UPDATE_CATEGORY,
+            type: CREATE_CATEGORY,
             payload: e.response
         })
     }
 }
 
 
-export { getAllCategoriesAction,getCategoryDetailsAction,updateCategoryAction,createCategoryAction }
+export { getAllCategoriesAction, getCategoryDetailsAction, updateCategoryAction, createCategoryAction }

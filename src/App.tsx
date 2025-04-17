@@ -23,6 +23,7 @@ import EditProduct from "./pages/Products/EditProduct";
 import Admins from "./pages/Admins";
 import Segments from "./pages/Segments";
 import Roles from "./pages/Roles";
+import Categories from "./pages/Categories";
 
 const queryClient = new QueryClient();
 
@@ -42,7 +43,7 @@ const App = () => (
           <Route path="/products" element={<Products />} />
           <Route path="/osa-reports" element={<OSAReports />} />
           <Route path="/points-bonuses" element={<PointsBonuses />} />
-          <Route path="/categories" element={<NotFound />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/segments" element={<Segments />} />
           <Route path="/roles" element={<Roles />} />
           <Route path="/users" element={<Users />} />

@@ -8,6 +8,7 @@ import InvoicesReducer from './InvoicesReducer';
 import SegmentsReducer from './SegmentsReducer';
 import DashboardReducer from './DashboardReducer';
 import RolesReducer from './RolesReducer';
+import CategoriesReducer from './CategoriesReducer';
 
 const rootReducer = combineReducers({
     AuthReducer,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     InvoicesReducer,
     SegmentsReducer,
     DashboardReducer,
-    RolesReducer
+    RolesReducer,
+    CategoriesReducer
 });
 
 export default rootReducer;
