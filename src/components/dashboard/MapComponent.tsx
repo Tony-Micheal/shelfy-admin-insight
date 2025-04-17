@@ -19,13 +19,24 @@ type MapComponentProps = {
   regionData: RegionData[];
 };
 
+// Egypt-specific regions
+const EGYPT_REGIONS = [
+  { region: 'Cairo', invoices: 245, color: '#4F46E5' },
+  { region: 'Alexandria', invoices: 187, color: '#06B6D4' },
+  { region: 'Giza', invoices: 156, color: '#059669' },
+  { region: 'Luxor', invoices: 203, color: '#D97706' },
+  { region: 'Aswan', invoices: 178, color: '#DC2626' },
+  { region: 'North', invoices: 120, color: '#8B5CF6' },
+  { region: 'South', invoices: 135, color: '#EC4899' },
+];
+
 const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
   const dispatch = useDispatch();
   
   // Get the invoices map data from Redux
   const invoicesMapData = useSelector((state: any) => state.DashboardReducer.invoicesMap);
   
-  // Custom hook for map interactions
+  // Custom hook for map interactions - enhanced for Google Maps
   const {
     selectedCoordinates,
     zoom,
@@ -45,7 +56,7 @@ const MapComponent = ({ regionData: initialRegionData }: MapComponentProps) => {
     toggleViewMode,
     handleRegionClick,
     downloadMapData
-  } = useMapInteractions(initialRegionData);
+  } = useMapInteractions(EGYPT_REGIONS || initialRegionData);
 
   // Effect to fetch data when coordinates are selected
   useEffect(() => {

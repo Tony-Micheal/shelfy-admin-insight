@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -28,24 +27,13 @@ export function useMapInteractions(initialRegionData: RegionData[]) {
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
-  const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = e.currentTarget;
-    if (!target) return;
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    if (!e.latLng) return;
     
-    const rect = target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
     
-    // Convert x,y position to lat,lng with improved precision
-    const width = rect.width;
-    const height = rect.height;
-    
-    // Map x,y to longitude (-180 to 180) and latitude (-90 to 90)
-    // Apply zoom factor for more precise positioning
-    const lng = ((x / width) * 360 - 180) / zoom;
-    const lat = (90 - (y / height) * 180) / zoom;
-    
-    setSelectedCoordinates({ lat: parseFloat(lat.toFixed(6)), lng: parseFloat(lng.toFixed(6)) });
+    setSelectedCoordinates({ lat, lng });
     setPointInvoiceCount(null); // Reset while loading new data
     
     // Show toast notification
@@ -77,11 +65,11 @@ export function useMapInteractions(initialRegionData: RegionData[]) {
   };
 
   const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev * 1.5, 10));
+    setZoom(prev => Math.min(prev * 1.2, 2)); // Adjusted zoom factor for Google Maps
   };
 
   const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev / 1.5, 0.5));
+    setZoom(prev => Math.max(prev / 1.2, 0.5)); // Adjusted zoom factor for Google Maps
   };
 
   const handleReset = () => {
@@ -94,6 +82,7 @@ export function useMapInteractions(initialRegionData: RegionData[]) {
 
   const toggleViewMode = () => {
     setViewMode(prev => prev === '2d' ? '3d' : '2d');
+    // Note: Google Maps has its own 3D mode, but we're keeping the state for UI consistency
   };
 
   const handleRegionClick = (region: string) => {
@@ -104,7 +93,7 @@ export function useMapInteractions(initialRegionData: RegionData[]) {
     const dataStr = JSON.stringify(regionData, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
     
-    const exportFileDefaultName = 'invoice-distribution-data.json';
+    const exportFileDefaultName = 'egypt-invoice-distribution-data.json';
     
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
